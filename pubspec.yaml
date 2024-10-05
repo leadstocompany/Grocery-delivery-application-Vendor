@@ -31,6 +31,61 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_screenutil: ^5.9.3
+   # Fonts
+  google_fonts: ^6.1.0
+
+  # Svg rendering
+  flutter_svg: ^2.0.9
+
+  # OTP input
+  pinput: ^3.0.1
+
+  # Nav bar
+  circle_nav_bar: ^2.0.1+1
+
+  # Flutter bloc:
+  flutter_bloc: any
+
+  # DI
+  get_it: any
+
+  # Networking
+  dio: any
+
+  # API log
+  pretty_dio_logger: any
+
+
+  # local storage
+  shared_preferences: any
+
+  # Functional programming
+  fpdart: any
+
+  # Slider
+  carousel_slider: any
+
+  # Internet connection
+  connectivity_plus: any
+  
+  # Loader overlay
+  loader_overlay: ^4.0.0
+  
+  # Routing
+  go_router: ^14.2.0
+
+  # Time Formatter
+  timeago: ^3.6.1
+
+  gap: ^3.0.1
+  
+  country_code_picker: ^3.0.0
+
+  smooth_page_indicator: ^1.2.0  
+
+  provider: any
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -59,9 +114,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/icons/
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
