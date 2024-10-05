@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 
 class MyApplication extends StatefulWidget {
   const MyApplication({super.key});
@@ -25,10 +26,14 @@ class _MyApplicationState extends State<MyApplication> {
         child: MaterialApp.router(
           routerConfig: MyRoutes.router,
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            canvasColor: const Color.fromRGBO(255, 255, 255, 1),
+            fontFamily: 'GoogleSans',
+            primarySwatch: Colors.blue,
+          ),
           themeMode: ThemeMode.light,
-          //  title: AppString.appName,
-          //    theme: CustomTheme.light(context),
-          //   darkTheme: CustomTheme.dark(context),
+          title: AppString.appName,
         ),
       ),
     );

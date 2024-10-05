@@ -83,10 +83,10 @@ class PhoneScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ButtonElevated(
+              backgroundColor: context.appColor.primarycolor,
               text: AppString.getOtp,
-              onPressed: () 
-              {
-                pageNotifier.goToNextPage();  // Change page
+              onPressed: () {
+                pageNotifier.goToNextPage(); // Change page
               },
             ),
           ),

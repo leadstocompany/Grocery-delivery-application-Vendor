@@ -1,11 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vendor_app/src/core/utiils_lib/common_utils.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
-
-
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -97,10 +94,10 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         counter: counterWidget,
         hintStyle: hintStyle ??
-            context.subTitleStyle.copyWith(
+            context.subTitleTxtStyleblack.copyWith(
               color: context.appColor.lightBlackColor,
             ),
-        labelStyle: context.subTitleStyle
+        labelStyle: context.subTitleTxtStyleblack
             .copyWith(color: context.appColor.blackColor, fontSize: 16.sp),
         contentPadding: EdgeInsets.symmetric(
           horizontal: horizontalContentPadding ?? 10.w,

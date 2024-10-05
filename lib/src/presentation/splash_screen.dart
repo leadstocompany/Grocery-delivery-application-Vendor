@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 
 import '../core/routes/routes.dart';
 
@@ -16,9 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () 
-    {
-      context.clearAndPush(routePath: MyRoutes.ONBOARDING);
+    Future.delayed(const Duration(seconds: 2), () async {
+      if (await SharedPrefUtils.isFreshInstall()) {
+        context.clearAndPush(routePath: MyRoutes.ONBOARDING);
+      } else {
+        context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
+      }
     }
         //context.read<SplashCubit>().initApp(),
         );
@@ -26,7 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    Scaffold(
       body: Container(
         width: MediaQuery.sizeOf(context).width,
         height: MediaQuery.sizeOf(context).height,
@@ -44,5 +49,6 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  
   }
 }

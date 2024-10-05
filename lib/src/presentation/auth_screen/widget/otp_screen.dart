@@ -128,56 +128,42 @@ class _OtpScreenState extends State<OtpScreen> {
                   style: context.buttonTxtStyle
                       .copyWith(color: context.appColor.primary),
                 ),
-              )
-              //  RichText(
-              //     text: TextSpan(
-              //       text: "${AppString.didNotReceiveOtp} ",
-              //       style:
-              //           context.smallTxtStyle.copyWith(fontSize: 13.sp),
-              //       children: <TextSpan>[
-              //         TextSpan(
-              //             text:
-              //                 "  sec",
-              //             style: TextStyle(fontWeight: FontWeight.bold)),
-              //       ],
-              //     ),
-              //   ),
-              ),
+              )),
 
           const Spacer(),
           SizedBox(
               width: double.infinity,
               child: ButtonElevated(
-                  text: AppString.continueTxt, onPressed: () {})),
+                  backgroundColor: context.appColor.primarycolor,
+                  text: AppString.continueTxt,
+                  onPressed: () {})),
           Gap(15.h),
           // Align(
-          //     alignment: Alignment.center,
-          //     child: Text("Terms of Services & Privacy Policy.",style: context.smallTxtStyle.copyWith(fontSize: 12.sp,color: context.appColor.secondary,decoration: TextDecoration.underline,decorationColor:context.appColor.secondary ),)),
 
-          Align(
-            alignment: Alignment.center,
-            child: RichText(
-              text: TextSpan(
-                text: AppString.byClickingContinue,
-                style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: AppString.termService,
-                      recognizer: TapGestureRecognizer(),
-                      //   ..onTap = () => context.push(MyRoutes.TERM_CONDITION),
-                      style: TextStyle(color: context.appColor.secondary)),
-                  const TextSpan(
-                    text: " ${AppString.and} ",
-                  ),
-                  TextSpan(
-                      recognizer: TapGestureRecognizer(),
-                      //   ..onTap = () => context.push(MyRoutes.PRIVACY_POLICY),
-                      text: AppString.privacyPolicy,
-                      style: TextStyle(color: context.appColor.secondary)),
-                ],
-              ),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.center,
+          //   child: RichText(
+          //     text: TextSpan(
+          //       text: AppString.byClickingContinue,
+          //       style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
+          //       children: <TextSpan>[
+          //         TextSpan(
+          //             text: AppString.termService,
+          //             recognizer: TapGestureRecognizer(),
+          //             //   ..onTap = () => context.push(MyRoutes.TERM_CONDITION),
+          //             style: TextStyle(color: context.appColor.secondary)),
+          //         const TextSpan(
+          //           text: " ${AppString.and} ",
+          //         ),
+          //         TextSpan(
+          //             recognizer: TapGestureRecognizer(),
+          //             //   ..onTap = () => context.push(MyRoutes.PRIVACY_POLICY),
+          //             text: AppString.privacyPolicy,
+          //             style: TextStyle(color: context.appColor.secondary)),
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
           Gap(30.h),
         ],

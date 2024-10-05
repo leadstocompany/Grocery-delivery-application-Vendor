@@ -1,111 +1,137 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
+import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
+import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
+import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
-
-import 'widget/create_password.dart';
-import 'widget/otp_screen.dart';
-import 'widget/user_name_screen.dart';
-import 'widget/phone_screen.dart';
-
-
-class LoginHostScreen extends StatefulWidget {
-  const LoginHostScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  SignUpScreen({super.key});
 
   @override
-  State<LoginHostScreen> createState() => _LoginHostScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginHostScreenState extends State<LoginHostScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => PageNotifier(),
-      child: WillPopScope(
-        onWillPop: () async {
-          // System back button handling
-          final pageNotifier =
-              Provider.of<PageNotifier>(context, listen: false);
-          if (pageNotifier.currentIndex > 0) {
-            pageNotifier.goToPage(pageNotifier.currentIndex - 1);
-            return false;
-          }
-          return true;
-        },
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 70),
+    final _formKey = GlobalKey<FormState>();
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Gap(100.h),
+            Image.asset(
+              AppImages.applogo,
+              height: 200,
+              width: 350,
+            ),
+            Text(
+              'Welcome back,',
+              style: context.subTitleTextStyle.copyWith(fontSize: 17.sp),
+            ),
+            Gap(20.h),
+            Form(
+              key: _formKey,
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Consumer<PageNotifier>(
-                        builder: (context, pageNotifier, child) {
-                          return IconButton(
-                            onPressed: () {
-                              // Back button logic with Consumer
-                              print(
-                                  "PageNotifier currentIndex: ${pageNotifier.currentIndex}");
-                              if (pageNotifier.currentIndex > 0) {
-                                // Navigate to the previous page
-                                pageNotifier
-                                    .goToPage(pageNotifier.currentIndex - 1);
-                              } else {
-                                Navigator.of(context)
-                                    .pop(); // Exit or pop screen if on the first page
-                              }
-                            },
-                            icon: Icon(Icons.arrow_back_ios_rounded),
-                          );
-                        },
-                      ),
-                      Text(
-                        '              Create your account',
-                        style:
-                            context.subTitleTextStyle.copyWith(fontSize: 12.sp),
-                      ),
-                    ],
+                  CustomTextField(
+                    validator: (val) {
+                      if (val.toString().isEmpty) {
+                        return "Please enter your name";
+                      }
+                      return null;
+                    },
+                    maxLength: 64,
+                    counterWidget: const Offstage(),
+                    // controller: context.read<AuthCubit>().userName,
+                    hintText: 'raidenLord@gmail.com',
+                    fillColor: context.appColor.greyColor100,
                   ),
-                  Gap(20),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-                    child: SizedBox(
-                      child: Consumer<PageNotifier>(
-                        builder: (context, pageNotifier, _) {
-                          return LinearProgressIndicator(
-                            value: pageNotifier.progress,
-                          );
-                        },
+                  Gap(10.h),
+                  CustomTextField(
+                    controller: _passwordController,
+                    obscureText: !_isPasswordVisible,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return "Please enter a password";
+                      } else if (val.length < 6) {
+                        return "Password must be at least 6 characters long";
+                      }
+                      return null;
+                    },
+                    maxLength: 64,
+                    counterWidget: const Offstage(),
+                    hintText: "Enter password",
+                    fillColor: context.appColor.greyColor100,
+                    suffix: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 520.h,
-                    width: MediaQuery.sizeOf(context).width,
-                    child: Consumer<PageNotifier>(
-                      builder: (context, pageNotifier, _) {
-                        return PageView(
-                          controller: pageNotifier.pageController,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: const [
-                            PhoneScreen(), // Page 1
-                            OtpScreen(), // Page 2
-                            UserNameScreen(), // Page 3
-                            CreatePassword() // Page 4
-                          ],
-                        );
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
                       },
                     ),
                   ),
                 ],
               ),
             ),
-          ),
+            const Gap(5),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'Forgot Password?',
+                style: context.smallTxtStyle
+                    .copyWith(color: context.appColor.primarycolor),
+              ),
+            ),
+            // const Spacer(),
+            Gap(50.h),
+            SizedBox(
+              width: double.infinity,
+              child: ButtonElevated(
+                  backgroundColor: context.appColor.primarycolor,
+                  text: AppString.continueTxt,
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {}
+                  }),
+            ),
+
+            Gap(25.h),
+            Gap(10.h),
+            Align(
+              alignment: Alignment.center,
+              child: RichText(
+                text: TextSpan(
+                  text: "Don’t have an account? ",
+                  style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: "Sign Up",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: context.appColor.primarycolor)),
+                  ],
+                ),
+              ),
+            ),
+
+            Gap(30.h),
+          ],
         ),
       ),
     );

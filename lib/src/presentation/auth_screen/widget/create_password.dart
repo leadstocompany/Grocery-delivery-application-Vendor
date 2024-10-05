@@ -7,7 +7,6 @@ import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
-
 class CreatePassword extends StatefulWidget {
   const CreatePassword({Key? key}) : super(key: key);
 
@@ -111,11 +110,11 @@ class _CreatePasswordState extends State<CreatePassword> {
               ],
             ),
           ),
-          
           const Spacer(),
           SizedBox(
             width: double.infinity,
             child: ButtonElevated(
+                backgroundColor: context.appColor.primarycolor,
                 text: AppString.continueTxt,
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {

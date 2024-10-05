@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:gap/gap.dart';
+import 'package:vendor_app/src/core/image/app_images.dart';
+import 'package:vendor_app/src/core/routes/routes.dart';
+import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/terms_conditions.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
@@ -103,11 +107,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nu
                         child: ButtonElevated(
                           text: AppString.continueTxt,
                           onPressed: () {
-                            _showBottomSheet(context);
+                            if (termsNotifier.isChecked)
+                              _showBottomSheet(context);
                           },
                           backgroundColor: termsNotifier.isChecked
-                              ? Colors.green
-                              : Colors.grey,
+                              ? context.appColor.primarycolor
+                              : Color.fromARGB(255, 160, 239, 157),
                         ),
                       ),
                     ),
@@ -135,73 +140,86 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nu
               // Centered App Logo
               Center(
                 child: Image.asset(
-                  'assets/logo.png', // Replace with your logo path
+                  AppImages.applogo, // Replace with your logo path
                   height: 100.h, // Adjust height as necessary
                 ),
               ),
-              SizedBox(height: 20.h),
 
-              // Title
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Create Account', style: context.subTitleStyle),
+              ),
+
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Create Account',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
+                    'Set up your store and get your business ready for activation',
+                    style: context.subTitleTextStyle),
+              ),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: ListTile(
+                  leading: Container(child: SvgPicture.asset(AppImages.icon1)),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Add business information',
+                        style: context.subTitleStyle,
+                      ),
+                      Text(
+                        'Add more information about your business',
+                        style: context.subTitleTxtStyle,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              SizedBox(height: 8.h),
 
-              // Subtitle
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  'Fill in your details below.',
-                  style: TextStyle(fontSize: 16.sp),
-                ),
-              ),
-              SizedBox(height: 20.h),
-
-              // Two Subtitles
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Step 1: Provide your information',
-                  style: TextStyle(fontSize: 14.sp),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Step 2: Confirm your details',
-                  style: TextStyle(fontSize: 14.sp),
-                ),
-              ),
-              SizedBox(height: 20.h),
-
-              // Continue Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Action to proceed
-                    Navigator.pop(context); // Close bottom sheet
-                  },
-                  style: ElevatedButton.styleFrom(
-                    // Always green for this button
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
+                child: ListTile(
+                  leading: Container(child: SvgPicture.asset(AppImages.icon2)),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Set-up your store',
+                        style: context.subTitleStyle,
+                      ),
+                      Text(
+                        'Create and customise your online store',
+                        style: context.subTitleTxtStyle,
+                      ),
+                    ],
                   ),
-                  child: Text(
-                      AppString.continueTxt), // Update with your button text
                 ),
               ),
-              SizedBox(height: 20.h),
+              Center(
+                child: SizedBox(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ButtonElevated(
+                        text: 'Continue to Setup',
+                        onPressed: () {
+                          print("lksdjfhgjdfghkldkfjghjkld");
+                          context.clearAndPush(
+                              routePath: MyRoutes.SETUPBUSSINESS);
+                        },
+                        backgroundColor: context.appColor.primarycolor),
+                  ),
+                ),
+              ),
             ],
           ),
         );
       },
     );
   }
+
+
+
 }

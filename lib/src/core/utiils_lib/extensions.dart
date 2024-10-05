@@ -28,28 +28,35 @@ extension IntExt on int {
 
 extension ThemeExt on BuildContext {
   /// Theme extensions
-  TextStyle get titleStyle => GoogleFonts.chivo(
+  TextStyle get titleStyle => GoogleFonts.nunito(
       color: appColor.blackColor, fontSize: 16.sp, fontWeight: FontWeight.w400);
 
-  TextStyle get titleStyleRegular => GoogleFonts.chivo(
+  TextStyle get titleStyleRegular => GoogleFonts.nunito(
       color: appColor.blackColor, fontSize: 19.sp, fontWeight: FontWeight.w600);
 
-  TextStyle get subTitleStyle => GoogleFonts.chivo(
+  TextStyle get subTitleStyle => GoogleFonts.nunito(
         fontWeight: FontWeight.w500,
         color: appColor.blackColor,
-        fontSize: 12.sp,
+        fontSize: 18.sp,
       );
 
-  TextStyle get subTitleTextStyle => GoogleFonts.chivo(
+  TextStyle get subTitleTextStyle => GoogleFonts.nunito(
+        fontWeight: FontWeight.w400,
+        color: appColor.greyColor,
+        fontSize: 16.sp,
+      );
+
+      TextStyle get subTitleTxtStyleblack => GoogleFonts.nunito(
         fontWeight: FontWeight.w400,
         color: appColor.blackColor,
-        fontSize: 11.sp,
+        fontSize: 13.sp,
       );
 
-  TextStyle get subTitleTxtStyle => GoogleFonts.chivo(
-        fontWeight: FontWeight.w600,
-        color: appColor.blackColor,
-        fontSize: 11.sp,
+
+  TextStyle get subTitleTxtStyle => GoogleFonts.nunito(
+        fontWeight: FontWeight.w400,
+        color: appColor.greyColor,
+        fontSize: 13.sp,
       );
 
   TextStyle get bodyTxtStyle => GoogleFonts.chivo(
@@ -260,10 +267,10 @@ extension ColorExtension on String {
 
 extension ColorExt on ColorScheme {
   Color get blackColor =>
-      brightness == Brightness.light ? const Color(0xff545454) : Colors.white38;
+      brightness == Brightness.light ? const Color(0xff1A1A1A) : Colors.white38;
 
-  Color get greyColor600 =>
-      brightness == Brightness.light ? const Color(0xff4F4F4F) : Colors.white30;
+  Color get greyColor =>
+      brightness == Brightness.light ? const Color(0xff666666) : Colors.white30;
 
   Color get greyColor500 =>
       brightness == Brightness.light ? Color(0xff6F6B7D) : Colors.white30;
@@ -296,7 +303,8 @@ extension ColorExt on ColorScheme {
 
   Color get redColor => Colors.red;
 
-  Color get dullRed => Color(0xffE26B6B);
+  Color get primarycolor => Color(0xff228B22);
+
 
   // Color get reviewColor =>
   //     brightness == Brightness.dark ? Colors.green : const Color(0xff006D60);

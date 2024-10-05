@@ -88,6 +88,7 @@ class UserNameScreen extends StatelessWidget {
             width: double.infinity,
             child: ButtonElevated(
                 text: AppString.continueTxt,
+                 backgroundColor: context.appColor.primarycolor,
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
                     pageNotifier.goToNextPage();

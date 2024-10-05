@@ -1,12 +1,15 @@
 import 'dart:ui';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class SelectAccount extends StatefulWidget {
   const SelectAccount({super.key});
@@ -19,128 +22,116 @@ class _SelectAccountState extends State<SelectAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBody(context),
-    );
-  }
-
-  Container _buildBody(BuildContext context) {
-    return Container(
-        height: context.height,
-        width: context.width,
-        decoration: BoxDecoration(
-          color: context.appColor.blackColor,
-          image: const DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(AppImages.splashscreensImage),
-            opacity: 0.8,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    Image.asset(
+                      AppImages.applogo,
+                      height: 200,
+                      width: 350,
+                    ),
+                    Positioned(
+                      top: 105.h,
+                      // bottom: 0,
+                      child: Text(
+                          'Experience business slaes on another \nlevel with ọjà, your market friendly app',
+                          style: context.subTitleTextStyle),
+                    )
+                  ],
+                ),
+                Gap(60.h),
+                signInBtn(),
+                Gap(20.h),
+                signUpBtn(),
+                Gap(100.h),
+                Align(
+                  alignment: Alignment.center,
+                  child: RichText(
+                    text: TextSpan(
+                      text: "By continuing, you agree to",
+                      style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "ọjàs Terms & \nConditions ",
+                            style: context.smallTxtStyle.copyWith(
+                                fontSize: 13.sp,
+                                color: context.appColor.primarycolor)),
+                        TextSpan(
+                            text: "And",
+                            style: context.smallTxtStyle
+                                .copyWith(fontSize: 13.sp)),
+                        TextSpan(
+                            text: "Privacy Policy",
+                            style: context.smallTxtStyle.copyWith(
+                                fontSize: 13.sp,
+                                color: context.appColor.primarycolor)),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  _subLogo(),
-                  welcomeEshopTxt(),
-                  eCommerceforBusinessTxt(),
-                  //  signInyourAccTxt(),
-                  signInBtn(),
-                  signUpBtn()
-                ],
-              ),
-            )));
+      ),
+    );
   }
 
   _subLogo() {
-    return Padding(
-        padding: const EdgeInsetsDirectional.only(top: 30.0),
-        child: SvgPicture.asset(
-          'assets/images/logokamduh.svg',
-          color: Colors.white,
-          // colorFilter: ColorFilter.mode(
-          //     Theme.of(context).colorScheme.primarytheme, BlendMode.srcIn),
-        ));
-  }
-
-  welcomeEshopTxt() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(top: 30.0),
-      child: Text(
-        'WELCOME ESHOP',
-
-        // getTranslated(context, 'WELCOME_ESHOP')!,
-        // style: Theme.of(context).textTheme.titleMedium!.copyWith(
-        //     color: Theme.of(context).colorScheme.fontColor,
-        //     fontWeight: FontWeight.bold),
+    return Center(
+      child: Image.asset(
+        AppImages.applogo, // Replace with your logo path
+        // Adjust height as necessary
       ),
-    );
-  }
-
-  eCommerceforBusinessTxt() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(
-        top: 5.0,
-      ),
-      child: Text('ECOMMERCE APP FOR ALL BUSINESS'
-          // getTranslated(context, 'ECOMMERCE_APP_FOR_ALL_BUSINESS')!,
-          // style: Theme.of(context).textTheme.titleSmall!.copyWith(
-          //     color: Theme.of(context).colorScheme.fontColor,
-          //     fontWeight: FontWeight.normal),
-          ),
     );
   }
 
   signInyourAccTxt() {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(top: 80.0, bottom: 40),
-      child: Text('SIGNIN_ACC_LB'
-          //  getTranslated(context, 'SIGNIN_ACC_LBL')!,
-          // style: Theme.of(context).textTheme.titleMedium!.copyWith(
-          //     color: Theme.of(context).colorScheme.fontColor,
-          //     fontWeight: FontWeight.bold),
-          ),
+    return SizedBox(
+      width: double.infinity,
+      child: ButtonElevated(
+        text: 'Next',
+        onPressed: () {
+          // if (_formKey.currentState?.validate() ?? false) {}
+        },
+        backgroundColor: context.appColor.primarycolor,
+      ),
     );
   }
 
   signInBtn() {
-    return CupertinoButton(
-      child: Container(
-          width: MediaQuery.of(context).size.width! * 0.8,
-          height: 45,
-          alignment: FractionalOffset.center,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          ),
-          child: Text(
-            'LOGIN',
-            textAlign: TextAlign.center,
-          )),
-      onPressed: () {
-        // Navigator.pushNamed(context, Routers.loginScreen,
-        //     arguments: {"isPop": false});
-      },
+    return SizedBox(
+      width: double.infinity,
+      child: ButtonElevated(
+        text: 'Sign Up',
+        onPressed: () {
+          context.push(MyRoutes.SIGNUP);
+          // if (_formKey.currentState?.validate() ?? false) {}
+        },
+        backgroundColor: context.appColor.primarycolor,
+      ),
     );
   }
 
   signUpBtn() {
-    return CupertinoButton(
-      child: Container(
-          width: MediaQuery.of(context).size.width! * 0.8,
-          height: 45,
-          alignment: FractionalOffset.center,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          ),
-          child: Text(
-            'SKIP',
-            textAlign: TextAlign.center,
-          )),
-      onPressed: () 
-      {
-        context.clearAndPush(routePath: MyRoutes.LOGIN);
-      },
-    );
+    return SizedBox(
+        width: double.infinity,
+        child: ButtonElevated(
+          text: 'Sign In',
+          textColor: context.appColor.blackColor,
+          onPressed: () {
+            context.clearAndPush(routePath: MyRoutes.LOGIN);
+            // if (_formKey.currentState?.validate() ?? false) {}
+          },
+          backgroundColor: context.appColor.whiteColor,
+          borderColor: context.appColor.primarycolor,
+        ));
   }
 }
