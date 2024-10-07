@@ -22,10 +22,10 @@ class UtilsMethod {
         final userIdLocal=await SharedPrefUtils.getUserId();
         if(userIdLocal!=userId)
         {
-          context.push(MyRoutes.OTHER_PROFILE_SCREEN,extra: userId);
+        //  context.push(MyRoutes.OTHER_PROFILE_SCREEN,extra: userId);
         }
         else{
-          context.push(MyRoutes.MYPROFILLE);
+        //  context.push(MyRoutes.MYPROFILLE);
         }
 
 

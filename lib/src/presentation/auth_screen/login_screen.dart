@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
+import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
@@ -107,7 +109,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   backgroundColor: context.appColor.primarycolor,
                   text: AppString.continueTxt,
                   onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {}
+                    context.push(MyRoutes.DASHBOARDSCREEN);
+                    if (_formKey.currentState?.validate() ?? false)
+                     {
+                      context.push(MyRoutes.DASHBOARDSCREEN);
+                    }
                   }),
             ),
 
@@ -121,10 +127,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
                   children: <TextSpan>[
                     TextSpan(
+                        onEnter: (event) {
+                          context.push(MyRoutes.SIGNUP);
+                        },
                         text: "Sign Up",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: context.appColor.primarycolor)),
+                            color: context.appColor.primarycolor))
                   ],
                 ),
               ),

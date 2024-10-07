@@ -10,6 +10,8 @@ import 'package:vendor_app/src/presentation/bussiness/approval_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/create_store.dart';
 import 'package:vendor_app/src/presentation/bussiness/setup_bussiness.dart';
 import 'package:vendor_app/src/presentation/bussiness/successfully_created.dart';
+import 'package:vendor_app/src/presentation/customersorder/customers_order.dart';
+import 'package:vendor_app/src/presentation/dashboard/dashboard_screen.dart';
 import 'package:vendor_app/src/presentation/onboarding/onboarding_screen.dart';
 import 'package:vendor_app/src/presentation/select_account.dart';
 import 'package:vendor_app/src/presentation/splash_screen.dart';
@@ -73,7 +75,30 @@ animatedGoRoute(
         name: SIGNUP,
         pageBuilder: (context, state) =>  SignUpScreen(),
       ),
+      animatedGoRoute(
+        path: DASHBOARDSCREEN,
+        name: DASHBOARDSCREEN,
+        
+        pageBuilder: (context, state) => DashboardScree(),
+      ),
 
+        animatedGoRoute(
+        path: CUSTOMERORDER,
+        name: CUSTOMERORDER,
+        pageBuilder: (context, state) {
+          // Extract data from `state.extra`
+      final Map<String, dynamic> orderDetails =
+              state.extra as Map<String, dynamic>;
+
+
+          return CustomerOrder(
+            orderDetails:
+                orderDetails, // Pass the data to the destination widget
+          );
+        },
+      ),
+
+      
       
       
     ],
@@ -93,21 +118,17 @@ animatedGoRoute(
   static const CREATESTORE = "/createStore";
   static const SUBMITSCREEN = "/submitscreen";
   static const APPROVEDSTATUS = "/approvedstatus";
-    static const SIGNUP = "/signup";
+  static const SIGNUP = "/signup";
+  static const DASHBOARDSCREEN = "/dashboardscreen";
+  static const CUSTOMERORDER = "/customerorder";
 
 
-  static const SETTING = "/setting";
-  static const SOUND = "/sound";
-  static const HELPSUPPORT = "/helpAndSupport";
-  static const NOTIFICATION = "/notification";
-  static const PRIVACY = "/privacy";
-  static const PRIVACY_POLICY = "/privacy_policy";
-  static const TERM_CONDITION = "/term_condition";
-  static const ACTIVITY_LOG = "/activity_log";
-  static const MYPROFILLE = "/my_profile";
-  static const OTHER_PROFILE_SCREEN = "/other_profile";
-  static const BLOCKED_LIST = "/blocked_list";
-  static const FEEDBACK_SCREEN = "/feedback_screen";
+  
+
+
+
+
+
 }
 
 GoRoute animatedGoRoute({

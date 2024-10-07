@@ -39,19 +39,28 @@ extension ThemeExt on BuildContext {
         color: appColor.blackColor,
         fontSize: 18.sp,
       );
+       TextStyle get buttonTestStyle => GoogleFonts.nunito(
+        fontWeight: FontWeight.w600,
+        color: appColor.blackColor,
+        fontSize: 14.sp,
+      );
 
   TextStyle get subTitleTextStyle => GoogleFonts.nunito(
         fontWeight: FontWeight.w400,
         color: appColor.greyColor,
         fontSize: 16.sp,
       );
+  TextStyle get subTitleTextStyleBloack => GoogleFonts.nunito(
+        fontWeight: FontWeight.w500,
+        color: appColor.blackColor,
+        fontSize: 14.sp,
+      );
 
-      TextStyle get subTitleTxtStyleblack => GoogleFonts.nunito(
+  TextStyle get subTitleTxtStyleblack => GoogleFonts.nunito(
         fontWeight: FontWeight.w400,
         color: appColor.blackColor,
         fontSize: 13.sp,
       );
-
 
   TextStyle get subTitleTxtStyle => GoogleFonts.nunito(
         fontWeight: FontWeight.w400,
@@ -304,7 +313,6 @@ extension ColorExt on ColorScheme {
   Color get redColor => Colors.red;
 
   Color get primarycolor => Color(0xff228B22);
-
 
   // Color get reviewColor =>
   //     brightness == Brightness.dark ? Colors.green : const Color(0xff006D60);

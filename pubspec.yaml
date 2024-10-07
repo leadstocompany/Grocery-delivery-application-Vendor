@@ -86,6 +86,10 @@ dependencies:
 
   provider: any
 
+  curved_navigation_bar: ^1.0.6
+
+  persistent_bottom_nav_bar: any
+
  
 
 

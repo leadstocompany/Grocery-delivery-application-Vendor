@@ -170,7 +170,8 @@ class CreateStore extends StatelessWidget {
     ];
 
     return Consumer<DaySelectionProvider>(
-      builder: (context, provider, _) {
+      builder: (context, provider, _) 
+      {
         return Container(
           height: 40.h,
           width: 90.h,
@@ -185,7 +186,8 @@ class CreateStore extends StatelessWidget {
               onSelected: (String day) {
                 provider.toggleDay(day);
               },
-              itemBuilder: (context) {
+              itemBuilder: (context) 
+              {
                 return days.map((String day) {
                   return PopupMenuItem<String>(
                     value: day,

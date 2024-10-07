@@ -95,7 +95,7 @@ class PhoneScreen extends StatelessWidget {
             alignment: Alignment.center,
             child: TextButton(
               onPressed: () {
-                context.push(MyRoutes.TERM_CONDITION);
+             
               },
               child: Text(
                 "Terms of Services & Privacy Policy.",
