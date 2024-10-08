@@ -13,9 +13,12 @@ import 'package:vendor_app/src/presentation/bussiness/successfully_created.dart'
 import 'package:vendor_app/src/presentation/customersorder/customers_order.dart';
 import 'package:vendor_app/src/presentation/dashboard/dashboard_screen.dart';
 import 'package:vendor_app/src/presentation/onboarding/onboarding_screen.dart';
+import 'package:vendor_app/src/presentation/product/create_product.dart';
+import 'package:vendor_app/src/presentation/product/product_details.dart';
 import 'package:vendor_app/src/presentation/select_account.dart';
 import 'package:vendor_app/src/presentation/splash_screen.dart';
 import 'package:vendor_app/src/presentation/terms&conditions/terms_conditions.dart';
+import 'package:vendor_app/src/presentation/transation/transation_history.dart';
 
 /// Route names as constants
 class MyRoutes {
@@ -36,14 +39,14 @@ class MyRoutes {
       animatedGoRoute(
         path: LOGIN,
         name: LOGIN,
-        pageBuilder: (context, state) => const LoginHostScreen(),
+        pageBuilder: (context, state) => LoginScreen(),
       ),
       animatedGoRoute(
         path: SELECTACCOUNT,
         name: SELECTACCOUNT,
         pageBuilder: (context, state) => const SelectAccount(),
       ),
-           animatedGoRoute(
+      animatedGoRoute(
         path: TERMANDCONDITIONS,
         name: TERMANDCONDITIONS,
         pageBuilder: (context, state) => const TermsAndConditionsScreen(),
@@ -53,13 +56,12 @@ class MyRoutes {
         name: SETUPBUSSINESS,
         pageBuilder: (context, state) => const SetupBussiness(),
       ),
-       animatedGoRoute(
+      animatedGoRoute(
         path: CREATESTORE,
         name: CREATESTORE,
         pageBuilder: (context, state) => const CreateStore(),
       ),
-
-animatedGoRoute(
+      animatedGoRoute(
         path: SUBMITSCREEN,
         name: SUBMITSCREEN,
         pageBuilder: (context, state) => const PinCreated(),
@@ -69,27 +71,23 @@ animatedGoRoute(
         name: APPROVEDSTATUS,
         pageBuilder: (context, state) => const ApprovalScreen(),
       ),
-
-         animatedGoRoute(
+      animatedGoRoute(
         path: SIGNUP,
         name: SIGNUP,
-        pageBuilder: (context, state) =>  SignUpScreen(),
+        pageBuilder: (context, state) => LoginHostScreen(),
       ),
       animatedGoRoute(
         path: DASHBOARDSCREEN,
         name: DASHBOARDSCREEN,
-        
         pageBuilder: (context, state) => DashboardScree(),
       ),
-
-        animatedGoRoute(
+      animatedGoRoute(
         path: CUSTOMERORDER,
         name: CUSTOMERORDER,
         pageBuilder: (context, state) {
           // Extract data from `state.extra`
-      final Map<String, dynamic> orderDetails =
+          final Map<String, dynamic> orderDetails =
               state.extra as Map<String, dynamic>;
-
 
           return CustomerOrder(
             orderDetails:
@@ -97,10 +95,21 @@ animatedGoRoute(
           );
         },
       ),
-
-      
-      
-      
+      animatedGoRoute(
+        path: PRODUCTFORMSCREEN,
+        name: PRODUCTFORMSCREEN,
+        pageBuilder: (context, state) => ProductFormScreen(),
+      ),
+      animatedGoRoute(
+        path: PRODUCTDETAILS,
+        name: PRODUCTDETAILS,
+        pageBuilder: (context, state) => Productdetails(),
+      ),
+      animatedGoRoute(
+        path: TRANSACTIONHISTORY,
+        name: TRANSACTIONHISTORY,
+        pageBuilder: (context, state) => TransactionHistory(),
+      ),
     ],
   );
 
@@ -122,13 +131,10 @@ animatedGoRoute(
   static const DASHBOARDSCREEN = "/dashboardscreen";
   static const CUSTOMERORDER = "/customerorder";
 
+  static const PRODUCTFORMSCREEN = "/productformscreen";
+  static const PRODUCTDETAILS = "/productdetails";
 
-  
-
-
-
-
-
+  static const TRANSACTIONHISTORY = "/transationhistory";
 }
 
 GoRoute animatedGoRoute({

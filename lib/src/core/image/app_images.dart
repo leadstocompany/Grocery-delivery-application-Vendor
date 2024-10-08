@@ -18,6 +18,12 @@ class AppImages {
     static const String image = "${imageURL}Image.png";
      static const String Avatar = "${imageURL}Avatar.png";
 
+ static const String Vector = "${imageURL}Vector.png";
+ static const String incoming = "${imageURL}import.png";
+
+
+    
+
 
   
 

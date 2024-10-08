@@ -12,14 +12,14 @@ import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
-class SignUpScreen extends StatefulWidget {
-  SignUpScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  LoginScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 

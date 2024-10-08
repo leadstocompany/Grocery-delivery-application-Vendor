@@ -100,8 +100,10 @@ class _CreatePasswordState extends State<CreatePassword> {
                           ? Icons.visibility
                           : Icons.visibility_off,
                     ),
-                    onPressed: () {
-                      setState(() {
+                    onPressed: ()
+                     {
+                      setState(() 
+                      {
                         _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
                       });
                     },

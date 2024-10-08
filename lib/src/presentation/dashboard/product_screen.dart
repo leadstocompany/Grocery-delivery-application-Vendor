@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
+import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/presentation/widgets/headerprofile.dart';
 
@@ -17,10 +19,25 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      floatingActionButton: _buildFloatActionButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Column(
         children: [HeaderProfile(), detailsCategory()],
       ),
+    );
+  }
+
+  _buildFloatActionButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        context.push(MyRoutes.PRODUCTFORMSCREEN);
+      },
+      shape: CircleBorder(),
+      child: Icon(
+        Icons.add,
+        color: context.appColor.primarycolor,
+      ),
+      backgroundColor: context.appColor.whiteColor,
     );
   }
 
@@ -83,13 +100,16 @@ class _ProductScreenState extends State<ProductScreen> {
     ];
 
     return Expanded(
-      child: ListView.builder(
+      child:
+       ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: productsC.length,
         itemBuilder: (context, index) {
           status = index;
           return InkWell(
-            onTap: () {},
+            onTap: () {
+              context.push(MyRoutes.PRODUCTDETAILS);
+            },
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: Padding(
@@ -138,9 +158,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                   .toString() ==
                                               "Out of Stock"
                                           ? Colors.black
-                                          : Colors.black
-                                          )
-                                          ),
+                                          : Colors.black)),
                             ),
                           )
                         ],
