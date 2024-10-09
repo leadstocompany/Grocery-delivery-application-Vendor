@@ -1,10 +1,14 @@
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pinput/pinput.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
+import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -23,7 +27,14 @@ class _WalletScreenState extends State<WalletScreen> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Gap(10.h),
+            Text(
+              "Wallet",
+              style: context.titleStyle.copyWith(color: Colors.black),
+            ),
+            Gap(10.h),
             cardWidget(),
             Gap(30.h),
             Row(
@@ -61,6 +72,19 @@ class _WalletScreenState extends State<WalletScreen> {
         color: Colors.black,
         child: Stack(
           children: [
+            // Positioned(
+            //   left: 180,
+            //   child: Container(
+            //     width: double.infinity,
+            //     height: 180,
+            //     decoration: BoxDecoration(
+            //         image: DecorationImage(
+            //             fit: BoxFit.cover,
+            //             image: AssetImage(
+            //               AppImages.Vector,
+            //             ))),
+            //   ),
+            // ),
             Positioned(
               child: Container(
                 color: Colors.green,
@@ -91,8 +115,9 @@ class _WalletScreenState extends State<WalletScreen> {
                         text: 'Withdraw',
                         textColor: context.appColor.blackColor,
                         onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                          _withdrawalBottomSheet(context);
+                          //  Navigator.pop(context);
+                          //  Navigator.pop(context);
                         },
                         backgroundColor: Colors.white),
                   ),
@@ -114,19 +139,6 @@ class _WalletScreenState extends State<WalletScreen> {
                     _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
                   });
                 },
-              ),
-            ),
-            Positioned(
-              left: 180,
-              child: Container(
-                width: double.infinity,
-                height: 180,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          AppImages.Vector,
-                        ))),
               ),
             ),
           ],
@@ -196,6 +208,213 @@ class _WalletScreenState extends State<WalletScreen> {
           );
         },
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: context.appColor.greyColor400),
+            color: context.appColor.whiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0)),
+          ),
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Centered App Logo
+              Center(
+                child: Image.asset(
+                  AppImages.applogo, // Replace with your logo path
+                  height: 100.h, // Adjust height as necessary
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.center,
+                child: Text('Please enter your ọjà pin ',
+                    style: context.subTitleStyle),
+              ),
+
+              Gap(20.h),
+              Pinput(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                length: 4,
+                defaultPinTheme: PinTheme(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5.h,
+                    horizontal: 8.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: context.appColor.whiteColor,
+                    borderRadius: BorderRadius.circular(4.r),
+                    border: Border.all(
+                        color: context.appColor.greyColor400, width: 1),
+                  ),
+                  textStyle:
+                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                ),
+                focusedPinTheme: PinTheme(
+                  decoration: BoxDecoration(
+                    color: context.appColor.greyColor100,
+                    borderRadius: BorderRadius.circular(4.r),
+                    border:
+                        Border.all(color: context.appColor.primary, width: 1),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5.h,
+                    horizontal: 8.w,
+                  ),
+                  textStyle:
+                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                ),
+                onChanged: (value) {
+                  // Optionally handle intermediate changes if needed
+                  // But do not call `pageNotifier.goToNextPage()` here
+                },
+                onCompleted: (value) {},
+              ),
+              Gap(50.h),
+
+              Center(
+                child: SizedBox(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ButtonElevated(
+                        text: 'Withdraw',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          ArtSweetAlert.show(
+                              context: context,
+                              artDialogArgs: ArtDialogArgs(
+                                  type: ArtSweetAlertType.success,
+                                  title: "Money Sent",
+                                  text: "Your funds is on its way to you"));
+                        },
+                        backgroundColor: context.appColor.primarycolor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _withdrawalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: context.appColor.greyColor400),
+            color: context.appColor.whiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0)),
+          ),
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // Centered App Logo
+
+              Center(
+                child: Image.asset(
+                  AppImages.applogo,
+                  height: 70.h,
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text('Withdrawal ', style: context.subTitleStyle),
+              ),
+              Gap(10.h),
+              CustomTextField(
+                validator: (val) {
+                  if (val.toString().isEmpty) {
+                    return "Please enter your amount number";
+                  }
+                  return null;
+                },
+                maxLength: 64,
+                counterWidget: const Offstage(),
+                // controller: context.read<AuthCubit>().userName,
+                hintText: "Amount",
+                fillColor: context.appColor.whiteColor,
+              ),
+              Gap(5.h),
+              Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Access Bank',
+                        style: context.subTitleTxtStyleblack,
+                      ),
+                      Text(
+                        'Emeka Festus Akanbi',
+                        style: context.subTitleTxtStyle,
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: context.appColor.greyColor400,
+                  )
+                ],
+              ),
+              Gap(5.h),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.add,
+                        color: context.appColor.primarycolor,
+                      )),
+                  Text(
+                    'Add Bank',
+                    style: context.subTitleTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: context.appColor.primarycolor),
+                  ),
+                ],
+              ),
+
+              Gap(50.h),
+
+              Center(
+                child: SizedBox(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ButtonElevated(
+                        text: 'Withdraw',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _showBottomSheet(context);
+                        },
+                        backgroundColor: context.appColor.primarycolor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

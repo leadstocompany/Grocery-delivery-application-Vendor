@@ -7,16 +7,19 @@ import 'package:vendor_app/src/core/utiils_lib/globle_variable.dart';
 import 'package:vendor_app/src/presentation/auth_screen/login_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/sign_up_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/approval_screen.dart';
-import 'package:vendor_app/src/presentation/bussiness/create_store.dart';
+import 'package:vendor_app/src/presentation/bussiness/bussiness_details.dart';
+import 'package:vendor_app/src/presentation/store/create_store.dart';
 import 'package:vendor_app/src/presentation/bussiness/setup_bussiness.dart';
 import 'package:vendor_app/src/presentation/bussiness/successfully_created.dart';
 import 'package:vendor_app/src/presentation/customersorder/customers_order.dart';
 import 'package:vendor_app/src/presentation/dashboard/dashboard_screen.dart';
+import 'package:vendor_app/src/presentation/insights/insights_history.dart';
 import 'package:vendor_app/src/presentation/onboarding/onboarding_screen.dart';
 import 'package:vendor_app/src/presentation/product/create_product.dart';
 import 'package:vendor_app/src/presentation/product/product_details.dart';
 import 'package:vendor_app/src/presentation/select_account.dart';
 import 'package:vendor_app/src/presentation/splash_screen.dart';
+import 'package:vendor_app/src/presentation/store/store_management.dart';
 import 'package:vendor_app/src/presentation/terms&conditions/terms_conditions.dart';
 import 'package:vendor_app/src/presentation/transation/transation_history.dart';
 
@@ -52,10 +55,13 @@ class MyRoutes {
         pageBuilder: (context, state) => const TermsAndConditionsScreen(),
       ),
       animatedGoRoute(
-        path: SETUPBUSSINESS,
-        name: SETUPBUSSINESS,
-        pageBuilder: (context, state) => const SetupBussiness(),
-      ),
+          path: SETUPBUSSINESS,
+          name: SETUPBUSSINESS,
+          pageBuilder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final String status = extra?['status'] ?? '';
+            return SetupBussiness(status: status);
+          }),
       animatedGoRoute(
         path: CREATESTORE,
         name: CREATESTORE,
@@ -110,6 +116,21 @@ class MyRoutes {
         name: TRANSACTIONHISTORY,
         pageBuilder: (context, state) => TransactionHistory(),
       ),
+      animatedGoRoute(
+        path: INSIGHTSHISTORY,
+        name: INSIGHTSHISTORY,
+        pageBuilder: (context, state) => InsightsHistory(),
+      ),
+      animatedGoRoute(
+        path: DETAILSBUSSINESS,
+        name: DETAILSBUSSINESS,
+        pageBuilder: (context, state) => DetailsBussiness(),
+      ),
+      animatedGoRoute(
+        path: STOREMANAGEMENT,
+        name: STOREMANAGEMENT,
+        pageBuilder: (context, state) => StoreManagement(),
+      ),
     ],
   );
 
@@ -135,6 +156,12 @@ class MyRoutes {
   static const PRODUCTDETAILS = "/productdetails";
 
   static const TRANSACTIONHISTORY = "/transationhistory";
+
+  static const INSIGHTSHISTORY = "/insightshistory";
+
+  static const DETAILSBUSSINESS = "/detailsbussiness";
+
+  static const STOREMANAGEMENT = "/storemanagement";
 }
 
 GoRoute animatedGoRoute({

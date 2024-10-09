@@ -18,13 +18,34 @@ import 'package:flutter_screenutil/flutter_screenutil.dart'; // Assuming you're 
 // Import your CustomTextField and ButtonElevated
 
 class SetupBussiness extends StatelessWidget {
-  const SetupBussiness({super.key});
+  final String status;
+  const SetupBussiness({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
+      // status == "0"
+      //     ?app
+
+      appBar: status == "0"
+          ? AppBar(
+              backgroundColor: Colors.transparent,
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_rounded,
+                  color: context.appColor.blackColor,
+                ),
+                onPressed: () {
+                  Navigator.pop(context); // Handle back button functionality
+                },
+              ),
+              title: Text('Set Up Your Business Details',
+                  style: context.subTitleTextStyleBloack
+                      .copyWith(fontSize: 16.sp)),
+            )
+          : AppBar(),
       body: SingleChildScrollView(
         // Make the body scrollable
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -32,13 +53,6 @@ class SetupBussiness extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Gap(20.h),
-              Text(
-                'Set Up Your Business Details',
-                style: context.subTitleStyle,
-              ),
-              Gap(20.h),
-
               CircleAvatar(
                 radius: 25.5.h,
                 backgroundColor: Colors.white,
@@ -215,9 +229,14 @@ class SetupBussiness extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ButtonElevated(
-                  text: 'Save & Next',
+                  text: status == "0" ? "Save details" : 'Save & Next',
                   onPressed: () {
-                    context.push(MyRoutes.CREATESTORE);
+                    if (status == "0") {
+                      Navigator.pop(context);
+                      _showBottomSheet(context);
+                    } else {
+                      context.push(MyRoutes.CREATESTORE);
+                    }
 
                     // if (_formKey.currentState?.validate() ?? false) {
                     //   // Perform action on valid form
@@ -232,6 +251,83 @@ class SetupBussiness extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // Function to show the Bottom Sheet
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: context.appColor.greyColor400),
+            color: context.appColor.whiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0)),
+          ),
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Centered App Logo
+              Center(
+                child: Image.asset(
+                  AppImages.applogo, // Replace with your logo path
+                  height: 100.h, // Adjust height as necessary
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.center,
+                child: Text('Details Saved', style: context.subTitleStyle),
+              ),
+
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 300,
+                  child: Text('Your details have been saved successfully',
+                      textAlign: TextAlign.center,
+                      style:
+                          context.subTitleTextStyle.copyWith(fontSize: 13.sp)),
+                ),
+              ),
+              Gap(20.h),
+              Center(
+                child: SizedBox(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ButtonElevated(
+                        text: 'View Account',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          context.push(MyRoutes.DETAILSBUSSINESS);
+                        },
+                        backgroundColor: context.appColor.primarycolor),
+                  ),
+                ),
+              ),
+              Gap(10.h),
+              Center(
+                  child: SizedBox(
+                      width: double.infinity,
+                      child: ButtonElevated(
+                        text: 'Skip for Later',
+                        textColor: context.appColor.primarycolor,
+                        onPressed: () {
+                          Navigator.pop(context);
+
+                          //context.clearAndPush(routePath: MyRoutes.LOGIN);
+                        },
+                        backgroundColor: context.appColor.whiteColor,
+                        borderColor: context.appColor.primarycolor,
+                      )))
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -31,7 +31,7 @@ class _OrderScreenState extends State<OrderScreen> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            Gap(20.h),
+            Gap(10.h),
             HeaderProfile(),
             categoryList(),
             if (slectedIndex == 0) ...{

@@ -110,8 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: AppString.continueTxt,
                   onPressed: () {
                     context.push(MyRoutes.DASHBOARDSCREEN);
-                    if (_formKey.currentState?.validate() ?? false)
-                     {
+                    if (_formKey.currentState?.validate() ?? false) {
                       context.push(MyRoutes.DASHBOARDSCREEN);
                     }
                   }),
@@ -121,20 +120,22 @@ class _LoginScreenState extends State<LoginScreen> {
             Gap(10.h),
             Align(
               alignment: Alignment.center,
-              child: RichText(
-                text: TextSpan(
-                  text: "Don’t have an account? ",
-                  style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
-                  children: <TextSpan>[
-                    TextSpan(
-                        onEnter: (event) {
-                          context.push(MyRoutes.SIGNUP);
-                        },
-                        text: "Sign Up",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: context.appColor.primarycolor))
-                  ],
+              child: InkWell(
+                onTap: () {
+                  context.push(MyRoutes.SIGNUP);
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: "Don’t have an account? ",
+                    style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: "Sign Up",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: context.appColor.primarycolor))
+                    ],
+                  ),
                 ),
               ),
             ),

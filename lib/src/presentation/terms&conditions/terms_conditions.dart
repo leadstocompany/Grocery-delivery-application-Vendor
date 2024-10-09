@@ -205,9 +205,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nu
                     child: ButtonElevated(
                         text: 'Continue to Setup',
                         onPressed: () {
-                          print("lksdjfhgjdfghkldkfjghjkld");
+
+                         
                           context.clearAndPush(
-                              routePath: MyRoutes.SETUPBUSSINESS);
+                              routePath: MyRoutes.SETUPBUSSINESS,
+                                args: {'status': '1'}, 
+                              );
+
+                              
                         },
                         backgroundColor: context.appColor.primarycolor),
                   ),

@@ -21,8 +21,11 @@ class _ProductScreenState extends State<ProductScreen> {
     return Scaffold(
       floatingActionButton: _buildFloatActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Column(
-        children: [HeaderProfile(), detailsCategory()],
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [Gap(10.h), HeaderProfile(), detailsCategory()],
+        ),
       ),
     );
   }
@@ -100,8 +103,7 @@ class _ProductScreenState extends State<ProductScreen> {
     ];
 
     return Expanded(
-      child:
-       ListView.builder(
+      child: ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: productsC.length,
         itemBuilder: (context, index) {

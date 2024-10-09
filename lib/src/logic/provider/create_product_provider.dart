@@ -11,14 +11,19 @@ class ProductProvider extends ChangeNotifier {
   double discountPrice = 0.0;
   bool inStock = true;
 
+   String selectedproducctQuentity = '';
+
   // Static Data
   List<String> categories = ['Electronics', 'Clothing', 'Groceries'];
-  Map<String, List<String>> subcategories = {
+  Map<String, List<String>> subcategories = 
+  {
     'Electronics': ['Mobiles', 'Laptops'],
     'Clothing': ['Men', 'Women'],
     'Groceries': ['Fruits', 'Vegetables'],
   };
-  Map<String, List<String>> products = {
+
+  Map<String, List<String>> products =
+   {
     'Mobiles': ['iPhone', 'Samsung', 'OnePlus'],
     'Laptops': ['Dell', 'HP', 'MacBook'],
     'Men': ['Shirts', 'Trousers'],
@@ -32,6 +37,12 @@ class ProductProvider extends ChangeNotifier {
     selectedSubcategory = '';
     selectedProduct = '';
     notifyListeners();
+  }
+
+   void setProductQuentity(String value) 
+   {
+    selectedproducctQuentity = value;
+   notifyListeners();
   }
 
   void setSubcategory(String value) {

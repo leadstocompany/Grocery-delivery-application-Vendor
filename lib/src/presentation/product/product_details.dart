@@ -221,6 +221,13 @@ class Productdetails extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: context.appColor.greyColor400),
+            color: context.appColor.whiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0)),
+          ),
           padding: EdgeInsets.all(20.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -247,7 +254,7 @@ class Productdetails extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style:
                           context.subTitleTextStyle.copyWith(fontSize: 13.sp)),
-                ),
+                 ),
               ),
               Gap(20.h),
               Center(

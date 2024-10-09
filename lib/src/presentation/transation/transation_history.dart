@@ -1,3 +1,4 @@
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class TransactionHistory extends StatefulWidget {
   const TransactionHistory({super.key});
@@ -45,7 +47,8 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -63,9 +66,14 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: Icon(
-              Icons.filter_list,
-              color: context.appColor.blackColor,
+            child: IconButton(
+              onPressed: () {
+                _showBottomSheet(context);
+              },
+              icon: Icon(
+                Icons.filter_list,
+                color: context.appColor.blackColor,
+              ),
             ),
           ),
         ],
@@ -174,6 +182,65 @@ class _TransactionHistoryState extends State<TransactionHistory> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: context.appColor.greyColor400),
+            color: context.appColor.whiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0)),
+          ),
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Centered App Logo
+              Center(
+                child: Image.asset(
+                  AppImages.applogo, // Replace with your logo path
+                  height: 100.h, // Adjust height as necessary
+                ),
+              ),
+              Gap(20.h),
+              InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Order Payment', style: context.subTitleStyle)),
+
+              Divider(
+                thickness: 0.2,
+              ),
+              Gap(20.h),
+              InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Withdrawal', style: context.subTitleStyle)),
+              Divider(
+                thickness: 0.2,
+              ),
+              Gap(20.h),
+
+              InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Refunds', style: context.subTitleStyle)),
+
+              Gap(20.h),
+            ],
+          ),
+        );
+      },
     );
   }
 }

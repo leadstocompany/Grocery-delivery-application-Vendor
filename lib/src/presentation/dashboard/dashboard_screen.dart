@@ -40,32 +40,32 @@ class _DashboardScreeState extends State<DashboardScree> {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
-        title: "Home",
-        activeColorPrimary: Colors.blue,
+        title: "Orders",
+        activeColorPrimary: context.appColor.primarycolor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.search),
-        title: "Search",
-        activeColorPrimary: Colors.blue,
+        icon: Icon(Icons.grid_view_rounded),
+        title: "Produc",
+        activeColorPrimary: context.appColor.primarycolor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.notifications),
-        title: "Notifications",
-        activeColorPrimary: Colors.blue,
+        icon: Icon(Icons.account_balance_wallet_outlined),
+        title: "Wallet",
+        activeColorPrimary: context.appColor.primarycolor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.settings),
-        title: "Settings",
-        activeColorPrimary: Colors.blue,
+        icon: Icon(Icons.bar_chart),
+        title: "Insights",
+        activeColorPrimary: context.appColor.primarycolor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.settings),
-        title: "Settings",
-        activeColorPrimary: Colors.blue,
+        icon: Icon(Icons.portrait_outlined),
+        title: "Profile",
+        activeColorPrimary: context.appColor.primarycolor,
         inactiveColorPrimary: Colors.grey,
       ),
     ];
@@ -73,9 +73,7 @@ class _DashboardScreeState extends State<DashboardScree> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-   
       body: PersistentTabView(
         context,
         controller: _controller,

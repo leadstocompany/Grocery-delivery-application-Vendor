@@ -11,7 +11,8 @@ class HeaderProfile extends StatefulWidget {
 class HeaderState extends State<HeaderProfile> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return 
+    Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Row(
         mainAxisSize: MainAxisSize.max,

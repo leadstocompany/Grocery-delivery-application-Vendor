@@ -15,18 +15,15 @@ class AppImages {
   static const String product2 = "${imageURL}product2.png";
   static const String product3 = "${imageURL}product3.png";
   static const String product4 = "${imageURL}product4.png";
-    static const String image = "${imageURL}Image.png";
-     static const String Avatar = "${imageURL}Avatar.png";
+  static const String image = "${imageURL}Image.png";
+  static const String Avatar = "${imageURL}Avatar.png";
 
- static const String Vector = "${imageURL}Vector.png";
- static const String incoming = "${imageURL}import.png";
+  static const String Vector = "${imageURL}Vector.png";
+  static const String incoming = "${imageURL}import.png";
 
-
-    
-
-
-  
-
+  static const String totalOrder = "${imageURL}totalOrder.png";
+  static const String totalcan = "${imageURL}totalcan.png";
+  static const String totalcom = "${imageURL}totalcom.png";
 
   static const String icon1 = "${iconURL}icon1.svg";
   static const String icon2 = "${iconURL}icon2.svg";

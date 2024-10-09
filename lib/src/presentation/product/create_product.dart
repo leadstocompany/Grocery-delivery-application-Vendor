@@ -35,8 +35,10 @@ class ProductFormScreen extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Consumer<ProductProvider>(
-            builder: (context, provider, child) {
-              return SingleChildScrollView(
+            builder: (context, provider, child) 
+            {
+              return 
+              SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -156,20 +158,38 @@ class ProductFormScreen extends StatelessWidget {
 
                     Gap(15.h),
 
-                    CustomTextField(
-                      validator: (val) {
-                        if (val.toString().isEmpty) {
-                          return "Please enter your name";
-                        }
-                        return null;
-                      },
-                      counterWidget: const Offstage(),
-                      onChanged: (value) {
-                        provider.setQuantity(int.tryParse(value) ?? 1);
-                      },
-                      hintText: 'Product Quantity',
-                      hintStyle: context.subTitleTxtStyleblack,
-                      fillColor: context.appColor.whiteColor,
+                    Container(
+                      height: 40.h,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        value: provider.selectedproducctQuentity.isNotEmpty
+                            ? provider.selectedproducctQuentity
+                            : null,
+                        hint: Text(
+                          'Select Products Quantity',
+                          style: context.subTitleTxtStyleblack,
+                        ),
+                        items: provider.categories
+                            .map((category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(
+                                    category,
+                                    style: context.buttonTestStyle,
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          provider.setProductQuentity(value!);
+                        },
+                        decoration: InputDecoration.collapsed(
+                            hintText: ''), // Removes default underline
+                      ),
                     ),
                     Gap(10.h),
                     CustomTextField(
@@ -248,6 +268,8 @@ class ProductFormScreen extends StatelessWidget {
                     SwitchListTile(
                       title: Text('In Stock'),
                       value: provider.inStock,
+                      activeColor: context.appColor.primarycolor,
+                      
                       onChanged: (value) {
                         provider.toggleStock(value);
                       },

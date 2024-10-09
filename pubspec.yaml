@@ -90,6 +90,8 @@ dependencies:
 
   persistent_bottom_nav_bar: any
 
+  art_sweetalert: ^0.0.5
+
  
 
 
