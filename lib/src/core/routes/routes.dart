@@ -8,6 +8,7 @@ import 'package:vendor_app/src/presentation/auth_screen/login_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/sign_up_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/approval_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/bussiness_details.dart';
+import 'package:vendor_app/src/presentation/profile/Setting_screen.dart';
 import 'package:vendor_app/src/presentation/store/create_store.dart';
 import 'package:vendor_app/src/presentation/bussiness/setup_bussiness.dart';
 import 'package:vendor_app/src/presentation/bussiness/successfully_created.dart';
@@ -131,6 +132,13 @@ class MyRoutes {
         name: STOREMANAGEMENT,
         pageBuilder: (context, state) => StoreManagement(),
       ),
+        animatedGoRoute(
+        path: SETTING,
+        name: SETTING,
+        pageBuilder: (context, state) => Settings(),
+      ),
+
+      
     ],
   );
 
@@ -162,6 +170,11 @@ class MyRoutes {
   static const DETAILSBUSSINESS = "/detailsbussiness";
 
   static const STOREMANAGEMENT = "/storemanagement";
+
+    static const SETTING = "/settings";
+
+  
+
 }
 
 GoRoute animatedGoRoute({

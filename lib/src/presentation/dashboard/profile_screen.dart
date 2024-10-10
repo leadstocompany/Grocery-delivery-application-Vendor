@@ -148,6 +148,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           extra: {'status': '0'},
                         );
                         break;
+                      case 2:
+                        context.push(
+                          MyRoutes.SETTING,
+                        );
+                        break;
                     }
                   },
                   child: Padding(
