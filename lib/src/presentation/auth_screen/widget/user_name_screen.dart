@@ -17,7 +17,8 @@ class UserNameScreen extends StatelessWidget {
     final pageNotifier = Provider.of<PageNotifier>(context, listen: false);
 
     final _formKey = GlobalKey<FormState>();
-    return Padding(
+    return 
+    Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,6 +76,7 @@ class UserNameScreen extends StatelessWidget {
               ],
             ),
           ),
+         
           const Gap(5),
           Align(
             alignment: Alignment.topRight,
@@ -100,5 +102,7 @@ class UserNameScreen extends StatelessWidget {
         ],
       ),
     );
+
+
   }
 }

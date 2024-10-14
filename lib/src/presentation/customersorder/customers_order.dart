@@ -262,8 +262,10 @@ class _CustomerOrderState extends State<CustomerOrder> {
   Widget orderProcess() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Center(
-        child: Column(
+      child: 
+      Center(
+        child: 
+        Column(
           children: [
             Center(
               child: Padding(

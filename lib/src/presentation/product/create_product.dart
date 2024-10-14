@@ -191,6 +191,8 @@ class ProductFormScreen extends StatelessWidget {
                             hintText: ''), // Removes default underline
                       ),
                     ),
+                  
+                  
                     Gap(10.h),
                     CustomTextField(
                       validator: (val) {

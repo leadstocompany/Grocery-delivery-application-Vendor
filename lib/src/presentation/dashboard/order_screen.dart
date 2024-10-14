@@ -72,8 +72,10 @@ class _OrderScreenState extends State<OrderScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(3.0)),
                     ),
                     child: InkWell(
-                      onTap: () {
-                        setState(() {
+                      onTap: () 
+                      {
+                        setState(()
+                         {
                           slectedIndex = index;
                         });
                       },
