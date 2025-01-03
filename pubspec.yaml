@@ -49,6 +49,7 @@ dependencies:
 
   # DI
   get_it: any
+  
 
   # Networking
   dio: any
@@ -88,9 +89,17 @@ dependencies:
 
   curved_navigation_bar: ^1.0.6
 
-  persistent_bottom_nav_bar: any
+  persistent_bottom_nav_bar:         any
 
   art_sweetalert: ^0.0.5
+
+  image_picker:
+
+
+  intl:
+  # sms_autofill: ^2.4.1
+
+
 
  
 

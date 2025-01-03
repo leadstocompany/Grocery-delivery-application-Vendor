@@ -86,7 +86,8 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void submitProduct() {
+  void submitProduct() 
+  {
     // Add your submit logic here
     print('Product Submitted');
   }

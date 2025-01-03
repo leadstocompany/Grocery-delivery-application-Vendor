@@ -1,14 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
+import 'package:vendor_app/src/logic/provider/crate_store_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
@@ -19,16 +23,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart'; // Assuming you're 
 
 class SetupBussiness extends StatelessWidget {
   final String status;
-  const SetupBussiness({super.key, required this.status});
+  SetupBussiness({super.key, required this.status});
+
+  ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
-    return Scaffold(
-      // status == "0"
-      //     ?app
+    final createStoreprovider =
+        Provider.of<DaySelectionProvider>(context, listen: false);
 
+    return Scaffold(
       appBar: status == "0"
           ? AppBar(
               backgroundColor: Colors.transparent,
@@ -87,6 +93,7 @@ class SetupBussiness extends StatelessWidget {
                 child: Column(
                   children: [
                     CustomTextField(
+                      controller: createStoreprovider.storeName,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "Store Name";
@@ -101,6 +108,7 @@ class SetupBussiness extends StatelessWidget {
                     ),
                     Gap(10.h),
                     CustomTextField(
+                      controller: createStoreprovider.storeDescription,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "Describe your business. e.g We sell fresh tomatoes";
@@ -117,6 +125,7 @@ class SetupBussiness extends StatelessWidget {
                     ),
                     Gap(10.h),
                     CustomTextField(
+                      controller: createStoreprovider.officialPhoneNumber,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "Official Phone Number";
@@ -131,6 +140,7 @@ class SetupBussiness extends StatelessWidget {
                     ),
                     Gap(10.h),
                     CustomTextField(
+                      controller: createStoreprovider.storeAddress,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "Address";
@@ -145,6 +155,7 @@ class SetupBussiness extends StatelessWidget {
                     ),
                     Gap(10.h),
                     CustomTextField(
+                      controller: createStoreprovider.storeGSTNumber,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "GST Number (optional)";
@@ -159,6 +170,7 @@ class SetupBussiness extends StatelessWidget {
                     ),
                     Gap(10.h),
                     CustomTextField(
+                      controller: createStoreprovider.storeGumastaNumber,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "Gumasta Number";
@@ -172,47 +184,70 @@ class SetupBussiness extends StatelessWidget {
                       fillColor: context.appColor.greyColor100,
                     ),
                     Gap(10.h),
+                   
+
                     Container(
                       height: 40.h,
                       decoration: BoxDecoration(
                         border:
                             Border.all(color: context.appColor.greyColor400),
                         color: context.appColor.greyColor200,
-
                         borderRadius: BorderRadius.all(Radius.circular(5.0)),
-
-                        // width: ,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            Text(
-                              'Upload shop Picture',
-                              style: context.subTitleTxtStyleblack.copyWith(
-                                color: context.appColor.lightBlackColor,
-                              ),
+                            Consumer<DaySelectionProvider>(
+                              builder: (context, imageProvider, child) {
+                                return Container(
+                                  width: 200.w,
+                                  child: Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    imageProvider.image == null
+                                        ? 'Upload shop Picture'
+                                        : imageProvider.image!.path
+                                            .split('/')
+                                            .last,
+                                    style:
+                                        context.subTitleTxtStyleblack.copyWith(
+                                      color: context.appColor.lightBlackColor,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             Spacer(),
                             SizedBox(
                               width: 100,
                               height: 25,
-                              child: ButtonElevated(
-                                text: 'Upload',
-                                onPressed: () {
-                                  if (_formKey.currentState?.validate() ??
-                                      false) {
-                                    // Perform action on valid form
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  final XFile? pickedFile = await _picker
+                                      .pickImage(source: ImageSource.gallery);
+                                  if (pickedFile != null) {
+                                    // Update the image in the provider
+
+                                    context
+                                        .read<DaySelectionProvider>()
+                                        .setImage(File(pickedFile.path));
                                   }
                                 },
-                                fontSize: 10,
-                                backgroundColor: context.appColor.primarycolor,
+                                child: Text(
+                                  'Upload',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      context.appColor.primarycolor),
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
+
                     Gap(10.h),
                   ],
                 ),

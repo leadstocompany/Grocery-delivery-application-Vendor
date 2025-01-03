@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:gap/gap.dart';
@@ -22,12 +23,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   String _numbersOnly = '';
 
   String _extractNumbers(String input) {
@@ -37,10 +32,26 @@ class _OtpScreenState extends State<OtpScreen> {
     return numbers;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  String? _otpCode;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   listenForCode(); // Start listening for OTP code from SMS
+  // }
+
+  // @override
+  // void codeUpdated() {
+  //   setState(() {
+  //     _otpCode = code; // Update the OTP code when received
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   cancel();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +86,62 @@ class _OtpScreenState extends State<OtpScreen> {
             ],
           ),
           Gap(10.h),
+          // Pinput(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+          //   length: 6,
+          //   defaultPinTheme: PinTheme(
+          //     padding: EdgeInsets.symmetric(
+          //       vertical: 10.h,
+          //       horizontal: 12.w,
+          //     ),
+          //     decoration: BoxDecoration(
+          //       color: context.appColor.greyColor100,
+          //       borderRadius: BorderRadius.circular(4.r),
+          //       border:
+          //           Border.all(color: context.appColor.greyColor400, width: 1),
+          //     ),
+          //     textStyle: context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+          //   ),
+          //   focusedPinTheme: PinTheme(
+          //     decoration: BoxDecoration(
+          //       color: context.appColor.greyColor100,
+          //       borderRadius: BorderRadius.circular(4.r),
+          //       border: Border.all(color: context.appColor.primary, width: 1),
+          //     ),
+          //     padding: EdgeInsets.symmetric(
+          //       vertical: 10.h,
+          //       horizontal: 12.w,
+          //     ),
+          //     textStyle: context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+          //   ),
+          //   onChanged: (value) {
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       SnackBar(
+          //         content: Text("Enter a valid otp"),
+          //       ),
+          //     );
+          //   },
+          //   onCompleted: (value) async {
+          //     // Only call `goToNextPage` once when the OTP is fully entered
+
+          //     final success = await pageNotifier.verifiOtp(value, context);
+
+          //     if (success) {
+          //       pageNotifier.goToNextPage(); // Change page
+          //     } else {
+          //       // Show error if OTP sending fails
+          //       ScaffoldMessenger.of(context).showSnackBar(
+          //         SnackBar(
+          //           content: Text("Failed to send OTP. Please try again."),
+          //         ),
+          //       );
+          //     }
+          //   },
+          // ),
+
           Pinput(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
             length: 6,
             defaultPinTheme: PinTheme(
               padding: EdgeInsets.symmetric(
@@ -85,43 +149,74 @@ class _OtpScreenState extends State<OtpScreen> {
                 horizontal: 12.w,
               ),
               decoration: BoxDecoration(
-                color: context.appColor.greyColor100,
+                color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(4.r),
-                border:
-                    Border.all(color: context.appColor.greyColor400, width: 1),
+                border: Border.all(
+                  color: Colors.grey.shade400,
+                  width: 1,
+                ),
               ),
-              textStyle: context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+              textStyle: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.black,
+              ),
             ),
             focusedPinTheme: PinTheme(
               decoration: BoxDecoration(
-                color: context.appColor.greyColor100,
+                color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(4.r),
-                border: Border.all(color: context.appColor.primary, width: 1),
+                border: Border.all(
+                  color: Colors.blue,
+                  width: 1,
+                ),
               ),
               padding: EdgeInsets.symmetric(
                 vertical: 10.h,
                 horizontal: 12.w,
               ),
-              textStyle: context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+              textStyle: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.black,
+              ),
             ),
-            onChanged: (value) {
-              // Optionally handle intermediate changes if needed
-              // But do not call `pageNotifier.goToNextPage()` here
+            controller: TextEditingController(text: _otpCode), // Autofill OTP
+            onChanged: (value) 
+            {
+              if (value.length < 6) 
+              {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Please enter a valid OTP."),
+                  ),
+                );
+              }
             },
-            onCompleted: (value) {
-              // Only call `goToNextPage` once when the OTP is fully entered
-              print("OTP Completed: $value");
-              pageNotifier.goToNextPage();
+            onCompleted: (value) async 
+            {
+              final success = await pageNotifier.verifiOtp(value, context);
+
+              if (success)
+               {
+                pageNotifier.goToNextPage(); // Change page
+              } else 
+              {
+                // Show error if OTP sending fails
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Failed to send OTP. Please try again."),
+                  ),
+                );
+              }
             },
           ),
-
           Gap(20.h),
 
           Align(
               alignment: Alignment.center,
               child: TextButton(
-                onPressed: () {
-                  // context.read<AuthCubit>().resendOtp();
+                onPressed: () async {
+                  final success =
+                      await pageNotifier.verifiOtp("876t8976458", context);
                 },
                 child: Text(
                   AppString.resend,

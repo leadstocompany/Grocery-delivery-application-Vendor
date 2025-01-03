@@ -92,7 +92,8 @@ class _LoginHostScreenState extends State<LoginHostScreen> {
                         return PageView(
                           controller: pageNotifier.pageController,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: const [
+                          children:  
+                          [
                             PhoneScreen(), // Page 1
                             OtpScreen(), // Page 2
                             UserNameScreen(), // Page 3

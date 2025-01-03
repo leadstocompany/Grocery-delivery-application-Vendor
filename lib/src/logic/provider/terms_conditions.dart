@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TermsNotifier extends ChangeNotifier {
-  bool _isChecked = false;
+// class TermsNotifier extends ChangeNotifier {
 
-  bool get isChecked => _isChecked;
+//   bool _isChecked = false;
 
-  void toggleCheckbox(bool value) {
-    _isChecked = value;
-    notifyListeners();
-  }
-}
+//   bool get isChecked => _isChecked;
+
+//   void toggleCheckbox(bool value) {
+//     _isChecked = value;
+//     notifyListeners();
+//   }
+// }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
+import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
@@ -17,22 +21,14 @@ class CreatePassword extends StatefulWidget {
 class _CreatePasswordState extends State<CreatePassword> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
+  String pattern =
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 
   @override
   Widget build(BuildContext context) {
+    final pageNotifier = Provider.of<PageNotifier>(context, listen: false);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       child: Column(
@@ -49,13 +45,20 @@ class _CreatePasswordState extends State<CreatePassword> {
               children: [
                 // Password Field
                 CustomTextField(
-                  controller: _passwordController,
+                  controller: pageNotifier.passwordController,
                   obscureText: !_isPasswordVisible,
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return "Please enter a password";
-                    } else if (val.length < 6) {
-                      return "Password must be at least 6 characters long";
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password cannot be empty';
+                    }
+                    final RegExp regex = RegExp(pattern);
+                    if (!regex.hasMatch(value)) {
+                      return 'Password must contain:\n'
+                          '- At least one lowercase letter\n'
+                          '- At least one uppercase letter\n'
+                          '- At least one number\n'
+                          '- At least one special character\n'
+                          '- Minimum 8 characters';
                     }
                     return null;
                   },
@@ -80,12 +83,12 @@ class _CreatePasswordState extends State<CreatePassword> {
 
                 // Confirm Password Field
                 CustomTextField(
-                  controller: _confirmPasswordController,
+                  controller: pageNotifier.confirmPasswordController,
                   obscureText: !_isConfirmPasswordVisible,
                   validator: (val) {
                     if (val == null || val.isEmpty) {
                       return "Please confirm your password";
-                    } else if (val != _passwordController.text) {
+                    } else if (val != pageNotifier.passwordController.text) {
                       return "Passwords do not match";
                     }
                     return null;
@@ -100,17 +103,13 @@ class _CreatePasswordState extends State<CreatePassword> {
                           ? Icons.visibility
                           : Icons.visibility_off,
                     ),
-                    onPressed: ()
-                     {
-                      setState(() 
-                      {
+                    onPressed: () {
+                      setState(() {
                         _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
                       });
                     },
                   ),
                 ),
-             
-             
               ],
             ),
           ),
@@ -120,13 +119,18 @@ class _CreatePasswordState extends State<CreatePassword> {
             child: ButtonElevated(
                 backgroundColor: context.appColor.primarycolor,
                 text: AppString.continueTxt,
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    context.clearAndPush(routePath: MyRoutes.TERMANDCONDITIONS);
+                onPressed: () async {
+                  if (_formKey.currentState?.validate() ?? false) 
+                  {
+                    await SharedPrefUtils.setPassWord(
+                        password: pageNotifier.passwordController.text ?? "");
+                    //  context.clearAndPush(routePath: MyRoutes.TERMANDCONDITIONS);
+
+                    context.push(MyRoutes.TERMANDCONDITIONS);
                     // Proceed with submission or next steps
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Passwords match and valid!')),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(content: Text('Passwords match and valid!')),
+                    // );
                   }
                 }),
           ),

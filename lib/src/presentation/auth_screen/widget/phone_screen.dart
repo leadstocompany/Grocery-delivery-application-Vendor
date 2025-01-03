@@ -14,7 +14,10 @@ import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class PhoneScreen extends StatelessWidget {
-  const PhoneScreen({super.key});
+  PhoneScreen({super.key});
+  TextEditingController phoneController = TextEditingController();
+
+  var country_code = "+91";
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class PhoneScreen extends StatelessWidget {
           Gap(20.h),
           CustomTextField(
             maxLength: 10,
+            controller: phoneController,
             onChanged: (value) {
               if (value.length == 10) {
                 return;
@@ -52,7 +56,9 @@ class PhoneScreen extends StatelessWidget {
                   width: 65,
                   child: CountryCodePicker(
                     textStyle: context.bodyTxtStyle,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      country_code = value.toString();
+                    },
                     initialSelection: 'IN',
                     favorite: const ['+91', 'IN'],
                     showCountryOnly: true,
@@ -85,8 +91,34 @@ class PhoneScreen extends StatelessWidget {
             child: ButtonElevated(
               backgroundColor: context.appColor.primarycolor,
               text: AppString.getOtp,
-              onPressed: () {
-                pageNotifier.goToNextPage(); // Change page
+              onPressed: () async {
+                // pageNotifier.sendOtp(number)
+
+                // pageNotifier.goToNextPage(); // Change page
+
+                final number = phoneController.text;
+
+                if (number.length == 10)
+                 {
+                  final success = await pageNotifier.sendOtp(number, context, country_code);
+
+                  if (success) {
+                    pageNotifier.goToNextPage(); // Change page
+                  } else {
+                    // Show error if OTP sending fails
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Failed to send OTP. Please try again."),
+                      ),
+                    );
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Enter a valid 10-digit phone number."),
+                    ),
+                  );
+                }
               },
             ),
           ),
@@ -94,9 +126,7 @@ class PhoneScreen extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: TextButton(
-              onPressed: () {
-             
-              },
+              onPressed: () {},
               child: Text(
                 "Terms of Services & Privacy Policy.",
                 style: context.smallTxtStyle.copyWith(
