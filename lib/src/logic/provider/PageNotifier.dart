@@ -73,6 +73,9 @@ class PageNotifier extends ChangeNotifier {
     }
   }
 
+   
+  //login
+
   //vendorRegister
 
   Future<bool> vendorRegister(BuildContext context) async {

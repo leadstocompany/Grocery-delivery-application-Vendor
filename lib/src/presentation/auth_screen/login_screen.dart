@@ -9,6 +9,7 @@ import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
+import 'package:vendor_app/src/logic/provider/login_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
@@ -20,11 +21,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
+    final pageNotifier = Provider.of<LoginProvider>(context, listen: false);
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       body: Padding(
@@ -48,21 +49,22 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   CustomTextField(
+                    controller: pageNotifier.emailOrPasswordController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
-                        return "Please enter your name";
+                        return "Please enter your phone number";
                       }
                       return null;
                     },
                     maxLength: 64,
                     counterWidget: const Offstage(),
                     // controller: context.read<AuthCubit>().userName,
-                    hintText: 'raidenLord@gmail.com',
+                    hintText: 'Enter phone number',
                     fillColor: context.appColor.greyColor100,
                   ),
                   Gap(10.h),
                   CustomTextField(
-                    controller: _passwordController,
+                    controller: pageNotifier.passwordController,
                     obscureText: !_isPasswordVisible,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
@@ -108,10 +110,14 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ButtonElevated(
                   backgroundColor: context.appColor.primarycolor,
                   text: AppString.continueTxt,
-                  onPressed: () {
-                    context.push(MyRoutes.DASHBOARDSCREEN);
+                  onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      context.push(MyRoutes.DASHBOARDSCREEN);
+                      var status = await pageNotifier.login(context);
+                      if (status) {
+                        context.push(MyRoutes.DASHBOARDSCREEN);
+                      }
+
+                      //
                     }
                   }),
             ),

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:vendor_app/src/core/utiils_lib/custom_dio_exception.dart';
 import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/data/createStoreModel.dart';
+import 'package:vendor_app/src/data/login_response.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/services/service_locator.dart';
 
@@ -44,12 +48,61 @@ class AuthRepo {
     }
   }
 
+  FutureResult<LoginResponse> login(data) async {
+    try {
+      var response = await _authServices.login(data);
+
+      LoginResponse loginResponse = loginResponseFromJson(response.toString());
+      if (loginResponse.accessToken != null) {
+        await SharedPrefUtils.setToken(
+            authToken: loginResponse.accessToken ?? "");
+      }
+
+      print("Response status code: ${response.statusCode}");
+
+      return right(loginResponse);
+    } on DioException catch (e) {
+      print("DioException occurred: $e");
+
+      if (e.response != null) {
+        int statusCode = e.response!.statusCode ?? 0;
+        var errorData = e.response!.data; // Error body from the server
+
+        String errorMessage =
+            errorData['message']['message'] ?? 'Unknown error';
+
+        print("Error: $errorMessage (Status Code: $statusCode)");
+
+        // Custom error handling
+        var error = CustomDioExceptions.handleError(e);
+        return left(error);
+      } else {
+        // Handle other DioExceptions without a response (e.g., network issues)
+        var error = CustomDioExceptions.handleError(e);
+        return left(error);
+      }
+    }
+  }
+
   FutureResult<String> vendorRegister(data) async {
     try {
       var response = await _authServices.vendorRegister(data);
       final String model = response.toString();
       return right(model);
     } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+  FutureResult<String> createStore(data) async {
+    try {
+      var response = await _authServices.createStore(data);
+
+      final String model = response.toString();
+      return right(model);
+    } on DioException catch (e) {
+      print("kdjfgkjfg ${e}");
       var error = CustomDioExceptions.handleError(e);
       return left(error);
     }

@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:vendor_app/src/core/constant/api.dart';
 import 'package:vendor_app/src/core/network_services/api_services.dart';
 
@@ -13,12 +14,19 @@ class AuthServices extends ApiService {
     return response;
   }
 
+   
+
+  
+
    Future verifyOtp(data) async {
     var response = await api.post(APIURL.verifyOtp, data: jsonEncode(data));
     return response;
   }
-   Future login(data) async {
+   Future login(data) async
+    {
     var response = await api.post(APIURL.login, data: jsonEncode(data));
+    //response.statusCode
+   
     return response;
   }
 
@@ -28,7 +36,12 @@ class AuthServices extends ApiService {
     return response;
   }
 
- // vendorRegister
+     Future createStore(data) async {
+    var response = await api.post(APIURL.createStore, data: jsonEncode(data));
+    return response;
+  }
+
+
 
   
 

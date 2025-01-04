@@ -126,13 +126,14 @@ class SetupBussiness extends StatelessWidget {
                     Gap(10.h),
                     CustomTextField(
                       controller: createStoreprovider.officialPhoneNumber,
+                      keyBoardType: TextInputType.number,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "Official Phone Number";
                         }
                         return null;
                       },
-                      maxLength: 64,
+                      maxLength: 10,
                       counterWidget: const Offstage(),
                       // controller: context.read<AuthCubit>().userName,
                       hintText: "Official Phone Number",
@@ -156,13 +157,14 @@ class SetupBussiness extends StatelessWidget {
                     Gap(10.h),
                     CustomTextField(
                       controller: createStoreprovider.storeGSTNumber,
+                        keyBoardType: TextInputType.number,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "GST Number (optional)";
                         }
                         return null;
                       },
-                      maxLength: 64,
+                      maxLength: 20,
                       counterWidget: const Offstage(),
                       // controller: context.read<AuthCubit>().userName,
                       hintText: 'GST Number (optional)',
@@ -184,8 +186,6 @@ class SetupBussiness extends StatelessWidget {
                       fillColor: context.appColor.greyColor100,
                     ),
                     Gap(10.h),
-                   
-
                     Container(
                       height: 40.h,
                       decoration: BoxDecoration(
@@ -247,7 +247,6 @@ class SetupBussiness extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Gap(10.h),
                   ],
                 ),

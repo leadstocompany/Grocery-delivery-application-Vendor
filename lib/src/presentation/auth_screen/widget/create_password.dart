@@ -88,7 +88,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                   validator: (val) {
                     if (val == null || val.isEmpty) {
                       return "Please confirm your password";
-                    } else if (val != pageNotifier.passwordController.text) {
+                    } else if (val != pageNotifier.passwordController.text)
+                     {
                       return "Passwords do not match";
                     }
                     return null;
@@ -120,6 +121,7 @@ class _CreatePasswordState extends State<CreatePassword> {
                 backgroundColor: context.appColor.primarycolor,
                 text: AppString.continueTxt,
                 onPressed: () async {
+                
                   if (_formKey.currentState?.validate() ?? false) 
                   {
                     await SharedPrefUtils.setPassWord(

@@ -18,6 +18,9 @@ class CreateStore extends StatelessWidget {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
+    final createStoreprovider =
+        Provider.of<DaySelectionProvider>(context, listen: false);
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -92,21 +95,39 @@ class CreateStore extends StatelessWidget {
                   //   ),
                   // ),
                   // Gap(10.h),
+
                   CustomTextField(
+                    controller: createStoreprovider.bankName,
                     validator: (val) {
                       if (val.toString().isEmpty) {
-                        return "Account Name ";
+                        return "Bank Name ";
+                      }
+
+                      return null;
+                    },
+                    maxLength: 64,
+                    counterWidget: const Offstage(),
+                    hintText: "Bank Name ",
+                    fillColor: context.appColor.greyColor100,
+                  ),
+                  Gap(10.h),
+                  CustomTextField(
+                    controller: createStoreprovider.accountHoldername,
+                    validator: (val) {
+                      if (val.toString().isEmpty) {
+                        return "Account Holder Name ";
                       }
                       return null;
                     },
                     maxLength: 64,
                     counterWidget: const Offstage(),
-                    hintText: "Account Name ",
+                    hintText: "Account Holder Name ",
                     fillColor: context.appColor.greyColor100,
                   ),
 
                   Gap(10.h),
                   CustomTextField(
+                    controller: createStoreprovider.accountNumber,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Account Number";
@@ -120,6 +141,7 @@ class CreateStore extends StatelessWidget {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    controller: createStoreprovider.ifscCode,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "IFSC Code";
@@ -141,8 +163,9 @@ class CreateStore extends StatelessWidget {
               child: ButtonElevated(
                 text: 'Next',
                 onPressed: () {
-                  _showBottomSheet(context);
-                  // if (_formKey.currentState?.validate() ?? false) {}
+                  if (_formKey.currentState?.validate() ?? false) {
+                    _showBottomSheet(context, createStoreprovider);
+                  }
                 },
                 backgroundColor: context.appColor.primarycolor,
               ),
@@ -296,91 +319,151 @@ class CreateStore extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(BuildContext context) {
+  void _showBottomSheet(
+      BuildContext context, DaySelectionProvider createStoreprovider) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Centered App Logo
-              Center(
-                child: Image.asset(
-                  AppImages.applogo, // Replace with your logo path
-                  height: 100.h, // Adjust height as necessary
+        return Consumer<DaySelectionProvider>(
+            builder: (context, pinProvider, child) {
+          return Container(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              //mainAxisSize: MainAxisSize.max,
+              children: [
+                // Centered App Logo
+                Center(
+                  child: Image.asset(
+                    AppImages.applogo, // Replace with your logo path
+                    height: 100.h, // Adjust height as necessary
+                  ),
                 ),
-              ),
 
-              Align(
-                alignment: Alignment.center,
-                child: Text('Withdrawal Pin', style: context.subTitleStyle),
-              ),
-
-              Align(
-                alignment: Alignment.center,
-                child: Text('Create your ọjà withdrawal pin ',
-                    style: context.subTitleTextStyle),
-              ),
-              Gap(20.h),
-              Pinput(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                length: 4,
-                defaultPinTheme: PinTheme(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 5.h,
-                    horizontal: 8.w,
-                  ),
-                  decoration: BoxDecoration(
-                    color: context.appColor.greyColor100,
-                    borderRadius: BorderRadius.circular(4.r),
-                    border: Border.all(
-                        color: context.appColor.greyColor400, width: 1),
-                  ),
-                  textStyle:
-                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('Withdrawal Pin', style: context.subTitleStyle),
                 ),
-                focusedPinTheme: PinTheme(
-                  decoration: BoxDecoration(
-                    color: context.appColor.greyColor100,
-                    borderRadius: BorderRadius.circular(4.r),
-                    border:
-                        Border.all(color: context.appColor.primary, width: 1),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 5.h,
-                    horizontal: 8.w,
-                  ),
-                  textStyle:
-                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
-                ),
-                onChanged: (value) {
-                  // Optionally handle intermediate changes if needed
-                  // But do not call `pageNotifier.goToNextPage()` here
-                },
-                onCompleted: (value) {},
-              ),
-              Gap(50.h),
 
-              Center(
-                child: SizedBox(
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('Create your ọjà withdrawal pin ',
+                      style: context.subTitleTextStyle),
+                ),
+                Gap(10.h),
+                Pinput(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                  length: 4,
+                  defaultPinTheme: PinTheme(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5.h,
+                      horizontal: 8.w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: context.appColor.greyColor100,
+                      borderRadius: BorderRadius.circular(4.r),
+                      border: Border.all(
+                          color: context.appColor.greyColor400, width: 1),
+                    ),
+                    textStyle:
+                        context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                  ),
+                  focusedPinTheme: PinTheme(
+                    decoration: BoxDecoration(
+                      color: context.appColor.greyColor100,
+                      borderRadius: BorderRadius.circular(4.r),
+                      border:
+                          Border.all(color: context.appColor.primary, width: 1),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5.h,
+                      horizontal: 8.w,
+                    ),
+                    textStyle:
+                        context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                  ),
+                  onChanged: (value) {},
+                  onCompleted: pinProvider.setPin,
+                ),
+                Gap(10.h),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('Confirm your ọjà withdrawal pin ',
+                      style: context.subTitleTextStyle),
+                ),
+                Gap(10.h),
+                Pinput(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                  length: 4,
+                  defaultPinTheme: PinTheme(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5.h,
+                      horizontal: 8.w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: context.appColor.greyColor100,
+                      borderRadius: BorderRadius.circular(4.r),
+                      border: Border.all(
+                          color: context.appColor.greyColor400, width: 1),
+                    ),
+                    textStyle:
+                        context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                  ),
+                  focusedPinTheme: PinTheme(
+                    decoration: BoxDecoration(
+                      color: context.appColor.greyColor100,
+                      borderRadius: BorderRadius.circular(4.r),
+                      border:
+                          Border.all(color: context.appColor.primary, width: 1),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 5.h,
+                      horizontal: 8.w,
+                    ),
+                    textStyle:
+                        context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                  ),
+                  onChanged: (value) {
+                    // Optionally handle intermediate changes if needed
+                    // But do not call `pageNotifier.goToNextPage()` here
+                  },
+                  onCompleted: pinProvider.setConfirmPin,
+                ),
+
+                if (!pinProvider.isMatch)
+                  Text(
+                    'PINs do not match!',
+                    style: TextStyle(color: Colors.red),
+                  ),
+
+                Gap(10.h),
+
+                Center(
                   child: SizedBox(
-                    width: double.infinity,
-                    child: ButtonElevated(
-                        text: 'Continue',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _showBottomSheetConfirmsPin(context);
-                        },
-                        backgroundColor: context.appColor.primarycolor),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ButtonElevated(
+                          text: 'Continue',
+                          onPressed: pinProvider.isMatch
+                              ? () async {
+                                  final status =
+                                      await pinProvider.createStore(context);
+
+                                  if (status) 
+                                  {
+                                    context.clearAndPush( routePath: MyRoutes.SUBMITSCREEN);
+                                  }
+                                }
+                              : null,
+                          backgroundColor: context.appColor.primarycolor),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
+              ],
+            ),
+          );
+        });
       },
     );
   }
