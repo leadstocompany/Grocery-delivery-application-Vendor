@@ -84,6 +84,12 @@ class AuthRepo {
     }
   }
 
+
+
+
+
+
+
   FutureResult<String> vendorRegister(data) async {
     try {
       var response = await _authServices.vendorRegister(data);
@@ -107,4 +113,22 @@ class AuthRepo {
       return left(error);
     }
   }
+
+
+ FutureResult<String> forgetPassword(data) async
+  {
+    try {
+    var response = await _authServices.forgetPassword(data);
+    final String model = response.toString();
+      return right(model);
+    } on DioException catch (e) 
+    {
+     
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+
+  
 }

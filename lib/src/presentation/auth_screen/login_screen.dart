@@ -28,126 +28,137 @@ class _LoginScreenState extends State<LoginScreen> {
     final pageNotifier = Provider.of<LoginProvider>(context, listen: false);
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Gap(100.h),
-            Image.asset(
-              AppImages.applogo,
-              height: 200,
-              width: 350,
-            ),
-            Text(
-              'Welcome back,',
-              style: context.subTitleTextStyle.copyWith(fontSize: 17.sp),
-            ),
-            Gap(20.h),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  CustomTextField(
-                    controller: pageNotifier.emailOrPasswordController,
-                    validator: (val) {
-                      if (val.toString().isEmpty) {
-                        return "Please enter your phone number";
-                      }
-                      return null;
-                    },
-                    maxLength: 64,
-                    counterWidget: const Offstage(),
-                    // controller: context.read<AuthCubit>().userName,
-                    hintText: 'Enter phone number',
-                    fillColor: context.appColor.greyColor100,
-                  ),
-                  Gap(10.h),
-                  CustomTextField(
-                    controller: pageNotifier.passwordController,
-                    obscureText: !_isPasswordVisible,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Please enter a password";
-                      } else if (val.length < 6) {
-                        return "Password must be at least 6 characters long";
-                      }
-                      return null;
-                    },
-                    maxLength: 64,
-                    counterWidget: const Offstage(),
-                    hintText: "Enter password",
-                    fillColor: context.appColor.greyColor100,
-                    suffix: IconButton(
-                      icon: Icon(
-                        _isPasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isPasswordVisible = !_isPasswordVisible;
-                        });
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gap(100.h),
+              Image.asset(
+                AppImages.applogo,
+                height: 200,
+                width: 350,
+              ),
+              Text(
+                'Welcome back,',
+                style: context.subTitleTextStyle.copyWith(fontSize: 17.sp),
+              ),
+              Gap(20.h),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: pageNotifier.emailOrPasswordController,
+                      validator: (val) {
+                        if (val.toString().isEmpty) {
+                          return "Please enter your phone number";
+                        }
+                        return null;
                       },
+                      maxLength: 64,
+                      counterWidget: const Offstage(),
+                      // controller: context.read<AuthCubit>().userName,
+                      hintText: 'Enter phone number',
+                      fillColor: context.appColor.greyColor100,
                     ),
-                  ),
-                ],
+                    Gap(10.h),
+                    CustomTextField(
+                      controller: pageNotifier.passwordController,
+                      obscureText: !_isPasswordVisible,
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return "Please enter a password";
+                        } else if (val.length < 6) {
+                          return "Password must be at least 6 characters long";
+                        }
+                        return null;
+                      },
+                      maxLength: 64,
+                      counterWidget: const Offstage(),
+                      hintText: "Enter password",
+                      fillColor: context.appColor.greyColor100,
+                      suffix: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Gap(5),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Forgot Password?',
-                style: context.smallTxtStyle
-                    .copyWith(color: context.appColor.primarycolor),
-              ),
-            ),
-            // const Spacer(),
-            Gap(50.h),
-            SizedBox(
-              width: double.infinity,
-              child: ButtonElevated(
-                  backgroundColor: context.appColor.primarycolor,
-                  text: AppString.continueTxt,
-                  onPressed: () async {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      var status = await pageNotifier.login(context);
-                      if (status) {
-                        context.push(MyRoutes.DASHBOARDSCREEN);
-                      }
-
-                      //
-                    }
-                  }),
-            ),
-
-            Gap(25.h),
-            Gap(10.h),
-            Align(
-              alignment: Alignment.center,
-              child: InkWell(
-                onTap: () {
-                  context.push(MyRoutes.SIGNUP);
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: "Don’t have an account? ",
-                    style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: "Sign Up",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: context.appColor.primarycolor))
-                    ],
+              const Gap(5),
+              GestureDetector(
+                onTap: ()
+                 {
+                 
+                 
+                  context.push(MyRoutes.FORGETPASSWORD);
+                 
+                  },
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Forgot Password?',
+                    style: context.smallTxtStyle
+                        .copyWith(color: context.appColor.primarycolor),
                   ),
                 ),
               ),
-            ),
+              // const Spacer(),
+              Gap(50.h),
+              SizedBox(
+                width: double.infinity,
+                child: ButtonElevated(
+                    backgroundColor: context.appColor.primarycolor,
+                    text: AppString.continueTxt,
+                    onPressed: () async {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        var status = await pageNotifier.login(context);
+                        if (status) {
+                          context.push(MyRoutes.DASHBOARDSCREEN);
+                        }
 
-            Gap(30.h),
-          ],
+                        //
+                      }
+                    }),
+              ),
+
+              Gap(25.h),
+              Gap(10.h),
+              Align(
+                alignment: Alignment.center,
+                child: InkWell(
+                  onTap: () {
+                    context.push(MyRoutes.SIGNUP);
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Don’t have an account? ",
+                      style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "Sign Up",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: context.appColor.primarycolor))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              Gap(30.h),
+            ],
+          ),
         ),
       ),
     );

@@ -15,14 +15,11 @@ class PageNotifier extends ChangeNotifier {
   final TextEditingController email = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =TextEditingController();
-
-  
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   int get currentIndex => _currentIndex;
   PageController get pageController => _pageController;
-
-  
 
   // Calculate progress as a percentage
   double get progress => (_currentIndex + 1) / _totalPages;
@@ -43,8 +40,7 @@ class PageNotifier extends ChangeNotifier {
       print("check response ${response}");
       context.showLoader(show: false);
       return true;
-    } catch (e) 
-    {
+    } catch (e) {
       print("Error sending OTP: $e");
       context.showLoader(show: false);
       return false;
@@ -58,30 +54,53 @@ class PageNotifier extends ChangeNotifier {
       "otp": otp,
     };
 
-    print("check response ${data}");
-
     try {
-      var response = await _authRepo.verifyOtp(data);
+      var result = await _authRepo.verifyOtp(data);
 
+      return result.fold(
+        (error) {
+          // Show error Snackbar
+          context.showLoader(show: false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) {
+          // Login success
+          context.showLoader(show: false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("OTP Verify successful!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          return true;
+        },
+      );
+    } catch (e) {
       context.showLoader(show: false);
-      return true;
-    } catch (e) 
-    {
-      context.showLoader(show: false);
-      print("Error sending OTP: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
       return false;
     }
   }
 
-   
   //login
 
   //vendorRegister
 
   Future<bool> vendorRegister(BuildContext context) async {
     context.showLoader(show: true);
-    var data = 
-    {
+    var data = {
       "firstName": await SharedPrefUtils.getFirstName(),
       "lastName": await SharedPrefUtils.getLastName(),
       "email": await SharedPrefUtils.getEmail(),
@@ -90,18 +109,41 @@ class PageNotifier extends ChangeNotifier {
       "vendorTermsAccepted": _isChecked
     };
 
-   
-
     try {
-      
-      var response = await _authRepo.vendorRegister(data);
-      print("check response ${response}");
+      var result = await _authRepo.vendorRegister(data);
+      return result.fold(
+        (error) {
+          // Show error Snackbar
+          context.showLoader(show: false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) {
+          // Login success
+          context.showLoader(show: false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Vendor Register successful!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          return true;
+        },
+      );
+    } catch (e) {
       context.showLoader(show: false);
-      return true;
-    } catch (e) 
-    {
-       context.showLoader(show: false);
-      print("Error sending OTP: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
       return false;
     }
   }

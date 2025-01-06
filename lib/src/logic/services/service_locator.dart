@@ -42,6 +42,15 @@ class AuthServices extends ApiService {
   }
 
 
+    Future forgetPassword(data) async
+     {
+    var response = await api.post(APIURL.forgetPassword, data: jsonEncode(data));
+    return response;
+  }
+
+  
+
+
 
   
 

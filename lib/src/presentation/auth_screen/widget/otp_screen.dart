@@ -179,30 +179,22 @@ class _OtpScreenState extends State<OtpScreen> {
                 color: Colors.black,
               ),
             ),
-            controller: TextEditingController(text: _otpCode), // Autofill OTP
-            onChanged: (value) 
-            {
-              if (value.length < 6) 
-              {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Please enter a valid OTP."),
-                  ),
-                );
-              }
-            },
-            onCompleted: (value) async 
-            {
+            controller: TextEditingController(text: _otpCode),
+            onChanged: (value) {
+              _otpCode = value;
+            }, // Autofill OTP
+
+            onCompleted: (value) async {
+              _otpCode = value.toString();
               final success = await pageNotifier.verifiOtp(value, context);
 
-              if (success)
-               {
+              if (success) {
                 pageNotifier.goToNextPage(); // Change page
-              } else 
-              {
+              } else {
                 // Show error if OTP sending fails
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: Colors.grey,
                     content: Text("Failed to send OTP. Please try again."),
                   ),
                 );
@@ -214,10 +206,7 @@ class _OtpScreenState extends State<OtpScreen> {
           Align(
               alignment: Alignment.center,
               child: TextButton(
-                onPressed: () async {
-                  final success =
-                      await pageNotifier.verifiOtp("876t8976458", context);
-                },
+                onPressed: () async {},
                 child: Text(
                   AppString.resend,
                   style: context.buttonTxtStyle
@@ -231,34 +220,34 @@ class _OtpScreenState extends State<OtpScreen> {
               child: ButtonElevated(
                   backgroundColor: context.appColor.primarycolor,
                   text: AppString.continueTxt,
-                  onPressed: () {})),
-          Gap(15.h),
-          // Align(
+                  onPressed: () async {
+                    if (_otpCode!.length > 6) {
+                      _otpCode = _otpCode.toString();
+                      final success =
+                          await pageNotifier.verifiOtp(_otpCode!, context);
 
-          // Align(
-          //   alignment: Alignment.center,
-          //   child: RichText(
-          //     text: TextSpan(
-          //       text: AppString.byClickingContinue,
-          //       style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
-          //       children: <TextSpan>[
-          //         TextSpan(
-          //             text: AppString.termService,
-          //             recognizer: TapGestureRecognizer(),
-          //             //   ..onTap = () => context.push(MyRoutes.TERM_CONDITION),
-          //             style: TextStyle(color: context.appColor.secondary)),
-          //         const TextSpan(
-          //           text: " ${AppString.and} ",
-          //         ),
-          //         TextSpan(
-          //             recognizer: TapGestureRecognizer(),
-          //             //   ..onTap = () => context.push(MyRoutes.PRIVACY_POLICY),
-          //             text: AppString.privacyPolicy,
-          //             style: TextStyle(color: context.appColor.secondary)),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+                      if (success) {
+                        pageNotifier.goToNextPage(); // Change page
+                      } else {
+                        // Show error if OTP sending fails
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.grey,
+                            content:
+                                Text("Failed to send OTP. Please try again."),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.grey,
+                          content: Text("Please enter a valid OTP."),
+                        ),
+                      );
+                    }
+                  })),
+          Gap(15.h),
 
           Gap(30.h),
         ],

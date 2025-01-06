@@ -73,6 +73,7 @@ class DaySelectionProvider with ChangeNotifier {
   Future<void> closedTiming(BuildContext context) async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
+      
       initialTime: TimeOfDay.now(),
     );
 
@@ -138,7 +139,7 @@ class DaySelectionProvider with ChangeNotifier {
 
   Future<bool> createStore(BuildContext context) async {
     context.showLoader(show: true);
-    
+
     var data = {
       "storeName": storeName.text,
       "storeDescription": storeDescription.text,
@@ -162,17 +163,42 @@ class DaySelectionProvider with ChangeNotifier {
     };
 
     try {
-      var response = await _authRepo.createStore(data);
-
-      print("days  ${response} ");
+      var result = await _authRepo.createStore(data);
 
       context.showLoader(show: false);
 
-      return true;
+      return result.fold(
+        (error) {
+          // Show error Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) {
+          // Login success
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Store created successful!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          return true;
+        },
+      );
     } catch (e) {
-      print("fkhgh,jfghkfkg");
       context.showLoader(show: false);
+      print("Unexpected error: $e");
 
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
       return false;
     }
   }

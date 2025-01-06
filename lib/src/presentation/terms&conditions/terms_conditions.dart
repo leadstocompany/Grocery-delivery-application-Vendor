@@ -118,17 +118,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nu
                     child: ButtonElevated(
                       text: AppString.continueTxt,
                       onPressed: termsNotifier.isChecked
-                          ? () async
-                           {
+                          ? () async {
                               var result =
                                   await termsNotifier.vendorRegister(context);
 
-                              if (result) 
-                              {
+                              if (result) {
                                 _showBottomSheet(context);
                               }
-
-                             
                             }
                           : null,
                       backgroundColor: termsNotifier.isChecked
@@ -150,6 +146,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nu
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      isDismissible: false,
+      enableDrag: false,
       builder: (BuildContext context) {
         return Container(
           padding: EdgeInsets.all(20.w),

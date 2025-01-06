@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/presentation/pdf_viewer_page.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class SelectAccount extends StatefulWidget {
@@ -53,26 +54,38 @@ class _SelectAccountState extends State<SelectAccount> {
                 Gap(100.h),
                 Align(
                   alignment: Alignment.center,
-                  child: RichText(
-                    text: TextSpan(
-                      text: "By continuing, you agree to",
-                      style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: "ọjàs Terms & \nConditions ",
-                            style: context.smallTxtStyle.copyWith(
-                                fontSize: 13.sp,
-                                color: context.appColor.primarycolor)),
-                        TextSpan(
-                            text: "And",
-                            style: context.smallTxtStyle
-                                .copyWith(fontSize: 13.sp)),
-                        TextSpan(
-                            text: "Privacy Policy",
-                            style: context.smallTxtStyle.copyWith(
-                                fontSize: 13.sp,
-                                color: context.appColor.primarycolor)),
-                      ],
+                  child: InkWell(
+                    onTap: (){
+                       Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PdfViewerPage(
+                            assetPath: 'assets/terms_and_conditions.pdf',
+                          ),
+                        ),
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        text: "By continuing, you agree to",
+                        style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: "ọjàs Terms & \nConditions ",
+                              style: context.smallTxtStyle.copyWith(
+                                  fontSize: 13.sp,
+                                  color: context.appColor.primarycolor)),
+                          TextSpan(
+                              text: "And ",
+                              style: context.smallTxtStyle
+                                  .copyWith(fontSize: 13.sp)),
+                          TextSpan(
+                              text: "Privacy Policy",
+                              style: context.smallTxtStyle.copyWith(
+                                  fontSize: 13.sp,
+                                  color: context.appColor.primarycolor)),
+                        ],
+                      ),
                     ),
                   ),
                 ),

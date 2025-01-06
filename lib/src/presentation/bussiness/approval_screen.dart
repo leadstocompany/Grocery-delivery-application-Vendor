@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
+import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 
 class ApprovalScreen extends StatefulWidget {
@@ -14,8 +15,21 @@ class ApprovalScreen extends StatefulWidget {
 
 class _ApprovalScreenState extends State<ApprovalScreen> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  void initState() {
+    // TODO: implement initState
+    Future.delayed(const Duration(seconds: 2), () async 
+    {
+      // Navigate to another route after 2 seconds (if needed)
+      context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context)
+   {
+    return
+     Scaffold(
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(20.w), // Padding for responsiveness

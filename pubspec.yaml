@@ -94,7 +94,8 @@ dependencies:
   art_sweetalert: ^0.0.5
 
   image_picker:
-
+  flutter_pdfview: 
+  path_provider: 
 
   intl:
   # sms_autofill: ^2.4.1
@@ -134,6 +135,7 @@ flutter:
   assets:
     - assets/icon/
     - assets/images/
+    - assets/terms_and_conditions.pdf
    
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:vendor_app/src/core/utiils_lib/globle_variable.dart';
+import 'package:vendor_app/src/presentation/auth_screen/forget_password.dart';
+import 'package:vendor_app/src/presentation/auth_screen/forget_password_verify.dart';
 import 'package:vendor_app/src/presentation/auth_screen/login_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/sign_up_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/approval_screen.dart';
@@ -132,12 +134,22 @@ class MyRoutes {
         name: STOREMANAGEMENT,
         pageBuilder: (context, state) => StoreManagement(),
       ),
-        animatedGoRoute(
+      animatedGoRoute(
         path: SETTING,
         name: SETTING,
         pageBuilder: (context, state) => Settings(),
       ),
+      animatedGoRoute(
+        path: FORGETPASSWORD,
+        name: FORGETPASSWORD,
+        pageBuilder: (context, state) => ForgetPassword(),
+      ),
 
+        animatedGoRoute(
+        path: VERIFYPASSWORD,
+        name: VERIFYPASSWORD,
+        pageBuilder: (context, state) => VerifyOtpForgetPassword(),
+      ),
       
     ],
   );
@@ -171,10 +183,13 @@ class MyRoutes {
 
   static const STOREMANAGEMENT = "/storemanagement";
 
-    static const SETTING = "/settings";
+  static const SETTING = "/settings";
 
-  
+  static const FORGETPASSWORD = "/forgetpassword";
+ static const VERIFYPASSWORD = "/verifypassword";
 
+
+ 
 }
 
 GoRoute animatedGoRoute({

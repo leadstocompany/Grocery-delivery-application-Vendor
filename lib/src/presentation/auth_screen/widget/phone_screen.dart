@@ -10,6 +10,7 @@ import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
+import 'package:vendor_app/src/presentation/pdf_viewer_page.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
@@ -98,9 +99,9 @@ class PhoneScreen extends StatelessWidget {
 
                 final number = phoneController.text;
 
-                if (number.length == 10)
-                 {
-                  final success = await pageNotifier.sendOtp(number, context, country_code);
+                if (number.length == 10) {
+                  final success =
+                      await pageNotifier.sendOtp(number, context, country_code);
 
                   if (success) {
                     pageNotifier.goToNextPage(); // Change page
@@ -126,7 +127,17 @@ class PhoneScreen extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () 
+              {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PdfViewerPage(
+                      assetPath: 'assets/terms_and_conditions.pdf',
+                    ),
+                  ),
+                );
+              },
               child: Text(
                 "Terms of Services & Privacy Policy.",
                 style: context.smallTxtStyle.copyWith(

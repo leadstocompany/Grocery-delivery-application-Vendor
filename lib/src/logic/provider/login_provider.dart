@@ -9,28 +9,7 @@ class LoginProvider extends ChangeNotifier {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailOrPasswordController =
       TextEditingController();
-
-  // Future<bool> login(BuildContext context) async {
-  //   context.showLoader(show: true);
-  //   var data = {
-  //     "phone": "+91" + emailOrPasswordController.text,
-  //     "password": passwordController.text
-  //   };
-
-  //   print("check response ${data}");
-
-  //   try {
-  //     var response = await _authRepo.login(data);
-
-  //     context.showLoader(show: false);
-  //     return true;
-  //   } catch (e)
-  //   {
-  //     context.showLoader(show: false);
-  //     print("Error sending OTP: $e");
-  //     return false;
-  //   }
-  // }
+  final TextEditingController phoneController = TextEditingController();
 
   Future<bool> login(BuildContext context) async {
     context.showLoader(show: true);
@@ -48,8 +27,7 @@ class LoginProvider extends ChangeNotifier {
       context.showLoader(show: false);
 
       return result.fold(
-        (error) 
-        {
+        (error) {
           // Show error Snackbar
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -59,12 +37,74 @@ class LoginProvider extends ChangeNotifier {
           );
           return false; // Login failed
         },
-        (response)
-         {
+        (response) {
           // Login success
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Login successful!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          return true;
+        },
+      );
+    } catch (e) {
+      context.showLoader(show: false);
+      print("Unexpected error: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+  }
+
+  // Future<bool> forgetPassword(BuildContext context, String countryCode) async {
+  //   context.showLoader(show: true);
+  //   var data = {"phone": countryCode + phoneController.text};
+  //   print("check response ${data}");
+  //   try {
+  //     var response = await _authRepo.forgetPassword(data);
+  //     context.showLoader(show: false);
+  //     return true;
+  //   } catch (e) {
+  //     context.showLoader(show: false);
+  //     print("Error sending OTP: $e");
+  //     return false;
+  //   }
+  // }
+
+  Future<bool> forgetPassword(BuildContext context, String countryCode) async {
+    context.showLoader(show: true);
+
+    var data = {"phone": countryCode + phoneController.text};
+
+    print("Check request data: $data");
+
+    try {
+      var result = await _authRepo.forgetPassword(data);
+
+      context.showLoader(show: false);
+
+      return result.fold(
+        (error) {
+          // Show error Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) {
+          // Login success
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Send Otp successful!"),
               backgroundColor: Colors.green,
             ),
           );
