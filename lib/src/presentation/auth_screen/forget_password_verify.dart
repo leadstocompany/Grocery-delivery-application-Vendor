@@ -13,6 +13,7 @@ import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:gap/gap.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
+import 'package:vendor_app/src/logic/provider/login_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class VerifyOtpForgetPassword extends StatefulWidget {
@@ -56,7 +57,7 @@ class _VerifyOtpForgetPasswordState extends State<VerifyOtpForgetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    final pageNotifier = Provider.of<PageNotifier>(context, listen: false);
+    final pageNotifier = Provider.of<LoginProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -190,24 +191,37 @@ class _VerifyOtpForgetPasswordState extends State<VerifyOtpForgetPassword> {
               ),
               controller: TextEditingController(text: _otpCode), // Autofill OTP
               onChanged: (value) {
-                if (value.length < 6) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Please enter a valid OTP."),
-                    ),
-                  );
-                }
+                // if (value.length < 6)
+                //  {
+
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       content: Text("Please enter a valid OTP."),
+                //     ),
+                //   );
+                //   }
               },
               onCompleted: (value) async {
-                final success = await pageNotifier.verifiOtp(value, context);
+                if (value.length >= 6) {
+                  _otpCode = value;
+                  final success =
+                      await pageNotifier.verifyForgetPassword(context, value);
 
-                if (success) {
-                  pageNotifier.goToNextPage(); // Change page
+                  if (success) {
+                    context.push(MyRoutes.FORGETNEWPASSWORD);
+                  } else {
+                    // Show error if OTP sending fails
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Failed verify OTP. Please try again."),
+                      ),
+                    );
+                  }
                 } else {
-                  // Show error if OTP sending fails
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("Failed to send OTP. Please try again."),
+                      backgroundColor: Colors.green,
+                      content: Text("Please enter a valid OTP."),
                     ),
                   );
                 }
@@ -215,54 +229,28 @@ class _VerifyOtpForgetPasswordState extends State<VerifyOtpForgetPassword> {
             ),
             Gap(20.h),
 
-            Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  onPressed: () async {
-                    final success =
-                        await pageNotifier.verifiOtp("876t8976458", context);
-                  },
-                  child: Text(
-                    AppString.resend,
-                    style: context.buttonTxtStyle
-                        .copyWith(color: context.appColor.primary),
-                  ),
-                )),
-
             const Spacer(),
             SizedBox(
                 width: double.infinity,
                 child: ButtonElevated(
                     backgroundColor: context.appColor.primarycolor,
                     text: AppString.continueTxt,
-                    onPressed: () {})),
-            Gap(15.h),
-            // Align(
+                    onPressed: () async {
+                      final success = await pageNotifier.verifyForgetPassword(
+                          context, _otpCode!);
 
-            // Align(
-            //   alignment: Alignment.center,
-            //   child: RichText(
-            //     text: TextSpan(
-            //       text: AppString.byClickingContinue,
-            //       style: context.smallTxtStyle.copyWith(fontSize: 13.sp),
-            //       children: <TextSpan>[
-            //         TextSpan(
-            //             text: AppString.termService,
-            //             recognizer: TapGestureRecognizer(),
-            //             //   ..onTap = () => context.push(MyRoutes.TERM_CONDITION),
-            //             style: TextStyle(color: context.appColor.secondary)),
-            //         const TextSpan(
-            //           text: " ${AppString.and} ",
-            //         ),
-            //         TextSpan(
-            //             recognizer: TapGestureRecognizer(),
-            //             //   ..onTap = () => context.push(MyRoutes.PRIVACY_POLICY),
-            //             text: AppString.privacyPolicy,
-            //             style: TextStyle(color: context.appColor.secondary)),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+                      if (success) {
+                        context.push(MyRoutes.FORGETNEWPASSWORD);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text("Failed verify OTP. Please try again."),
+                          ),
+                        );
+                      }
+                    })),
+            Gap(15.h),
 
             Gap(30.h),
           ],

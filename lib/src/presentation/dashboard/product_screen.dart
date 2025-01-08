@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/headerprofile.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -16,6 +18,14 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   int status = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch products on screen load
+    Provider.of<ProductProvider>(context, listen: false).getProduct();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,82 +112,91 @@ class _ProductScreenState extends State<ProductScreen> {
       },
     ];
 
-    return Expanded(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: productsC.length,
-        itemBuilder: (context, index) {
-          status = index;
-          return InkWell(
-            onTap: () {
-              context.push(MyRoutes.PRODUCTDETAILS);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            productsC[index]['image'].toString(),
-                            // height: 200,
-                            // width: 350,
-                          ),
-                          Gap(5.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+    return Consumer<ProductProvider>(builder: (context, provider, child) {
+      if (provider.isLoading) {
+        return Center(child: CircularProgressIndicator());
+      } else if (provider.products.isEmpty) {
+        return Center(child: Text('No products available'));
+      } else {
+        return Expanded(
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: productsC.length,
+            itemBuilder: (context, index) {
+              status = index;
+              return InkWell(
+                onTap: () {
+                  context.push(MyRoutes.PRODUCTDETAILS);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          child: Row(
                             children: [
-                              Text(
-                                productsC[index]['title'].toString(),
-                                style: context.buttonTestStyle.copyWith(),
+                              Image.asset(
+                                productsC[index]['image'].toString(),
+                                // height: 200,
+                                // width: 350,
                               ),
-                              Text(
-                                productsC[index]['subTitle'].toString(),
-                                style: context.buttonTestStyle.copyWith(
-                                    color: context.appColor.greyColor),
+                              Gap(5.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productsC[index]['title'].toString(),
+                                    style: context.buttonTestStyle.copyWith(),
+                                  ),
+                                  Text(
+                                    productsC[index]['subTitle'].toString(),
+                                    style: context.buttonTestStyle.copyWith(
+                                        color: context.appColor.greyColor),
+                                  ),
+                                ],
                               ),
+                              Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: productsC[index]["price"].toString() ==
+                                          "Out of Stock"
+                                      ? Colors.grey
+                                      : Color(0xffEAFFEA),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(3.0)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                      productsC[index]["price"].toString(),
+                                      style: context.buttonTestStyle.copyWith(
+                                          color: productsC[index]["price"]
+                                                      .toString() ==
+                                                  "Out of Stock"
+                                              ? Colors.black
+                                              : Colors.black)),
+                                ),
+                              )
                             ],
                           ),
-                          Spacer(),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: productsC[index]["price"].toString() ==
-                                      "Out of Stock"
-                                  ? Colors.grey
-                                  : Color(0xffEAFFEA),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(3.0)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text(productsC[index]["price"].toString(),
-                                  style: context.buttonTestStyle.copyWith(
-                                      color: productsC[index]["price"]
-                                                  .toString() ==
-                                              "Out of Stock"
-                                          ? Colors.black
-                                          : Colors.black)),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Divider(
+                          //color: context.appColor.greyColor ,
+                          thickness: 0.2,
+                        )
+                      ],
                     ),
-                    Divider(
-                      //color: context.appColor.greyColor ,
-                      thickness: 0.2,
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+              );
+            },
+          ),
+        );
+      }
+    });
   }
 
   Color getStatus() {

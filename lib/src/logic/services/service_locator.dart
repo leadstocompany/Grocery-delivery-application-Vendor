@@ -48,6 +48,22 @@ class AuthServices extends ApiService {
     return response;
   }
 
+   Future verifyForgetPassword(data) async
+     {
+    var response = await api.post(APIURL.verifyForgetPassword, data: jsonEncode(data));
+    return response;
+  }
+
+
+   Future reset_password(data) async
+     {
+    var response = await api.post(APIURL.reset_password, data: jsonEncode(data));
+    return response;
+  }
+
+
+
+
   
 
 

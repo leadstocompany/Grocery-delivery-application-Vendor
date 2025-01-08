@@ -28,11 +28,11 @@ class DioClient {
       Options? options,
       CancelToken? cancelToken,
       ProgressCallback? onReceiveProgress,
-      bool hideSoftKeyboard = true}) async {
+      bool hideSoftKeyboard = true, required data}) async {
     if (hideSoftKeyboard) {
       // hideKeyBoard();
     }
-    debugLog(" get request Bearer token: ${await SharedPrefUtils.getToken()}");
+   
     try {
       final Response response = await _dio.get(
         url,

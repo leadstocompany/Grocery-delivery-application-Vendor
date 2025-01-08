@@ -7,10 +7,18 @@ class APIURL {
   static const String vendorRegister = "${BASE_URL}auth/register/vendor";
   static const String createStore = "${BASE_URL}stores";
   static const String forgetPassword = "${BASE_URL}auth/forgot-password/vendor";
+  static const String verifyForgetPassword = "${BASE_URL}auth/forgot-password-verify-otp/vendor";
+  static const String reset_password = "${BASE_URL}auth/reset-password/vendor";
+  static const String get_category = "${BASE_URL}categories";
+
+   static const String getProduct = "${BASE_URL}products";
 
 
 
-  
+
+
+
+
 
 }
 

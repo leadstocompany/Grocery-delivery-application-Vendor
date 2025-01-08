@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:vendor_app/src/core/utiils_lib/globle_variable.dart';
 import 'package:vendor_app/src/presentation/auth_screen/forget_password.dart';
+import 'package:vendor_app/src/presentation/auth_screen/forget_password_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/forget_password_verify.dart';
 import 'package:vendor_app/src/presentation/auth_screen/login_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/sign_up_screen.dart';
@@ -150,6 +151,11 @@ class MyRoutes {
         name: VERIFYPASSWORD,
         pageBuilder: (context, state) => VerifyOtpForgetPassword(),
       ),
+        animatedGoRoute(
+        path: FORGETNEWPASSWORD,
+        name: FORGETNEWPASSWORD,
+        pageBuilder: (context, state) => ForgetNewPassword(),
+      ),
       
     ],
   );
@@ -187,6 +193,10 @@ class MyRoutes {
 
   static const FORGETPASSWORD = "/forgetpassword";
  static const VERIFYPASSWORD = "/verifypassword";
+
+  static const FORGETNEWPASSWORD = "/forgetnewpassword";
+
+ 
 
 
  

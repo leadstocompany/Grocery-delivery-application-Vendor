@@ -39,7 +39,8 @@ class ProductFormScreen extends StatelessWidget {
             {
               return 
               SingleChildScrollView(
-                child: Column(
+                child: 
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(

@@ -7,6 +7,7 @@ import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/createStoreModel.dart';
 import 'package:vendor_app/src/data/login_response.dart';
+import 'package:vendor_app/src/data/password_model.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/services/service_locator.dart';
 
@@ -84,12 +85,6 @@ class AuthRepo {
     }
   }
 
-
-
-
-
-
-
   FutureResult<String> vendorRegister(data) async {
     try {
       var response = await _authServices.vendorRegister(data);
@@ -114,21 +109,44 @@ class AuthRepo {
     }
   }
 
-
- FutureResult<String> forgetPassword(data) async
-  {
+  FutureResult<String> forgetPassword(data) async {
     try {
-    var response = await _authServices.forgetPassword(data);
-    final String model = response.toString();
+      var response = await _authServices.forgetPassword(data);
+      final String model = response.toString();
       return right(model);
-    } on DioException catch (e) 
-    {
-     
+    } on DioException catch (e) {
       var error = CustomDioExceptions.handleError(e);
       return left(error);
     }
   }
 
+  FutureResult<String> verifyForgetPassword(data) async {
+    try {
+      var response = await _authServices.verifyForgetPassword(data);
 
-  
+      PasswordModel passwordModel = passwordModelFromJson(response.toString());
+      if (passwordModel.data != null) {
+        print("JHGhjhg   ${passwordModel.data!.resetToken}");
+        await SharedPrefUtils.setResetToken(
+            resetToken: passwordModel.data!.resetToken ?? "");
+      }
+
+      final String model = response.toString();
+      return right(model);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+  FutureResult<String> reset_password(data) async {
+    try {
+      var response = await _authServices.reset_password(data);
+      final String model = response.toString();
+      return right(model);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
 }

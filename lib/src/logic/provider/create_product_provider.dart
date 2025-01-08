@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vendor_app/src/core/network_services/service_locator.dart';
+import 'package:vendor_app/src/data/prdouct_model.dart';
+import 'package:vendor_app/src/logic/repo/product_repo.dart';
+import 'package:vendor_app/src/logic/services/product_locator.dart';
 
 class ProductProvider extends ChangeNotifier {
   String selectedCategory = '';
@@ -11,19 +15,17 @@ class ProductProvider extends ChangeNotifier {
   double discountPrice = 0.0;
   bool inStock = true;
 
-   String selectedproducctQuentity = '';
+  String selectedproducctQuentity = '';
 
   // Static Data
   List<String> categories = ['Electronics', 'Clothing', 'Groceries'];
-  Map<String, List<String>> subcategories = 
-  {
+  Map<String, List<String>> subcategories = {
     'Electronics': ['Mobiles', 'Laptops'],
     'Clothing': ['Men', 'Women'],
     'Groceries': ['Fruits', 'Vegetables'],
   };
 
-  Map<String, List<String>> products =
-   {
+  Map<String, List<String>> products = {
     'Mobiles': ['iPhone', 'Samsung', 'OnePlus'],
     'Laptops': ['Dell', 'HP', 'MacBook'],
     'Men': ['Shirts', 'Trousers'],
@@ -39,10 +41,9 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-   void setProductQuentity(String value) 
-   {
+  void setProductQuentity(String value) {
     selectedproducctQuentity = value;
-   notifyListeners();
+    notifyListeners();
   }
 
   void setSubcategory(String value) {
@@ -86,9 +87,37 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void submitProduct() 
-  {
+  void submitProduct() {
     // Add your submit logic here
     print('Product Submitted');
   }
+
+///////////////////////////////////////////////////////////////////  create product //////////////////////
+  final _authRepo = getIt<ProductRepo>();
+
+  bool isLoading = false;
+  List<Poduct> products1 = [];
+
+  Future<void> getProduct() async {
+    isLoading = true;
+    notifyListeners();
+
+    final result = await _authRepo.getProduct({});
+    result.fold(
+      (error) {
+        // Handle error
+        isLoading = false;
+        notifyListeners();
+      },
+      (productList) {
+        products1 = productList.product!;
+        isLoading = false;
+        notifyListeners();
+      },
+    );
+  }
+
+
+
+  
 }

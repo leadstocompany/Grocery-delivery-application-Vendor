@@ -17,10 +17,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () async {
-      if (await SharedPrefUtils.isFreshInstall()) {
+    Future.delayed(const Duration(seconds: 2), () async 
+    {
+      if (await SharedPrefUtils.isFreshInstall()) 
+      {
         context.clearAndPush(routePath: MyRoutes.ONBOARDING);
-      } else {
+      }else 
+      {
+        
         context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
       }
     }

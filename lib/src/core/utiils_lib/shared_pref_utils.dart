@@ -8,6 +8,7 @@ class SharedPrefUtils {
   SharedPrefUtils._();
 
   static String? _token;
+   static String? _resetToken;
 
   static const String PROFILE_PIC = "profile_pic";
   static const String BADGE_URL = "badge_url";
@@ -33,11 +34,19 @@ class SharedPrefUtils {
   static const String EMAIL = "EMAIL";
   static const String PASSWORD = "PASSWORD";
 
+   static const String RESET_TOKEN = "RESET_TOKEN";
+
   /// Set bearer authorization token
   static Future<bool> setToken({required String authToken}) {
     _token = authToken;
     return SharedPreferences.getInstance()
         .then((sp) async => await sp.setString(KEY_TOKEN, authToken));
+  }
+
+   static Future<bool> setResetToken({required String resetToken}) {
+    resetToken = resetToken;
+    return SharedPreferences.getInstance()
+        .then((sp) async => await sp.setString(RESET_TOKEN, resetToken));
   }
 
   static Future<bool> setFistName({required String firstName}) {
@@ -80,6 +89,13 @@ class SharedPrefUtils {
     final sp = await SharedPreferences.getInstance();
     _token = sp.getString(KEY_TOKEN);
     return _token;
+  }
+
+   static Future<String?> getResetToken() async 
+   {
+    final sp = await SharedPreferences.getInstance();
+    _resetToken = sp.getString(RESET_TOKEN);
+    return _resetToken;
   }
 
   static Future<bool> setIsSubscriptionPurchase(bool value) {
