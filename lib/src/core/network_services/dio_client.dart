@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:vendor_app/src/core/constant/api.dart';
@@ -22,17 +21,19 @@ class DioClient {
   }
 
   /// Send GET request
-  Future<Response> 
-  get(String url,
+  Future<Response> get(String url,
       {Map<String, dynamic>? queryParameters,
       Options? options,
       CancelToken? cancelToken,
       ProgressCallback? onReceiveProgress,
-      bool hideSoftKeyboard = true, required data}) async {
+      bool hideSoftKeyboard = true,
+      required data}) async {
     if (hideSoftKeyboard) {
       // hideKeyBoard();
     }
-   
+
+    print("post request Bearer token: ${await SharedPrefUtils.getToken()}");
+
     try {
       final Response response = await _dio.get(
         url,
@@ -59,8 +60,7 @@ class DioClient {
       ProgressCallback? onSendProgress,
       ProgressCallback? onReceiveProgress,
       bool hideSoftKeyboard = true}) async {
-    if (hideSoftKeyboard) 
-    {
+    if (hideSoftKeyboard) {
       hideKeyBoard();
     }
     debugLog(" post request Bearer token: ${await SharedPrefUtils.getToken()}");
@@ -70,8 +70,7 @@ class DioClient {
         data: data,
         queryParameters: queryParameters,
         options: options ??
-            Options(headers: 
-            {
+            Options(headers: {
               "authorization": "Bearer ${await SharedPrefUtils.getToken()}"
             }),
         cancelToken: cancelToken,
@@ -79,8 +78,7 @@ class DioClient {
         onReceiveProgress: onReceiveProgress,
       );
       return response;
-    } catch (e) 
-    {
+    } catch (e) {
       rethrow;
     }
   }

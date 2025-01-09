@@ -54,9 +54,10 @@ class LoginProvider extends ChangeNotifier {
           return true;
         },
       );
-    } catch (e) {
+    } catch (e) 
+    {
       context.showLoader(show: false);
-      print("Unexpected error: $e");
+
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -64,6 +65,7 @@ class LoginProvider extends ChangeNotifier {
           backgroundColor: Colors.red,
         ),
       );
+
       return false;
     }
   }

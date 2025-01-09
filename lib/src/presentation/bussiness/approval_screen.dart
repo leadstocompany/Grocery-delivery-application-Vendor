@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 
 class ApprovalScreen extends StatefulWidget {
   const ApprovalScreen({super.key});
@@ -19,6 +20,7 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
     // TODO: implement initState
     Future.delayed(const Duration(seconds: 2), () async 
     {
+      await SharedPrefUtils.setToken(authToken: "1");
       // Navigate to another route after 2 seconds (if needed)
       context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
     });
@@ -26,10 +28,8 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
   }
 
   @override
-  Widget build(BuildContext context)
-   {
-    return
-     Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(20.w), // Padding for responsiveness

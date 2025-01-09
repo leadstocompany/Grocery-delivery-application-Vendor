@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/data/store_model.dart';
 import 'package:vendor_app/src/logic/repo/auth_repo.dart';
+import 'package:vendor_app/src/logic/repo/store_repo.dart';
 
 class DaySelectionProvider with ChangeNotifier {
   List<String> _selectedDays = [];
 
   List<String> get selectedDays => _selectedDays;
-  final _authRepo = getIt<AuthRepo>();
+  final _storeRepo = getIt<StoreRepo>();
 
   void toggleDay(String day) {
     if (_selectedDays.contains(day)) {
@@ -73,7 +75,6 @@ class DaySelectionProvider with ChangeNotifier {
   Future<void> closedTiming(BuildContext context) async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      
       initialTime: TimeOfDay.now(),
     );
 
@@ -163,7 +164,7 @@ class DaySelectionProvider with ChangeNotifier {
     };
 
     try {
-      var result = await _authRepo.createStore(data);
+      var result = await _storeRepo.createStore(data);
 
       context.showLoader(show: false);
 
@@ -201,5 +202,28 @@ class DaySelectionProvider with ChangeNotifier {
       );
       return false;
     }
+  }
+
+  bool isLoading = false;
+
+   StoreModel? store_model ;
+  Future<void> getStore() async {
+    isLoading = true;
+    notifyListeners();
+
+    final result = await _storeRepo.getStore({});
+    result.fold(
+      (error) {
+        // Handle error
+        isLoading = false;
+        notifyListeners();
+      },
+      (store) {
+        print("lksjdfdkjf  ${store.createdAt}");
+        isLoading = false;
+        store_model = store;
+        notifyListeners();
+      },
+    );
   }
 }

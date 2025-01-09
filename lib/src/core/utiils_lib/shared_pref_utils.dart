@@ -281,10 +281,13 @@ class SharedPrefUtils {
   }
 
   /// Clear all preferences
-  static Future<void> clear() async {
+  static Future<void> clear() async 
+  {
     final sp = await SharedPreferences.getInstance();
-    sp.getKeys().forEach((key) async {
-      if (key != IS_FRESH_INSTALL) {
+    sp.getKeys().forEach((key) async 
+    {
+      if (key != IS_FRESH_INSTALL)
+       {
         await sp.remove(key);
       }
     });

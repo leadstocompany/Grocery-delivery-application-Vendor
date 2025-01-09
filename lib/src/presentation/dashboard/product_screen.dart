@@ -112,12 +112,15 @@ class _ProductScreenState extends State<ProductScreen> {
       },
     ];
 
-    return Consumer<ProductProvider>(builder: (context, provider, child) {
-      if (provider.isLoading) {
+    return Consumer<ProductProvider>(builder: (context, provider, child)
+     {
+      if (provider.isLoading)
+       {
         return Center(child: CircularProgressIndicator());
       } else if (provider.products.isEmpty) {
         return Center(child: Text('No products available'));
-      } else {
+      } else 
+      {
         return Expanded(
           child: ListView.builder(
             scrollDirection: Axis.vertical,

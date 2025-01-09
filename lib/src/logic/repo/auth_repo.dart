@@ -96,19 +96,7 @@ class AuthRepo {
     }
   }
 
-  FutureResult<String> createStore(data) async {
-    try {
-      var response = await _authServices.createStore(data);
-
-      final String model = response.toString();
-      return right(model);
-    } on DioException catch (e) {
-      print("kdjfgkjfg ${e}");
-      var error = CustomDioExceptions.handleError(e);
-      return left(error);
-    }
-  }
-
+  
   FutureResult<String> forgetPassword(data) async {
     try {
       var response = await _authServices.forgetPassword(data);

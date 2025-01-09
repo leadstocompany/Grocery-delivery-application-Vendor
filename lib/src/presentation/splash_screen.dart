@@ -17,15 +17,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () async 
-    {
-      if (await SharedPrefUtils.isFreshInstall()) 
-      {
+    Future.delayed(const Duration(seconds: 2), () async {
+      if (await SharedPrefUtils.isFreshInstall()) {
         context.clearAndPush(routePath: MyRoutes.ONBOARDING);
-      }else 
-      {
-        
-        context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
+      } else {
+        if (await SharedPrefUtils.getToken() == "1") {
+          context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
+        } else {
+          context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
+        }
       }
     }
         //context.read<SplashCubit>().initApp(),
@@ -34,8 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    Scaffold(
+    return Scaffold(
       body: Container(
         width: MediaQuery.sizeOf(context).width,
         height: MediaQuery.sizeOf(context).height,
@@ -53,6 +52,5 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
-  
   }
 }

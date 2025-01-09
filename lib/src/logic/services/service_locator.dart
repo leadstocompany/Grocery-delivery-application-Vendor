@@ -36,10 +36,7 @@ class AuthServices extends ApiService {
     return response;
   }
 
-     Future createStore(data) async {
-    var response = await api.post(APIURL.createStore, data: jsonEncode(data));
-    return response;
-  }
+  
 
 
     Future forgetPassword(data) async

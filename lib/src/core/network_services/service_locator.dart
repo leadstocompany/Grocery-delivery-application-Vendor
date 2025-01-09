@@ -5,8 +5,10 @@ import 'package:get_it/get_it.dart';
 import 'package:vendor_app/src/core/network_services/dio_client.dart';
 import 'package:vendor_app/src/logic/repo/auth_repo.dart';
 import 'package:vendor_app/src/logic/repo/product_repo.dart';
+import 'package:vendor_app/src/logic/repo/store_repo.dart';
 import 'package:vendor_app/src/logic/services/product_locator.dart';
 import 'package:vendor_app/src/logic/services/service_locator.dart';
+import 'package:vendor_app/src/logic/services/store_locator.dart';
 
 
 
@@ -21,6 +23,9 @@ class ServiceLocator
     getIt.registerSingleton(DioClient(getIt<Dio>()));
     getIt.registerSingleton(AuthServices());
     getIt.registerSingleton(ProductService());
+       getIt.registerSingleton(StoreService());
+
+   // StoreRepo
 
     // getIt.registerSingleton(ContactApiService());
     // getIt.registerSingleton(BuzzService());
@@ -32,7 +37,7 @@ class ServiceLocator
     // Repos
     getIt.registerSingleton(AuthRepo(getIt<AuthServices>()));
      getIt.registerSingleton(ProductRepo(getIt<ProductService>()));
-
+getIt.registerSingleton(StoreRepo(getIt<StoreService>()));
     // getIt.registerSingleton(BuzzRepo(getIt<BuzzService>()));
     // getIt.registerSingleton(CmsRepo(getIt<CmsServices>()));
     // getIt.registerSingleton(ActivityRepository(getIt<ActivityService>()));
