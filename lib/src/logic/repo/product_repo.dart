@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:vendor_app/src/core/utiils_lib/custom_dio_exception.dart';
 import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/data/prdouct_model.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/services/product_locator.dart';
@@ -20,8 +21,7 @@ class ProductRepo {
       final PrdouctModel prdouctModel =
           prdouctModelFromJson(response.toString());
 
-      if (prdouctModel.product!.isNotEmpty)
-       {
+      if (prdouctModel.product!.isNotEmpty) {
         print("check data are fetch are note");
       }
 
@@ -33,4 +33,35 @@ class ProductRepo {
       return left(error);
     }
   }
+
+  FutureResult<List<ProductCategoryModel>> getCategoryByLevel(data) async 
+  {
+    try {
+      var response = await _productServices.getCategoryByLevel(data);
+
+      final List<ProductCategoryModel> productModels = (response.data as List)
+            .map((item) => ProductCategoryModel.fromJson(item))
+            .toList();
+      if (response != null && response.data != null) 
+      {
+        // Parse the response data into a list of ProductCategoryModel
+        final List<ProductCategoryModel> productModels = (response.data as List)
+            .map((item) => ProductCategoryModel.fromJson(item))
+            .toList();
+
+        // Print or handle the fetched data
+        if (productModels.isNotEmpty) 
+        {
+          print(
+              "Data successfully fetched and parsed: ${productModels.length} categories.");
+        }
+      }
+      return right(productModels);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+
 }

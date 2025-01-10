@@ -11,13 +11,26 @@ import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 
-class ProductFormScreen extends StatelessWidget {
+class ProductFormScreen extends StatefulWidget {
+  @override
+  State<ProductFormScreen> createState() => _ProductFormScreenState();
+}
+
+class _ProductFormScreenState extends State<ProductFormScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch products on screen load
+    Provider.of<ProductProvider>(context, listen: false).getCategoryByLevel();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ProductProvider(),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
@@ -32,270 +45,271 @@ class ProductFormScreen extends StatelessWidget {
           title: Text('Add Product',
               style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Consumer<ProductProvider>(
-            builder: (context, provider, child) 
-            {
-              return 
-              SingleChildScrollView(
-                child: 
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 40.h,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: DropdownButtonFormField<String>(
-                        value: provider.selectedCategory.isNotEmpty
-                            ? provider.selectedCategory
-                            : null,
-                        hint: Text(
-                          'Select Category',
-                          style: context.subTitleTxtStyleblack,
-                        ),
-                        items: provider.categories
-                            .map((category) => DropdownMenuItem(
-                                  value: category,
-                                  child: Text(
-                                    category,
-                                    style: context.buttonTestStyle,
-                                  ),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          provider.setCategory(value!);
-                        },
-                        decoration: InputDecoration.collapsed(
-                            hintText: ''), // Removes default underline
-                      ),
-                    ),
+        body: Consumer<ProductProvider>(builder: (context, provider, child) {
+          print("check status  ${provider.categories}");
+          if (provider.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-                    if (provider.selectedCategory.isNotEmpty) ...{
-                      Gap(15.h),
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Consumer<ProductProvider>(
+              builder: (context, provider, child) {
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Container(
                         height: 40.h,
                         padding:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color:
-                              Colors.white, // Background color of the container
-                          borderRadius:
-                              BorderRadius.circular(8), // Rounded corners
-                          border:
-                              Border.all(color: Colors.grey), // Border color
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey),
                         ),
                         child: DropdownButtonFormField<String>(
-                          value: provider.selectedSubcategory.isNotEmpty
-                              ? provider.selectedSubcategory
+                          value: provider.selectedCategory.isNotEmpty
+                              ? provider.selectedCategory
                               : null,
                           hint: Text(
-                            'Select Subcategory',
+                            'Select Category',
                             style: context.subTitleTxtStyleblack,
                           ),
-                          items:
-                              provider.subcategories[provider.selectedCategory]!
-                                  .map((subcategory) => DropdownMenuItem(
-                                        value: subcategory,
-                                        child: Text(
-                                          subcategory,
-                                          style: context.buttonTestStyle,
-                                        ),
-                                      ))
-                                  .toList(),
-                          onChanged: (value) {
-                            provider.setSubcategory(value!);
-                          },
-                          decoration: InputDecoration.collapsed(hintText: ''),
-                        ),
-                      ),
-                      Gap(15.h),
-                    },
-
-                    if (provider.selectedSubcategory.isNotEmpty) ...{
-                      Container(
-                        height: 40.h,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color:
-                              Colors.white, // Background color of the container
-                          borderRadius:
-                              BorderRadius.circular(8), // Rounded corners
-                          border:
-                              Border.all(color: Colors.grey), // Border color
-                        ),
-                        child: DropdownButtonFormField<String>(
-                          value: provider.selectedProduct.isNotEmpty
-                              ? provider.selectedProduct
-                              : null,
-                          hint: Text(
-                            'Select Product',
-                            style: context.subTitleTxtStyleblack,
-                          ),
-                          items:
-                              provider.products[provider.selectedSubcategory]!
-                                  .map((product) => DropdownMenuItem(
-                                        value: product,
-                                        child: Text(
-                                          product,
-                                          style: context.buttonTestStyle,
-                                        ),
-                                      ))
-                                  .toList(),
-                          onChanged: (value) {
-                            provider.setProduct(value!);
-                          },
-                          decoration: InputDecoration.collapsed(hintText: ''),
-                        ),
-                      ),
-                    },
-
-                    Gap(15.h),
-
-                    Container(
-                      height: 40.h,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: DropdownButtonFormField<String>(
-                        value: provider.selectedproducctQuentity.isNotEmpty
-                            ? provider.selectedproducctQuentity
-                            : null,
-                        hint: Text(
-                          'Select Products Quantity',
-                          style: context.subTitleTxtStyleblack,
-                        ),
-                        items: provider.categories
-                            .map((category) => DropdownMenuItem(
+                          items: provider.categories
+                              .map(
+                                (category) => DropdownMenuItem(
                                   value: category,
-                                  child: Text(
-                                    category,
-                                    style: context.buttonTestStyle,
-                                  ),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          provider.setProductQuentity(value!);
-                        },
-                        decoration: InputDecoration.collapsed(
-                            hintText: ''), // Removes default underline
+                                  child: Text(category),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            provider.setCategory(value!);
+                          },
+
+                          decoration: InputDecoration.collapsed(
+                              hintText: ''), // Removes default underline
+                        ),
                       ),
-                    ),
-                  
-                  
-                    Gap(10.h),
-                    CustomTextField(
-                      validator: (val) {
-                        if (val.toString().isEmpty) {
-                          return "Please enter your name";
-                        }
-                        return null;
-                      },
-                      counterWidget: const Offstage(),
-                      onChanged: (value) {
-                        provider.setDescription(value);
-                      },
-                      hintText: 'Product Description',
-                      hintStyle: context.subTitleTxtStyleblack,
-                      fillColor: context.appColor.whiteColor,
-                    ),
 
-                    Gap(10.h),
-                    CustomTextField(
-                      validator: (val) {
-                        if (val.toString().isEmpty) {
-                          return "Please enter your name";
-                        }
-                        return null;
+                      if (provider.selectedCategory.isNotEmpty) ...{
+                        Gap(15.h),
+                        Container(
+                          height: 40.h,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .white, // Background color of the container
+                            borderRadius:
+                                BorderRadius.circular(8), // Rounded corners
+                            border:
+                                Border.all(color: Colors.grey), // Border color
+                          ),
+                          child: DropdownButtonFormField<String>(
+                            value: provider.selectedSubcategory.isNotEmpty
+                                ? provider.selectedSubcategory
+                                : null,
+                            hint: Text(
+                              'Select Subcategory',
+                              style: context.subTitleTxtStyleblack,
+                            ),
+                            items: provider
+                                .subcategories[provider.selectedCategory]!
+                                .map((subcategory) => DropdownMenuItem(
+                                      value: subcategory,
+                                      child: Text(
+                                        subcategory,
+                                        style: context.buttonTestStyle,
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              provider.setSubcategory(value!);
+                            },
+                            decoration: InputDecoration.collapsed(hintText: ''),
+                          ),
+                        ),
+                        Gap(15.h),
                       },
-                      counterWidget: const Offstage(),
-                      onChanged: (value) {
-                        provider.setUnit(value);
-                      },
-                      hintText: 'Product Unit',
-                      hintStyle: context.subTitleTxtStyleblack,
-                      fillColor: context.appColor.whiteColor,
-                    ),
 
-                    Gap(10.h),
-                    CustomTextField(
-                      validator: (val) {
-                        if (val.toString().isEmpty) {
-                          return "Please enter your name";
-                        }
-                        return null;
+                      if (provider.selectedSubcategory.isNotEmpty) ...{
+                        Container(
+                          height: 40.h,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .white, // Background color of the container
+                            borderRadius:
+                                BorderRadius.circular(8), // Rounded corners
+                            border:
+                                Border.all(color: Colors.grey), // Border color
+                          ),
+                          child: DropdownButtonFormField<String>(
+                            value: provider.selectedProduct.isNotEmpty
+                                ? provider.selectedProduct
+                                : null,
+                            hint: Text(
+                              'Select Product',
+                              style: context.subTitleTxtStyleblack,
+                            ),
+                            items:
+                                provider.products[provider.selectedSubcategory]!
+                                    .map((product) => DropdownMenuItem(
+                                          value: product,
+                                          child: Text(
+                                            product,
+                                            style: context.buttonTestStyle,
+                                          ),
+                                        ))
+                                    .toList(),
+                            onChanged: (value) {
+                              provider.setProduct(value!);
+                            },
+                            decoration: InputDecoration.collapsed(hintText: ''),
+                          ),
+                        ),
                       },
-                      counterWidget: const Offstage(),
-                      onChanged: (value) {
-                        provider.setPrice(double.tryParse(value) ?? 0.0);
-                      },
-                      hintText: 'Product Price',
-                      hintStyle: context.subTitleTxtStyleblack,
-                      fillColor: context.appColor.whiteColor,
-                    ),
 
-                    Gap(10.h),
-                    CustomTextField(
-                      validator: (val) {
-                        if (val.toString().isEmpty) {
-                          return "Please enter your name";
-                        }
-                        return null;
-                      },
-                      counterWidget: const Offstage(),
-                      onChanged: (value) {
-                        provider
-                            .setDiscountPrice(double.tryParse(value) ?? 0.0);
-                      },
-                      hintText: 'Discount Price',
-                      hintStyle: context.subTitleTxtStyleblack,
-                      fillColor: context.appColor.whiteColor,
-                    ),
+                      Gap(15.h),
 
-                    // Discount Price
+                      // Container(
+                      //   height: 40.h,
+                      //   padding:
+                      //       EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(8),
+                      //     border: Border.all(color: Colors.grey),
+                      //   ),
+                      //   child: DropdownButtonFormField<String>(
+                      //     value: provider.selectedproducctQuentity.isNotEmpty
+                      //         ? provider.selectedproducctQuentity
+                      //         : null,
+                      //     hint: Text(
+                      //       'Select Products Quantity',
+                      //       style: context.subTitleTxtStyleblack,
+                      //     ),
+                      //     items: provider.categories
+                      //         .map((category) => DropdownMenuItem(
+                      //               value: category,
+                      //               child: Text(
+                      //                 category,
+                      //                 style: context.buttonTestStyle,
+                      //               ),
+                      //             ))
+                      //         .toList(),
+                      //     onChanged: (value) {
+                      //       provider.setProductQuentity(value!);
+                      //     },
+                      //     decoration: InputDecoration.collapsed(
+                      //         hintText: ''), // Removes default underline
+                      //   ),
+                      // ),
 
-                    Gap(10.h),
+                      Gap(10.h),
+                      CustomTextField(
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter your name";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {
+                          provider.setDescription(value);
+                        },
+                        hintText: 'Product Description',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
 
-                    // Product Stock Switch
-                    SwitchListTile(
-                      title: Text('In Stock'),
-                      value: provider.inStock,
-                      activeColor: context.appColor.primarycolor,
-                      
-                      onChanged: (value) {
-                        provider.toggleStock(value);
-                      },
-                    ),
-                    Gap(50.h),
+                      Gap(10.h),
+                      CustomTextField(
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter your name";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {
+                          provider.setUnit(value);
+                        },
+                        hintText: 'Product Unit',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
 
-                    SizedBox(
-                      width: double.infinity,
-                      child: ButtonElevated(
-                          text: 'Add to Product List',
-                          backgroundColor: context.appColor.primarycolor,
-                          onPressed: () {
-                            _showBottomSheet(context);
-                          }),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+                      Gap(10.h),
+                      CustomTextField(
+                      //  controller: ,
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter your name";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {
+                          provider.setPrice(double.tryParse(value) ?? 0.0);
+                        },
+                        hintText: 'Product Price',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
+
+                      Gap(10.h),
+                      CustomTextField(
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter your name";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {
+                          provider
+                              .setDiscountPrice(double.tryParse(value) ?? 0.0);
+                        },
+                        hintText: 'Discount Price',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
+
+                      // Discount Price
+
+                      Gap(10.h),
+
+                      // Product Stock Switch
+                      SwitchListTile(
+                        title: Text('In Stock'),
+                        value: provider.inStock,
+                        activeColor: context.appColor.primarycolor,
+                        onChanged: (value) {
+                          provider.toggleStock(value);
+                        },
+                      ),
+                      Gap(50.h),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ButtonElevated(
+                            text: 'Add to Product List',
+                            backgroundColor: context.appColor.primarycolor,
+                            onPressed: () {
+                              _showBottomSheet(context);
+                            }),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        }));
   }
 
   // Function to show the Bottom Sheet
@@ -368,6 +382,4 @@ class ProductFormScreen extends StatelessWidget {
       },
     );
   }
-
-
 }

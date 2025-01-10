@@ -12,6 +12,9 @@ class APIURL {
   static const String reset_password = "${BASE_URL}auth/reset-password/vendor";
   static const String get_category = "${BASE_URL}categories";
   static const String getProduct = "${BASE_URL}products";
+  static const String getCategoryByLevel = "${BASE_URL}categories/by-level/1";
+
+ 
 
 
 

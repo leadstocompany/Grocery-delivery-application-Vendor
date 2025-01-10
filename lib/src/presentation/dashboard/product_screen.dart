@@ -23,7 +23,7 @@ class _ProductScreenState extends State<ProductScreen> {
   void initState() {
     super.initState();
     // Fetch products on screen load
-    Provider.of<ProductProvider>(context, listen: false).getProduct();
+    //Provider.of<ProductProvider>(context, listen: false).getProduct();
   }
 
   @override
@@ -117,9 +117,14 @@ class _ProductScreenState extends State<ProductScreen> {
       if (provider.isLoading)
        {
         return Center(child: CircularProgressIndicator());
-      } else if (provider.products.isEmpty) {
-        return Center(child: Text('No products available'));
-      } else 
+      } 
+      
+      // else if (provider.products.isEmpty) 
+      // {
+      //   return Center(child: Text('No products available'));
+      // }
+      
+       else 
       {
         return Expanded(
           child: ListView.builder(
