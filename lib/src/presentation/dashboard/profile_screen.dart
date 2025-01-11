@@ -138,7 +138,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     switch (index) {
                       case 0:
                         context.push(
-                          MyRoutes.SETUPBUSSINESS,
+                          // MyRoutes.SETUPBUSSINESS,
+                          MyRoutes.DETAILSBUSSINESS,
                           extra: {'status': '0'},
                         );
                         break;

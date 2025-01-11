@@ -48,13 +48,24 @@ class _StoreManagementState extends State<StoreManagement> {
         title: Text('Store Management',
             style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
       ),
-      body: Consumer<DaySelectionProvider>(
+      body:
+       Consumer<DaySelectionProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (provider.store_model == null) {
             return Center(child: Text('No available'));
-          } else {
+          } else 
+          
+          {
+            provider.bankName.text =
+                provider.store_model!.paymentDetails!.bankName;
+            provider.accountHoldername.text =
+                provider.store_model!.paymentDetails!.accountHolder;
+            provider.accountNumber.text =
+                provider.store_model!.paymentDetails!.accountNumber;
+            provider.ifscCode.text =
+                provider.store_model!.paymentDetails!.ifscCode;
             return SingleChildScrollView(
               // Make the body scrollable
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -115,6 +126,7 @@ class _StoreManagementState extends State<StoreManagement> {
                     child: Column(
                       children: [
                         CustomTextField(
+                          controller: provider.bankName,
                           validator: (val) {
                             if (val.toString().isEmpty) {
                               return "Store Name";
@@ -130,31 +142,49 @@ class _StoreManagementState extends State<StoreManagement> {
                         ),
                         Gap(10.h),
                         CustomTextField(
+                          controller: provider.accountHoldername,
                           validator: (val) {
                             if (val.toString().isEmpty) {
-                              return "Official Phone Number";
+                              return "AccountHodername";
                             }
                             return null;
                           },
                           maxLength: 64,
                           counterWidget: const Offstage(),
                           readOnly: true,
-                          hintText: "09032986759",
+                          hintText: "Account Holder Name",
                           hintStyle: context.subTitleTextStyle,
                           fillColor: context.appColor.whiteColor,
                         ),
                         Gap(10.h),
                         CustomTextField(
+                          controller: provider.accountNumber,
                           validator: (val) {
                             if (val.toString().isEmpty) {
-                              return "Gumasta Number";
+                              return "Account Number";
                             }
                             return null;
                           },
                           maxLength: 64,
                           counterWidget: const Offstage(),
                           readOnly: true,
-                          hintText: 'WB67HUDY89HDHH',
+                          hintText: 'Account Number',
+                          hintStyle: context.subTitleTextStyle,
+                          fillColor: context.appColor.whiteColor,
+                        ),
+                        Gap(10.h),
+                        CustomTextField(
+                          controller: provider.ifscCode,
+                          validator: (val) {
+                            if (val.toString().isEmpty) {
+                              return "Bank IFSCCOde";
+                            }
+                            return null;
+                          },
+                          maxLength: 64,
+                          counterWidget: const Offstage(),
+                          readOnly: true,
+                          hintText: 'Bank IFSCCOde',
                           hintStyle: context.subTitleTextStyle,
                           fillColor: context.appColor.whiteColor,
                         ),
@@ -254,48 +284,115 @@ class _StoreManagementState extends State<StoreManagement> {
     );
   }
 
-  Widget _daysList(BuildContext context, StoreModel? store_model) {
-    
-    final List<Map<String, String>> daysData = 
-    [
-      {'day': 'Sunday', 'open': "09:30 AM", 'close': "05:00 PM"},
-      {'day': 'Monday', 'open': "09:30 AM", 'close': "05:00 PM"},
-      {'day': 'Tuesday', 'open': "09:30 AM", 'close': "05:00 PM"},
-      {'day': 'Wednesday', 'open': "09:30 AM", 'close': "05:00 PM"},
-      {'day': 'Thursday', 'open': "09:30 AM", 'close': "05:00 PM"},
-      {'day': 'Friday', 'open': "09:30 AM", 'close': "05:00 PM"},
-      {'day': 'Saturday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  // Widget _daysList(BuildContext context, StoreModel? store_model) {
+
+  //   final List<Map<String, String>> daysData =
+  //   [
+  //     {'day': 'Sunday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  //     {'day': 'Monday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  //     {'day': 'Tuesday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  //     {'day': 'Wednesday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  //     {'day': 'Thursday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  //     {'day': 'Friday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  //     {'day': 'Saturday', 'open': "09:30 AM", 'close': "05:00 PM"},
+  //   ];
+
+  //   final Map<String, dynamic> operateDates = {
+  //     "id": "cm5rye8nw000binw9sansoxk5",
+  //     "monday": true,
+  //     "tuesday": true,
+  //     "wednesday": true,
+  //     "thursday": true,
+  //     "friday": true,
+  //     "saturday": true,
+  //     "sunday": false,
+  //     "storeId": "cm5rye8nw000ainw9u5e71ogw"
+  //   };
+
+  //   return ListView.builder(
+  //     shrinkWrap: true, // Make the ListView size to fit its children
+  //     physics:
+  //         NeverScrollableScrollPhysics(), // Disable scrolling for the ListView
+  //     itemCount: daysData.length,
+  //     itemBuilder: (context, index) {
+  //       final dayInfo = daysData[index];
+  //       return Padding(
+  //         padding: const EdgeInsets.all(8.0),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               //  dayInfo['day']!,
+  //               "${store_model!.operateDates!.friday}",
+  //               style: context.subTitleTxtStyleblack.copyWith(
+  //                 color: context.appColor.blackColor,
+  //               ),
+  //             ),
+  //             Text(
+  //               dayInfo['open']!,
+  //               style: context.subTitleTxtStyleblack.copyWith(
+  //                 color: context.appColor.blackColor,
+  //               ),
+  //             ),
+  //             Text(
+  //               dayInfo['close']!,
+  //               style: context.subTitleTxtStyleblack.copyWith(
+  //                 color: context.appColor.blackColor,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  Widget _daysList(BuildContext context, StoreModel? storeModel) {
+    final List<Map<String, String>> daysData = [
+      {'day': 'Sunday', 'key': 'sunday'},
+      {'day': 'Monday', 'key': 'monday'},
+      {'day': 'Tuesday', 'key': 'tuesday'},
+      {'day': 'Wednesday', 'key': 'wednesday'},
+      {'day': 'Thursday', 'key': 'thursday'},
+      {'day': 'Friday', 'key': 'friday'},
+      {'day': 'Saturday', 'key': 'saturday'},
     ];
 
     return ListView.builder(
-      shrinkWrap: true, // Make the ListView size to fit its children
-      physics:
-          NeverScrollableScrollPhysics(), // Disable scrolling for the ListView
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: daysData.length,
       itemBuilder: (context, index) {
         final dayInfo = daysData[index];
+        final dayKey = dayInfo['key']!;
+        final isOpen = storeModel?.operateDates?.toJson()[dayKey] ?? false;
+        final openTime = storeModel?.operateTimes?.startTime ?? "N/A";
+        final closeTime = storeModel?.operateTimes?.endTime ?? "N/A";
+
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                //  dayInfo['day']!,
-                "${store_model!.operateDates!.friday}",
-                style: context.subTitleTxtStyleblack.copyWith(
-                  color: context.appColor.blackColor,
+                dayInfo['day']!,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isOpen ? Colors.black : Colors.grey,
                 ),
               ),
               Text(
-                dayInfo['open']!,
-                style: context.subTitleTxtStyleblack.copyWith(
-                  color: context.appColor.blackColor,
+                isOpen ? openTime : "Closed",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isOpen ? Colors.green : Colors.red,
                 ),
               ),
               Text(
-                dayInfo['close']!,
-                style: context.subTitleTxtStyleblack.copyWith(
-                  color: context.appColor.blackColor,
+                isOpen ? closeTime : "",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isOpen ? Colors.green : Colors.red,
                 ),
               ),
             ],

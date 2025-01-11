@@ -8,6 +8,7 @@ import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/createStoreModel.dart';
 import 'package:vendor_app/src/data/login_response.dart';
 import 'package:vendor_app/src/data/password_model.dart';
+import 'package:vendor_app/src/data/vendor_model.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/services/service_locator.dart';
 
@@ -57,6 +58,10 @@ class AuthRepo {
       if (loginResponse.accessToken != null) {
         await SharedPrefUtils.setToken(
             authToken: loginResponse.accessToken ?? "");
+              await SharedPrefUtils.setRefreshToken(
+            refresh_token: loginResponse.refreshToken ?? "");
+
+           
       }
 
       print("Response status code: ${response.statusCode}");
@@ -137,4 +142,10 @@ class AuthRepo {
       return left(error);
     }
   }
+
+
+
+
+
+  
 }

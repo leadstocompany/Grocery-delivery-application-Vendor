@@ -8,6 +8,7 @@ import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
 import 'package:vendor_app/src/logic/provider/crate_store_provider.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 import 'package:vendor_app/src/logic/provider/login_provider.dart';
 
 class MyApplication extends StatefulWidget {
@@ -34,6 +35,7 @@ class _MyApplicationState extends State<MyApplication> {
              ChangeNotifierProvider(create: (_) => DaySelectionProvider()),
               ChangeNotifierProvider(create: (_) => LoginProvider()),
                 ChangeNotifierProvider(create: (_) => ProductProvider()),
+                   ChangeNotifierProvider(create: (_) => HomeProvider()),
               
 
             

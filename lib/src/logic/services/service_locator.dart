@@ -30,6 +30,10 @@ class AuthServices extends ApiService {
     return response;
   }
 
+   
+
+  
+
    Future vendorRegister(data) async 
    {
     var response = await api.post(APIURL.vendorRegister, data: jsonEncode(data));

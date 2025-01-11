@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/logic/provider/PageNotifier.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 import 'package:vendor_app/src/logic/provider/login_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
@@ -97,13 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const Gap(5),
               GestureDetector(
-                onTap: ()
-                 {
-                 
-                 
+                onTap: () {
                   context.push(MyRoutes.FORGETPASSWORD);
-                 
-                  },
+                },
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -124,7 +122,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (_formKey.currentState?.validate() ?? false) {
                         var status = await pageNotifier.login(context);
                         if (status) {
-                          context.push(MyRoutes.DASHBOARDSCREEN);
+                          Provider.of<HomeProvider>(context, listen: false)
+                              .getMe();
+                              print(
+                              "dfdfdfdffd  ${await SharedPrefUtils.getStoreId()}");
+                          if (await SharedPrefUtils.getStoreId() == null) {
+                            print("jdhfgkdkfgkdfkjgjf");
+                          } else {
+                            print(
+                                "jdhfgkdkfgkdfkjgjf  ${await SharedPrefUtils.getStoreId()}");
+                            context.push(MyRoutes.DASHBOARDSCREEN);
+                          }
                         }
 
                         //

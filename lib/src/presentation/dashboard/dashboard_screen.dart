@@ -2,8 +2,11 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 import 'package:vendor_app/src/presentation/dashboard/Insights_screen.dart';
 import 'package:vendor_app/src/presentation/dashboard/order_screen.dart';
 import 'package:vendor_app/src/presentation/dashboard/product_screen.dart';
@@ -24,6 +27,16 @@ class _DashboardScreeState extends State<DashboardScree> {
   void initState() {
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
+
+    Provider.of<HomeProvider>(context, listen: false).refreshToken();
+
+    getvendordata();
+  }
+
+  getvendordata() {
+    Future.delayed(const Duration(seconds: 10), () async {
+      Provider.of<HomeProvider>(context, listen: false).getMe();
+    });
   }
 
   List<Widget> _buildScreens() {

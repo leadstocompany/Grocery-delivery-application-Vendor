@@ -8,8 +8,8 @@ class SharedPrefUtils {
   SharedPrefUtils._();
 
   static String? _token;
-   static String? _resetToken;
-
+  static String? _resetToken;
+  static String? _refreshToken;
   static const String PROFILE_PIC = "profile_pic";
   static const String BADGE_URL = "badge_url";
   static const String USER_NAME = "username";
@@ -29,12 +29,12 @@ class SharedPrefUtils {
   static const String CITY = "city";
   static const String IS_SUBSCRIPTION_PURCHASE = "IS_SUBSCRIPTION_PURCHASE";
   static const String FIRST_NAME = "FIRST_NAME";
-
   static const String LAST_NAME = "FIRST_NAME";
   static const String EMAIL = "EMAIL";
   static const String PASSWORD = "PASSWORD";
-
-   static const String RESET_TOKEN = "RESET_TOKEN";
+  static const String RESET_TOKEN = "RESET_TOKEN";
+  static const String STORE_ID = "STORE_ID";
+  static const String REFRESH_TOKEN = "REFRESH_TOKEN";
 
   /// Set bearer authorization token
   static Future<bool> setToken({required String authToken}) {
@@ -43,7 +43,24 @@ class SharedPrefUtils {
         .then((sp) async => await sp.setString(KEY_TOKEN, authToken));
   }
 
-   static Future<bool> setResetToken({required String resetToken}) {
+  static Future<bool> setRefreshToken({required String refresh_token}) {
+    _refreshToken = refresh_token;
+    return SharedPreferences.getInstance()
+        .then((sp) async => await sp.setString(REFRESH_TOKEN, refresh_token));
+  }
+
+  static Future<bool> setStoreId({required String storeId}) {
+    return SharedPreferences.getInstance()
+        .then((sp) async => await sp.setString(STORE_ID, storeId));
+  }
+
+  static Future<String?> getStoreId() async {
+    final sp = await SharedPreferences.getInstance();
+    _token = sp.getString(STORE_ID);
+    return _token;
+  }
+
+  static Future<bool> setResetToken({required String resetToken}) {
     resetToken = resetToken;
     return SharedPreferences.getInstance()
         .then((sp) async => await sp.setString(RESET_TOKEN, resetToken));
@@ -91,8 +108,13 @@ class SharedPrefUtils {
     return _token;
   }
 
-   static Future<String?> getResetToken() async 
-   {
+   static Future<String?> getRefreshToken() async {
+    final sp = await SharedPreferences.getInstance();
+    _refreshToken = sp.getString(REFRESH_TOKEN);
+    return _refreshToken;
+  }
+
+  static Future<String?> getResetToken() async {
     final sp = await SharedPreferences.getInstance();
     _resetToken = sp.getString(RESET_TOKEN);
     return _resetToken;
@@ -281,13 +303,10 @@ class SharedPrefUtils {
   }
 
   /// Clear all preferences
-  static Future<void> clear() async 
-  {
+  static Future<void> clear() async {
     final sp = await SharedPreferences.getInstance();
-    sp.getKeys().forEach((key) async 
-    {
-      if (key != IS_FRESH_INSTALL)
-       {
+    sp.getKeys().forEach((key) async {
+      if (key != IS_FRESH_INSTALL) {
         await sp.remove(key);
       }
     });

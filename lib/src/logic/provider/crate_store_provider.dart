@@ -35,6 +35,12 @@ class DaySelectionProvider with ChangeNotifier {
   final TextEditingController storeGSTNumber = TextEditingController();
   final TextEditingController storeGumastaNumber = TextEditingController();
 
+//   final TextEditingController bankAccoutController = TextEditingController();
+//   final TextEditingController accountHolder = TextEditingController();
+//    final TextEditingController accountNumber = TextEditingController();
+//  final TextEditingController ifscCode = TextEditingController();
+   
+
   File? _image;
 
   File? get image => _image;
