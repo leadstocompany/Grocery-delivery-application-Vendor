@@ -22,8 +22,8 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch products on screen load
-    //Provider.of<ProductProvider>(context, listen: false).getProduct();
+
+    Provider.of<ProductProvider>(context, listen: false).getProduct();
   }
 
   @override
@@ -110,27 +110,135 @@ class _ProductScreenState extends State<ProductScreen> {
         "subTitle": "N15,000",
         "price": "In Stock"
       },
+      {
+        "image": AppImages.product4,
+        "title": "Tomatoes",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product3,
+        "title": "Tatashe",
+        "subTitle": "N15,000",
+        "price": "Out of Stock"
+      },
+      {
+        "image": AppImages.product2,
+        "title": "Mama Gold Rice",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product4,
+        "title": "Tomatoes",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product3,
+        "title": "Tatashe",
+        "subTitle": "N15,000",
+        "price": "Out of Stock"
+      },
+      {
+        "image": AppImages.product2,
+        "title": "Mama Gold Rice",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product4,
+        "title": "Tomatoes",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product3,
+        "title": "Tatashe",
+        "subTitle": "N15,000",
+        "price": "Out of Stock"
+      },
+      {
+        "image": AppImages.product2,
+        "title": "Mama Gold Rice",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product4,
+        "title": "Tomatoes",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product3,
+        "title": "Tatashe",
+        "subTitle": "N15,000",
+        "price": "Out of Stock"
+      },
+      {
+        "image": AppImages.product2,
+        "title": "Mama Gold Rice",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product4,
+        "title": "Tomatoes",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product3,
+        "title": "Tatashe",
+        "subTitle": "N15,000",
+        "price": "Out of Stock"
+      },
+      {
+        "image": AppImages.product2,
+        "title": "Mama Gold Rice",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product4,
+        "title": "Tomatoes",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
+      {
+        "image": AppImages.product3,
+        "title": "Tatashe",
+        "subTitle": "N15,000",
+        "price": "Out of Stock"
+      },
+      {
+        "image": AppImages.product2,
+        "title": "Mama Gold Rice",
+        "subTitle": "N15,000",
+        "price": "In Stock"
+      },
     ];
 
-    return Consumer<ProductProvider>(builder: (context, provider, child)
-     {
-      if (provider.isLoading)
-       {
+    return Consumer<ProductProvider>(builder: (context, provider, child) {
+      if (provider.isLoadingg) {
         return Center(child: CircularProgressIndicator());
-      } 
-      
-      // else if (provider.products.isEmpty) 
+      }
+
+      // else if (provider.products.isEmpty)
       // {
       //   return Center(child: Text('No products available'));
       // }
-      
-       else 
-      {
+
+      else {
+        print("dfjkjffhhh  ${provider.products1}");
         return Expanded(
           child: ListView.builder(
             scrollDirection: Axis.vertical,
-            itemCount: productsC.length,
+            itemCount: provider.products1.length,
+            // productsC.length,
             itemBuilder: (context, index) {
+              final product = provider.products1[index];
               status = index;
               return InkWell(
                 onTap: () {
@@ -152,40 +260,44 @@ class _ProductScreenState extends State<ProductScreen> {
                                 // width: 350,
                               ),
                               Gap(5.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    productsC[index]['title'].toString(),
-                                    style: context.buttonTestStyle.copyWith(),
-                                  ),
-                                  Text(
-                                    productsC[index]['subTitle'].toString(),
-                                    style: context.buttonTestStyle.copyWith(
-                                        color: context.appColor.greyColor),
-                                  ),
-                                ],
+                              Container(
+                                width: 150,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product.name!,
+                                      // productsC[index]['title'].toString(),
+                                      style: context.buttonTestStyle.copyWith(),
+                                    ),
+                                    Text(
+                                      //  productsC[index]['subTitle'].toString(),
+
+                                      product.basePrice!,
+                                      style: context.buttonTestStyle.copyWith(
+                                          color: context.appColor.greyColor),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Spacer(),
                               Container(
                                 decoration: BoxDecoration(
-                                  color: productsC[index]["price"].toString() ==
-                                          "Out of Stock"
-                                      ? Colors.grey
-                                      : Color(0xffEAFFEA),
+                                  color: product.isInStock!
+                                      ? Color(0xffEAFFEA)
+                                      : Colors.grey,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(3.0)),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
-                                      productsC[index]["price"].toString(),
-                                      style: context.buttonTestStyle.copyWith(
-                                          color: productsC[index]["price"]
-                                                      .toString() ==
-                                                  "Out of Stock"
-                                              ? Colors.black
-                                              : Colors.black)),
+                                      // productsC[index]["price"].toString(),
+                                      product.isInStock!
+                                          ? "In Stock"
+                                          : "Out Of Stock",
+                                      style: context.buttonTestStyle
+                                          .copyWith(color: Colors.black)),
                                 ),
                               )
                             ],

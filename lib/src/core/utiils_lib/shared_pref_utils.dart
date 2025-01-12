@@ -12,7 +12,7 @@ class SharedPrefUtils {
   static String? _refreshToken;
   static const String PROFILE_PIC = "profile_pic";
   static const String BADGE_URL = "badge_url";
-  static const String USER_NAME = "username";
+  static  String USER_NAME = "username";
   static const String INS_RANDOM = "ins_random";
   static const String INS_NearBy = "ins_nearby";
   static const String USER_ID = "user_id";

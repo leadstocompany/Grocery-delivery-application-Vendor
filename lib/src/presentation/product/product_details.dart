@@ -63,7 +63,7 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                      provider.setDescription(value);
+                     
                     },
                     hintText: 'Basmati Rice',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -79,7 +79,7 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                      provider.setUnit(value);
+                     
                     },
                     hintText: 'Mama Gold Premium Rice',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -95,7 +95,7 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                      provider.setPrice(double.tryParse(value) ?? 0.0);
+                     // provider.setPrice(double.tryParse(value) ?? 0.0);
                     },
                     hintText: '1 kg',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -111,8 +111,8 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                      provider
-                          .setDiscountPrice(double.tryParse(value) ?? 0.0);
+                      // provider
+                      //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
                     },
                     hintText: 'Very Good Long Grain Rice',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -128,8 +128,8 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                      provider
-                          .setDiscountPrice(double.tryParse(value) ?? 0.0);
+                      // provider
+                      //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
                     },
                     hintText: '80 pieces',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -145,8 +145,8 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                      provider
-                          .setDiscountPrice(double.tryParse(value) ?? 0.0);
+                      // provider
+                      //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
                     },
                     hintText: '45,000',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -162,8 +162,8 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                      provider
-                          .setDiscountPrice(double.tryParse(value) ?? 0.0);
+                      // provider
+                      //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
                     },
                     hintText: 'Discount Price (Optional)',
                     hintStyle: context.subTitleTxtStyleblack,

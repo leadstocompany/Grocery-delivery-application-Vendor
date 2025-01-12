@@ -1,42 +1,53 @@
 // To parse this JSON data, do
 //
-//     final vendorModel = vendorModelFromJson(jsonString);
+//     final vendorModel = vendorModelFromJson(jsondynamic);
 
 import 'dart:convert';
 
-VendorModel vendorModelFromJson(String str) =>
-    VendorModel.fromJson(json.decode(str));
+VendorModel vendorModelFromJson(dynamic str) => VendorModel.fromJson(json.decode(str));
 
-String vendorModelToJson(VendorModel data) => json.encode(data.toJson());
+dynamic vendorModelToJson(VendorModel data) => json.encode(data.toJson());
 
 class VendorModel {
-  String? id;
-  String? phone;
-  String? role;
-  bool? isPhoneVerified;
-  String? storeId;
+    dynamic id;
+    dynamic phone;
+    dynamic firstName;
+    dynamic lastName;
+    dynamic name;
+    dynamic role;
+    bool? isPhoneVerified;
+    dynamic storeId;
 
-  VendorModel({
-    this.id,
-    this.phone,
-    this.role,
-    this.isPhoneVerified,
-    this.storeId,
-  });
+    VendorModel({
+        this.id,
+        this.phone,
+        this.firstName,
+        this.lastName,
+        this.name,
+        this.role,
+        this.isPhoneVerified,
+        this.storeId,
+    });
 
-  factory VendorModel.fromJson(Map<String, dynamic> json) => VendorModel(
+    factory VendorModel.fromJson(Map<dynamic, dynamic> json) => VendorModel(
         id: json["id"],
         phone: json["phone"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        name: json["name"],
         role: json["role"],
         isPhoneVerified: json["isPhoneVerified"],
         storeId: json["storeId"],
-      );
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<dynamic, dynamic> toJson() => {
         "id": id,
         "phone": phone,
+        "firstName": firstName,
+        "lastName": lastName,
+        "name": name,
         "role": role,
         "isPhoneVerified": isPhoneVerified,
         "storeId": storeId,
-      };
+    };
 }

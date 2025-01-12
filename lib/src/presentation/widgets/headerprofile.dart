@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 
 class HeaderProfile extends StatefulWidget {
   @override
@@ -11,8 +12,7 @@ class HeaderProfile extends StatefulWidget {
 class HeaderState extends State<HeaderProfile> {
   @override
   Widget build(BuildContext context) {
-    return 
-    Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -27,8 +27,7 @@ class HeaderState extends State<HeaderProfile> {
                 width: 50,
                 height: 50,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace)
-                 {
+                errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     AppImages.Avatar,
                     width: 50,
@@ -46,7 +45,7 @@ class HeaderState extends State<HeaderProfile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hello Emekus',
+                  SharedPrefUtils.USER_NAME ?? "Hello Emekus",
                   style: context.subTitleStyle,
                 ),
                 Text(

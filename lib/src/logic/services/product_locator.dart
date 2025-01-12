@@ -17,6 +17,11 @@ class ProductService extends ApiService
     return response;
   }
 
+ Future createProduct(data) async 
+  {
+    var response = await api.post(APIURL.getProduct, data: jsonEncode(data));
+    return response;
+  }
     Future getCategoryByLevel(data) async 
   {
     var response = await api.get(APIURL.getCategoryByLevel, data: jsonEncode(data));

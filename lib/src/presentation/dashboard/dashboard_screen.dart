@@ -34,7 +34,8 @@ class _DashboardScreeState extends State<DashboardScree> {
   }
 
   getvendordata() {
-    Future.delayed(const Duration(seconds: 10), () async {
+    Future.delayed(const Duration(seconds: 10), () async 
+    {
       Provider.of<HomeProvider>(context, listen: false).getMe();
     });
   }

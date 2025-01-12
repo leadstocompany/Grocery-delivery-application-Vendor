@@ -121,18 +121,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
                         var status = await pageNotifier.login(context);
-                        if (status) {
-                          Provider.of<HomeProvider>(context, listen: false)
-                              .getMe();
-                              print(
-                              "dfdfdfdffd  ${await SharedPrefUtils.getStoreId()}");
-                          if (await SharedPrefUtils.getStoreId() == null) {
-                            print("jdhfgkdkfgkdfkjgjf");
-                          } else {
-                            print(
-                                "jdhfgkdkfgkdfkjgjf  ${await SharedPrefUtils.getStoreId()}");
-                            context.push(MyRoutes.DASHBOARDSCREEN);
-                          }
+                        if (status)
+                         {
+                          context.push(MyRoutes.DASHBOARDSCREEN);
+                          // Provider.of<HomeProvider>(context, listen: false)
+                          //     .getMe();
+                          //     print(
+                          //     "dfdfdfdffd  ${await SharedPrefUtils.getStoreId()}");
+                          // if (await SharedPrefUtils.getStoreId() == null)
+                          // {
+                          //   print("jdhfgkdkfgkdfkjgjf");
+                          // } else {
+                          //   print(
+                          //       "jdhfgkdkfgkdfkjgjf  ${await SharedPrefUtils.getStoreId()}");
+
+                          // }
                         }
 
                         //

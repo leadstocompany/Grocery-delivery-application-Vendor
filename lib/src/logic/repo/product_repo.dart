@@ -21,7 +21,8 @@ class ProductRepo {
       final PrdouctModel prdouctModel =
           prdouctModelFromJson(response.toString());
 
-      if (prdouctModel.product!.isNotEmpty) {
+      if (prdouctModel.data!.isNotEmpty)
+       {
         print("check data are fetch are note");
       }
 
@@ -57,6 +58,18 @@ class ProductRepo {
         }
       }
       return right(productModels);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+    FutureResult<String> createProduct(data) async {
+    try {
+      var response = await _productServices.createProduct(data);
+      final String model = response.toString();
+
+      return right(model);
     } on DioException catch (e) {
       var error = CustomDioExceptions.handleError(e);
       return left(error);

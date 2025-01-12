@@ -8,6 +8,7 @@ import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
+import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
@@ -46,7 +47,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
               style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
         ),
         body: Consumer<ProductProvider>(builder: (context, provider, child) {
-          print("check status  ${provider.categories}");
           if (provider.isLoading) {
             return Center(child: CircularProgressIndicator());
           }
@@ -59,42 +59,43 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 40.h,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: DropdownButtonFormField<String>(
-                          value: provider.selectedCategory.isNotEmpty
-                              ? provider.selectedCategory
-                              : null,
-                          hint: Text(
-                            'Select Category',
-                            style: context.subTitleTxtStyleblack,
+                      if (provider.categories.isNotEmpty)
+                        Container(
+                          height: 40.h,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey),
                           ),
-                          items: provider.categories
-                              .map(
-                                (category) => DropdownMenuItem(
-                                  value: category,
-                                  child: Text(category),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            provider.setCategory(value!);
-                          },
+                          child: DropdownButtonFormField<ProductCategoryModel>(
+                            value: provider.selectedCategory,
 
-                          decoration: InputDecoration.collapsed(
-                              hintText: ''), // Removes default underline
+                            hint: Text(
+                              'Select Category',
+                              style: context.subTitleTxtStyleblack,
+                            ),
+                            items: provider.categories.map((category) {
+                              return DropdownMenuItem<ProductCategoryModel>(
+                                value: category,
+                                child: Text(category.name ??
+                                    'Unknown Category'), // Display the category name
+                              );
+                            }).toList(),
+                            onChanged: (ProductCategoryModel? value) {
+                              if (value != null) {
+                                provider.setCategory(
+                                    value); // Update the selected category
+                              }
+                            },
+
+                            decoration: InputDecoration.collapsed(
+                                hintText: ''), // Removes default underline
+                          ),
                         ),
-                      ),
-
-                      if (provider.selectedCategory.isNotEmpty) ...{
-                        Gap(15.h),
+                      if (provider.selectedCategory != null) Gap(15.h),
+                      if (provider.selectedCategory != null)
                         Container(
                           height: 40.h,
                           padding:
@@ -107,34 +108,29 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                             border:
                                 Border.all(color: Colors.grey), // Border color
                           ),
-                          child: DropdownButtonFormField<String>(
-                            value: provider.selectedSubcategory.isNotEmpty
-                                ? provider.selectedSubcategory
-                                : null,
+                          child: DropdownButtonFormField<ProductCategoryModel>(
+                            value: provider.selectedSubcategory,
                             hint: Text(
                               'Select Subcategory',
                               style: context.subTitleTxtStyleblack,
                             ),
                             items: provider
-                                .subcategories[provider.selectedCategory]!
-                                .map((subcategory) => DropdownMenuItem(
-                                      value: subcategory,
-                                      child: Text(
-                                        subcategory,
-                                        style: context.buttonTestStyle,
-                                      ),
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              provider.setSubcategory(value!);
+                                .subcategories[provider.selectedCategory!.name]!
+                                .map((sub) {
+                              return DropdownMenuItem(
+                                  value: sub, child: Text(sub.name!));
+                            }).toList(),
+                            onChanged: (subcategory) {
+                              if (subcategory != null) {
+                                provider.setSubcategory(subcategory);
+                              }
                             },
                             decoration: InputDecoration.collapsed(hintText: ''),
                           ),
                         ),
-                        Gap(15.h),
-                      },
+                      if (provider.selectedSubcategory != null) Gap(15.h),
 
-                      if (provider.selectedSubcategory.isNotEmpty) ...{
+                      if (provider.selectedSubcategory != null)
                         Container(
                           height: 40.h,
                           padding:
@@ -147,33 +143,33 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                             border:
                                 Border.all(color: Colors.grey), // Border color
                           ),
-                          child: DropdownButtonFormField<String>(
-                            value: provider.selectedProduct.isNotEmpty
-                                ? provider.selectedProduct
-                                : null,
+                          child: DropdownButtonFormField<ProductCategoryModel>(
+                            value: provider.selectedProduct,
                             hint: Text(
                               'Select Product',
                               style: context.subTitleTxtStyleblack,
                             ),
-                            items:
-                                provider.products[provider.selectedSubcategory]!
-                                    .map((product) => DropdownMenuItem(
-                                          value: product,
-                                          child: Text(
-                                            product,
-                                            style: context.buttonTestStyle,
-                                          ),
-                                        ))
-                                    .toList(),
-                            onChanged: (value) {
-                              provider.setProduct(value!);
+                            items: provider
+                                .products[provider.selectedSubcategory!.name]!
+                                .map((product) {
+                              return DropdownMenuItem(
+                                value: product,
+                                child: Text(
+                                  product.name!,
+                                  style: context.buttonTestStyle,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (product) {
+                              if (product != null) {
+                                provider.setProduct(product);
+                                print('Selected Product ID: ${product.id}');
+                              }
                             },
                             decoration: InputDecoration.collapsed(hintText: ''),
                           ),
                         ),
-                      },
-
-                      Gap(15.h),
+                      if (provider.selectedSubcategory != null) Gap(15.h),
 
                       // Container(
                       //   height: 40.h,
@@ -211,32 +207,48 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
                       Gap(10.h),
                       CustomTextField(
+                        controller: provider.productDescriptionController,
                         validator: (val) {
                           if (val.toString().isEmpty) {
-                            return "Please enter your name";
+                            return "Please enter Description";
                           }
                           return null;
                         },
                         counterWidget: const Offstage(),
-                        onChanged: (value) {
-                          provider.setDescription(value);
-                        },
+                        onChanged: (value) {},
                         hintText: 'Product Description',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
+                      Gap(10.h),
+                      CustomTextField(
+                        controller: provider.productquantityController,
+                        keyBoardType: TextInputType.number,
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter product quantity";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {},
+                        hintText: 'Product quantity',
                         hintStyle: context.subTitleTxtStyleblack,
                         fillColor: context.appColor.whiteColor,
                       ),
 
                       Gap(10.h),
                       CustomTextField(
+                        controller: provider.productUnitController,
                         validator: (val) {
                           if (val.toString().isEmpty) {
-                            return "Please enter your name";
+                            return "Please enter product uint";
                           }
                           return null;
                         },
                         counterWidget: const Offstage(),
                         onChanged: (value) {
-                          provider.setUnit(value);
+                          //provider.setUnit(value);
                         },
                         hintText: 'Product Unit',
                         hintStyle: context.subTitleTxtStyleblack,
@@ -245,16 +257,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
                       Gap(10.h),
                       CustomTextField(
-                      //  controller: ,
+                        controller: provider.productPriceController,
+                        keyBoardType: TextInputType.number,
                         validator: (val) {
                           if (val.toString().isEmpty) {
-                            return "Please enter your name";
+                            return "Please enter product price";
                           }
                           return null;
                         },
                         counterWidget: const Offstage(),
                         onChanged: (value) {
-                          provider.setPrice(double.tryParse(value) ?? 0.0);
+                          //provider.setPrice(double.tryParse(value) ?? 0.0);
                         },
                         hintText: 'Product Price',
                         hintStyle: context.subTitleTxtStyleblack,
@@ -263,17 +276,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
                       Gap(10.h),
                       CustomTextField(
+                        controller:
+                            provider.productProductDiscountPriceController,
+                        keyBoardType: TextInputType.number,
                         validator: (val) {
                           if (val.toString().isEmpty) {
-                            return "Please enter your name";
+                            return "Please enter Discount Price";
                           }
                           return null;
                         },
                         counterWidget: const Offstage(),
-                        onChanged: (value) {
-                          provider
-                              .setDiscountPrice(double.tryParse(value) ?? 0.0);
-                        },
+                        onChanged: (value) {},
                         hintText: 'Discount Price',
                         hintStyle: context.subTitleTxtStyleblack,
                         fillColor: context.appColor.whiteColor,
@@ -292,6 +305,65 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           provider.toggleStock(value);
                         },
                       ),
+                      if (provider.inStock)
+                        CustomTextField(
+                          controller: provider.productStockController,
+                          keyBoardType: TextInputType.number,
+                          validator: (val) {
+                            if (val.toString().isEmpty) {
+                              return "Please enter stock quntity";
+                            }
+                            return null;
+                          },
+                          counterWidget: const Offstage(),
+                          onChanged: (value) {},
+                          hintText: 'Stock quantity',
+                          hintStyle: context.subTitleTxtStyleblack,
+                          fillColor: context.appColor.whiteColor,
+                        ),
+
+                      Gap(10.h),
+                      CustomTextField(
+                        maxLines: 5,
+                        controller: provider.productqlongDescriptionController,
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter Long Description";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {},
+                        hintText: 'Product Long Description',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
+                      Gap(10.h),
+                      Container(
+                        height: 120.h,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: context.appColor.greyColor400),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: InkWell(
+                          onTap: () {
+                            provider..pickImage();
+                          },
+                          child: provider.selectedImage == null
+                              ? Center(
+                                  child: Icon(
+                                    Icons.camera,
+                                    size: 100,
+                                  ),
+                                )
+                              : Image.file(
+                                  provider.selectedImage!,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+
                       Gap(50.h),
 
                       SizedBox(
@@ -299,8 +371,13 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         child: ButtonElevated(
                             text: 'Add to Product List',
                             backgroundColor: context.appColor.primarycolor,
-                            onPressed: () {
-                              _showBottomSheet(context);
+                            onPressed: () async {
+                              var status =
+                                  await provider.createProduct(context);
+                              if (status) {
+                                Navigator.pop(context);
+                                _showBottomSheet(context);
+                              }
                             }),
                       ),
                     ],

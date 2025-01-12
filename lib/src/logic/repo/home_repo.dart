@@ -39,11 +39,14 @@ class HomeRepo {
   FutureResult<String> getMe(data) async {
     try {
       var response = await _homeService.getMe(data);
-      print("uweg7yguyergfuyegyuf ${response}");
+
       final VendorModel vendorModel = vendorModelFromJson(response.toString());
 
       if (vendorModel != null) {
-        print("uweg7yguyergfuyegyuf ${vendorModel.storeId}");
+        SharedPrefUtils.USER_NAME =
+            vendorModel.firstName + " " + vendorModel.lastName;
+
+        print("dkfjhdkfhkfk  ${SharedPrefUtils.USER_NAME}");
         await SharedPrefUtils.setStoreId(storeId: vendorModel.storeId ?? "");
       }
 
