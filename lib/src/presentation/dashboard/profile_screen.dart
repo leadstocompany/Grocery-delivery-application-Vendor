@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/logic/provider/crate_store_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -67,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Business Name',
+                            SharedPrefUtils.USER_NAME ?? "Hello Emekus",
                             style: context.subTitleStyle,
                           ),
                           Text(
@@ -153,6 +156,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         context.push(
                           MyRoutes.SETTING,
                         );
+                        break;
+
+                      case 4:
+                        Provider.of<DaySelectionProvider>(context, listen: false).vendorLogOut(context);
+                        
                         break;
                     }
                   },

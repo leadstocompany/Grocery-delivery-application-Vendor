@@ -28,7 +28,7 @@ class _DashboardScreeState extends State<DashboardScree> {
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
 
-    Provider.of<HomeProvider>(context, listen: false).refreshToken();
+    Provider.of<HomeProvider>(context, listen: false).refreshToken(context);
 
     getvendordata();
   }

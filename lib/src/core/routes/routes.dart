@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:vendor_app/src/core/utiils_lib/globle_variable.dart';
+import 'package:vendor_app/src/data/prdouct_model.dart';
 import 'package:vendor_app/src/presentation/auth_screen/forget_password.dart';
 import 'package:vendor_app/src/presentation/auth_screen/forget_password_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/forget_password_verify.dart';
@@ -113,7 +114,12 @@ class MyRoutes {
       animatedGoRoute(
         path: PRODUCTDETAILS,
         name: PRODUCTDETAILS,
-        pageBuilder: (context, state) => Productdetails(),
+        pageBuilder: (context, state) {
+          final Product product = state.extra as Product;
+          return Productdetails(
+            product: product, // Pass the `Product` object directly
+          );
+        },
       ),
       animatedGoRoute(
         path: TRANSACTIONHISTORY,
@@ -145,18 +151,16 @@ class MyRoutes {
         name: FORGETPASSWORD,
         pageBuilder: (context, state) => ForgetPassword(),
       ),
-
-        animatedGoRoute(
+      animatedGoRoute(
         path: VERIFYPASSWORD,
         name: VERIFYPASSWORD,
         pageBuilder: (context, state) => VerifyOtpForgetPassword(),
       ),
-        animatedGoRoute(
+      animatedGoRoute(
         path: FORGETNEWPASSWORD,
         name: FORGETNEWPASSWORD,
         pageBuilder: (context, state) => ForgetNewPassword(),
       ),
-      
     ],
   );
 
@@ -192,14 +196,9 @@ class MyRoutes {
   static const SETTING = "/settings";
 
   static const FORGETPASSWORD = "/forgetpassword";
- static const VERIFYPASSWORD = "/verifypassword";
+  static const VERIFYPASSWORD = "/verifypassword";
 
   static const FORGETNEWPASSWORD = "/forgetnewpassword";
-
- 
-
-
- 
 }
 
 GoRoute animatedGoRoute({

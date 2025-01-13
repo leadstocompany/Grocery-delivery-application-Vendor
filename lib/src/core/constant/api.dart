@@ -15,14 +15,9 @@ class APIURL {
   static const String getCategoryByLevel = "${BASE_URL}categories/by-level/1";
   static const String getMe = "${BASE_URL}auth/me";
   static const String refresh_token = "${BASE_URL}auth/refresh-token";
-
   static const String createProduct = "${BASE_URL}products";
-
-
-
-
-
-
-
+  static const String vendorLogOut = "${BASE_URL}auth/logout/vendor";
+  static const String uploadImage = "${BASE_URL}images/upload";
+  static const String deleteProduct = "${BASE_URL}products/";
 }
 

@@ -8,12 +8,12 @@ class HomeProvider extends ChangeNotifier {
   
   
   
-  Future<void> refreshToken() async {
+  Future<void> refreshToken(BuildContext context) async {
     var data = {
       "refresh_token": "${await SharedPrefUtils.getRefreshToken()}"
     };
 
-    var result = await _homeRepo.refreshToken(data);
+    var result = await _homeRepo.refreshToken(data,context);
   }
 
     Future<void> getMe() async {

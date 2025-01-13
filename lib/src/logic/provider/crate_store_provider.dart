@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
+import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/store_model.dart';
 import 'package:vendor_app/src/logic/repo/auth_repo.dart';
 import 'package:vendor_app/src/logic/repo/store_repo.dart';
@@ -39,7 +41,6 @@ class DaySelectionProvider with ChangeNotifier {
 //   final TextEditingController accountHolder = TextEditingController();
 //    final TextEditingController accountNumber = TextEditingController();
 //  final TextEditingController ifscCode = TextEditingController();
-   
 
   File? _image;
 
@@ -212,7 +213,7 @@ class DaySelectionProvider with ChangeNotifier {
 
   bool isLoading = false;
 
-   StoreModel? store_model ;
+  StoreModel? store_model;
   Future<void> getStore() async {
     isLoading = true;
     notifyListeners();
@@ -231,5 +232,53 @@ class DaySelectionProvider with ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  Future<bool> vendorLogOut(BuildContext context) async {
+    context.showLoader(show: true);
+
+    var data = {};
+
+    try {
+      var result = await _storeRepo.vendorLogOut(data);
+
+      context.showLoader(show: false);
+
+      return result.fold(
+        (error) {
+          // Show error Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) async {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Store created successful!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          await SharedPrefUtils.clear();
+          context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
+
+          return true;
+        },
+      );
+    } catch (e) {
+      context.showLoader(show: false);
+      print("Unexpected error: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
   }
 }

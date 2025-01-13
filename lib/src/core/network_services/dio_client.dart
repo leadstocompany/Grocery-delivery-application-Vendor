@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:vendor_app/src/core/constant/api.dart';
@@ -174,4 +176,43 @@ class DioClient {
       rethrow;
     }
   }
+
+
+Future<Response> uploadImage(String url, File imageFile,
+      {Map<String, dynamic>? additionalFields,
+      Options? options,
+      CancelToken? cancelToken,
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress,
+      bool hideSoftKeyboard = true}) async {
+    if (hideSoftKeyboard) {
+      hideKeyBoard();
+    }
+
+    debugLog("UPLOAD IMAGE Bearer token: ${await SharedPrefUtils.getToken()}");
+
+    try {
+      String fileName = imageFile.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "image": await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        ...?additionalFields,
+      });
+
+      final Response response = await _dio.post(
+        url,
+        data: formData,
+        options: options ??
+            Options(headers: {
+              "authorization": "Bearer ${await SharedPrefUtils.getToken()}"
+            }),
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }

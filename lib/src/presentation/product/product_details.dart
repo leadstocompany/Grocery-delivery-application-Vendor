@@ -8,11 +8,26 @@ import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
+import 'package:vendor_app/src/data/prdouct_model.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
-class Productdetails extends StatelessWidget {
+class Productdetails extends StatefulWidget {
+  final Product product;
+  const Productdetails({super.key, required this.product});
+  @override
+  State<Productdetails> createState() => _ProductdetailsState();
+}
+
+class _ProductdetailsState extends State<Productdetails> {
+  @override
+  void initState() {
+    print("kdjfgjk  ${widget.product}");
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +49,22 @@ class Productdetails extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Consumer<ProductProvider>(
           builder: (context, provider, child) {
+            provider.productNameController.text = widget.product.name!;
+            provider.productDescriptionController.text =
+                widget.product.description!;
+            provider.productUnitController.text = widget.product.unit!;
+            provider.productPriceController.text = widget.product.basePrice!;
+            provider.productProductDiscountPriceController.text =
+                widget.product.discountPrice!;
+            provider.productStockController.text =
+                widget.product.stock.toString()!;
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextField(
+                    controller: provider.productNameController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -47,7 +73,7 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                     // provider.setQuantity(int.tryParse(value) ?? 1);
+                      // provider.setQuantity(int.tryParse(value) ?? 1);
                     },
                     hintText: 'Rice',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -55,6 +81,7 @@ class Productdetails extends StatelessWidget {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    controller: provider.productPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -62,15 +89,14 @@ class Productdetails extends StatelessWidget {
                       return null;
                     },
                     counterWidget: const Offstage(),
-                    onChanged: (value) {
-                     
-                    },
+                    onChanged: (value) {},
                     hintText: 'Basmati Rice',
                     hintStyle: context.subTitleTxtStyleblack,
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    controller: provider.productDescriptionController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -78,15 +104,14 @@ class Productdetails extends StatelessWidget {
                       return null;
                     },
                     counterWidget: const Offstage(),
-                    onChanged: (value) {
-                     
-                    },
+                    onChanged: (value) {},
                     hintText: 'Mama Gold Premium Rice',
                     hintStyle: context.subTitleTxtStyleblack,
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    controller: provider.productUnitController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -95,7 +120,7 @@ class Productdetails extends StatelessWidget {
                     },
                     counterWidget: const Offstage(),
                     onChanged: (value) {
-                     // provider.setPrice(double.tryParse(value) ?? 0.0);
+                      // provider.setPrice(double.tryParse(value) ?? 0.0);
                     },
                     hintText: '1 kg',
                     hintStyle: context.subTitleTxtStyleblack,
@@ -103,6 +128,7 @@ class Productdetails extends StatelessWidget {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    controller: provider.productDescriptionController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -110,7 +136,8 @@ class Productdetails extends StatelessWidget {
                       return null;
                     },
                     counterWidget: const Offstage(),
-                    onChanged: (value) {
+                    onChanged: (value)
+                     {
                       // provider
                       //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
                     },
@@ -120,7 +147,9 @@ class Productdetails extends StatelessWidget {
                   ),
                   Gap(10.h),
                   CustomTextField(
-                    validator: (val) {
+                    // controller: provider.,
+                    validator: (val)
+                     {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
                       }
@@ -137,6 +166,7 @@ class Productdetails extends StatelessWidget {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    controller: provider.productPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -154,6 +184,7 @@ class Productdetails extends StatelessWidget {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    controller: provider.productProductDiscountPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -186,7 +217,13 @@ class Productdetails extends StatelessWidget {
                         text: 'Save Product',
                         backgroundColor: context.appColor.primarycolor,
                         onPressed: () {
-                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Working on progress "),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          // Navigator.pop(context);
                         }),
                   ),
                   Gap(10.h),
@@ -197,8 +234,14 @@ class Productdetails extends StatelessWidget {
                             text: 'Delete Product',
                             textColor: context.appColor.redColor,
                             onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Working on progress "),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
                               _showBottomSheet(context);
-    
+
                               //context.clearAndPush(routePath: MyRoutes.LOGIN);
                             },
                             backgroundColor: context.appColor.whiteColor,
@@ -210,8 +253,6 @@ class Productdetails extends StatelessWidget {
           },
         ),
       ),
-       
-       
     );
   }
 
@@ -253,7 +294,7 @@ class Productdetails extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style:
                           context.subTitleTextStyle.copyWith(fontSize: 13.sp)),
-                 ),
+                ),
               ),
               Gap(20.h),
               Center(
@@ -262,9 +303,22 @@ class Productdetails extends StatelessWidget {
                     width: double.infinity,
                     child: ButtonElevated(
                         text: 'Confirm',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                        onPressed: () async {
+                          var status = await Provider.of<ProductProvider>(
+                                  context,
+                                  listen: false)
+                              .deleteProduct(
+                                  context, widget.product.id.toString());
+
+                          if (status) {
+                            Provider.of<ProductProvider>(context, listen: false)
+                                .getProduct();
+                            Future.delayed(const Duration(seconds: 2),
+                                () async {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                          }
                         },
                         backgroundColor: Color.fromARGB(255, 127, 51, 46)),
                   ),

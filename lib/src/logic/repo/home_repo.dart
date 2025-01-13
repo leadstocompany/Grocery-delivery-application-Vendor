@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/custom_dio_exception.dart';
+import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/login_response.dart';
@@ -12,11 +15,9 @@ class HomeRepo {
 
   HomeRepo(this._homeService);
 
-  FutureResult<String> refreshToken(data) async {
+  FutureResult<String> refreshToken(data, BuildContext context) async {
     try {
       var response = await _homeService.refresh_token(data);
-
-      print("chwckData ${response}");
       LoginResponse loginResponse = loginResponseFromJson(response.toString());
 
       if (loginResponse.accessToken != null) {
@@ -31,6 +32,8 @@ class HomeRepo {
 
       return right(model);
     } on DioException catch (e) {
+      context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
+
       var error = CustomDioExceptions.handleError(e);
       return left(error);
     }

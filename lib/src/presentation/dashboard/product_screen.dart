@@ -223,15 +223,9 @@ class _ProductScreenState extends State<ProductScreen> {
     return Consumer<ProductProvider>(builder: (context, provider, child) {
       if (provider.isLoadingg) {
         return Center(child: CircularProgressIndicator());
-      }
-
-      // else if (provider.products.isEmpty)
-      // {
-      //   return Center(child: Text('No products available'));
-      // }
-
-      else {
-        print("dfjkjffhhh  ${provider.products1}");
+      } else if (provider.products1.isEmpty) {
+        return Center(child: Text('No products available'));
+      } else {
         return Expanded(
           child: ListView.builder(
             scrollDirection: Axis.vertical,
@@ -240,9 +234,14 @@ class _ProductScreenState extends State<ProductScreen> {
             itemBuilder: (context, index) {
               final product = provider.products1[index];
               status = index;
+
+              print("kfjgk  ${product.productImages!.first.url.toString()}");
               return InkWell(
                 onTap: () {
-                  context.push(MyRoutes.PRODUCTDETAILS);
+                  context.push(
+                    MyRoutes.PRODUCTDETAILS,
+                    extra: product,
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -254,11 +253,30 @@ class _ProductScreenState extends State<ProductScreen> {
                           padding: const EdgeInsets.only(left: 8.0, right: 8),
                           child: Row(
                             children: [
-                              Image.asset(
-                                productsC[index]['image'].toString(),
-                                // height: 200,
-                                // width: 350,
+                              Image.network(
+                                product.productImages != null &&
+                                        product.productImages!.isNotEmpty
+                                    ? product.productImages!.first.url ?? ''
+                                    : 'https://via.placeholder.com/150', // Fallback placeholder
+                                height: 50,
+                                width: 50,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons
+                                      .broken_image); // Fallback icon for invalid URLs
+                                },
                               ),
+
+                              // Image.network(
+                              //   product.productImages!.first.url.toString(),
+                              //   height: 100,
+                              //   width: 50,
+                              // ),
+                              // Image.asset(
+                              //   productsC[index]['image'].toString(),
+                              //   // height: 200,
+                              //   // width: 350,
+                              // ),
                               Gap(5.w),
                               Container(
                                 width: 150,

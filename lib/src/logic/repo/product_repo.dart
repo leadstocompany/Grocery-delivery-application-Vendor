@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:vendor_app/src/core/utiils_lib/custom_dio_exception.dart';
@@ -5,6 +7,7 @@ import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/data/prdouct_model.dart';
+import 'package:vendor_app/src/data/upload_image.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/services/product_locator.dart';
 import 'package:vendor_app/src/logic/services/service_locator.dart';
@@ -75,6 +78,34 @@ class ProductRepo {
       return left(error);
     }
   }
+ 
+ FutureResult<String> deleteProduct(data,id) async
+  {
+    try {
+      var response = await _productServices.deleteProduct(data,id);
+      final String model = response.toString();
+
+      return right(model);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+ 
+ 
+   FutureResult<UploadImage> uploadImage(File imageFile) 
+   async {
+    try {
+      final response = await _productServices.uploadImage(imageFile);
+      UploadImage upload=uploadImageFromJson(response.toString());
+      return right(upload);
+    } on DioException catch (e) {
+      final error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+  
+
 
 
 }

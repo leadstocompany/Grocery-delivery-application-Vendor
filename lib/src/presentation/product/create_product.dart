@@ -55,6 +55,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Consumer<ProductProvider>(
               builder: (context, provider, child) {
+                print("djhfgjh  ${provider.selectedCategory}");
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,7 +349,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                             borderRadius: BorderRadius.circular(10)),
                         child: InkWell(
                           onTap: () {
-                            provider..pickImage();
+                            provider..pickImage(context);
                           },
                           child: provider.selectedImage == null
                               ? Center(
@@ -370,15 +371,18 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         width: double.infinity,
                         child: ButtonElevated(
                             text: 'Add to Product List',
-                            backgroundColor: context.appColor.primarycolor,
-                            onPressed: () async {
-                              var status =
-                                  await provider.createProduct(context);
-                              if (status) {
-                                Navigator.pop(context);
-                                _showBottomSheet(context);
-                              }
-                            }),
+                            backgroundColor: provider.isImageLoading
+                                ? context.appColor.primarycolor
+                                : context.appColor.greyColor,
+                            onPressed: provider.isImageLoading
+                                ? () async {
+                                    var status =
+                                        await provider.createProduct(context);
+                                    if (status) {
+                                      _showBottomSheet(context);
+                                    }
+                                  }
+                                : null),
                       ),
                     ],
                   ),

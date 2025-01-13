@@ -18,4 +18,9 @@ class StoreService extends ApiService {
         await api.get(APIURL.getStore + storeId, data: jsonEncode(data));
     return response;
   }
+
+  Future logoutVendor(data) async {
+    var response = await api.post(APIURL.vendorLogOut, data: jsonEncode(data));
+    return response;
+  }
 }

@@ -41,4 +41,17 @@ class StoreRepo {
       return left(error);
     }
   }
+  FutureResult<String> vendorLogOut(data) async {
+    try {
+      var response = await _storeService.logoutVendor(data);
+
+      final String model = response.toString();
+      return right(model);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+  
 }
