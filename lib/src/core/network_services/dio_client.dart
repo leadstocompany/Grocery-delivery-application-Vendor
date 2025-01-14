@@ -86,7 +86,7 @@ class DioClient {
   }
 
   /// Send PUT request
-  Future<Response> put(String url,
+  Future<Response> patch(String url,
       {data,
       Map<String, dynamic>? queryParameters,
       Options? options,
@@ -99,7 +99,7 @@ class DioClient {
     }
     debugLog("Put Bearer token: ${await SharedPrefUtils.getToken()}");
     try {
-      final Response response = await _dio.put(
+      final Response response = await _dio.patch(
         url,
         data: data,
         queryParameters: queryParameters,

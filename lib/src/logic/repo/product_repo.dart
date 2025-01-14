@@ -91,6 +91,21 @@ class ProductRepo {
       return left(error);
     }
   }
+
+   FutureResult<String> updateProduct(data,id) async
+  {
+    try {
+      var response = await _productServices.updateProduct(data,id);
+      final String model = response.toString();
+
+      return right(model);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+  
  
  
    FutureResult<UploadImage> uploadImage(File imageFile) 

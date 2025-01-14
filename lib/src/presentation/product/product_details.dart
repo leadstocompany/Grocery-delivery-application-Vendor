@@ -58,6 +58,11 @@ class _ProductdetailsState extends State<Productdetails> {
                 widget.product.discountPrice!;
             provider.productStockController.text =
                 widget.product.stock.toString()!;
+            provider.productqlongDescriptionController.text =
+                widget.product.additionalInfo!;
+
+            provider.productStockController.text =
+                widget.product.stock.toString()!;
 
             return SingleChildScrollView(
               child: Column(
@@ -65,6 +70,7 @@ class _ProductdetailsState extends State<Productdetails> {
                 children: [
                   CustomTextField(
                     controller: provider.productNameController,
+                    readOnly: true,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -81,6 +87,7 @@ class _ProductdetailsState extends State<Productdetails> {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    readOnly: true,
                     controller: provider.productPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
@@ -96,6 +103,7 @@ class _ProductdetailsState extends State<Productdetails> {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    readOnly: true,
                     controller: provider.productDescriptionController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
@@ -111,6 +119,7 @@ class _ProductdetailsState extends State<Productdetails> {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    readOnly: true,
                     controller: provider.productUnitController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
@@ -128,28 +137,9 @@ class _ProductdetailsState extends State<Productdetails> {
                   ),
                   Gap(10.h),
                   CustomTextField(
-                    controller: provider.productDescriptionController,
+                    readOnly: true,
+                    controller: provider.productqlongDescriptionController,
                     validator: (val) {
-                      if (val.toString().isEmpty) {
-                        return "Please enter your name";
-                      }
-                      return null;
-                    },
-                    counterWidget: const Offstage(),
-                    onChanged: (value)
-                     {
-                      // provider
-                      //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
-                    },
-                    hintText: 'Very Good Long Grain Rice',
-                    hintStyle: context.subTitleTxtStyleblack,
-                    fillColor: context.appColor.whiteColor,
-                  ),
-                  Gap(10.h),
-                  CustomTextField(
-                    // controller: provider.,
-                    validator: (val)
-                     {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
                       }
@@ -160,12 +150,13 @@ class _ProductdetailsState extends State<Productdetails> {
                       // provider
                       //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
                     },
-                    hintText: '80 pieces',
+                    hintText: 'Very Good Long Grain Rice',
                     hintStyle: context.subTitleTxtStyleblack,
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    readOnly: true,
                     controller: provider.productPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
@@ -184,6 +175,7 @@ class _ProductdetailsState extends State<Productdetails> {
                   ),
                   Gap(10.h),
                   CustomTextField(
+                    readOnly: true,
                     controller: provider.productProductDiscountPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
@@ -211,19 +203,46 @@ class _ProductdetailsState extends State<Productdetails> {
                     },
                   ),
                   Gap(10.h),
+                  if (provider.inStock)
+                    CustomTextField(
+                      controller: provider.productStockController,
+                      validator: (val) {
+                        if (val.toString().isEmpty) {
+                          return "Please enter your name";
+                        }
+                        return null;
+                      },
+                      counterWidget: const Offstage(),
+                      onChanged: (value) {
+                        // provider
+                        //     .setDiscountPrice(double.tryParse(value) ?? 0.0);
+                      },
+                      hintText: '80 pieces',
+                      hintStyle: context.subTitleTxtStyleblack,
+                      fillColor: context.appColor.whiteColor,
+                    ),
+                  Gap(10.h),
                   SizedBox(
                     width: double.infinity,
                     child: ButtonElevated(
                         text: 'Save Product',
                         backgroundColor: context.appColor.primarycolor,
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Working on progress "),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                          // Navigator.pop(context);
+                        onPressed: () async {
+                          var status = await provider.updateProduct(
+                              context, widget.product.id.toString());
+                          if (status)
+                           {
+                            Provider.of<ProductProvider>(context, listen: false)
+                                .getProduct();
+                            Navigator.pop(context);
+                          }
+
+                          //  ScaffoldMessenger.of(context).showSnackBar(
+                          //     SnackBar(
+                          //       content: Text("Working on progress "),
+                          //       backgroundColor: Colors.red,
+                          //     ),
+                          //   );
                         }),
                   ),
                   Gap(10.h),
@@ -313,7 +332,7 @@ class _ProductdetailsState extends State<Productdetails> {
                           if (status) {
                             Provider.of<ProductProvider>(context, listen: false)
                                 .getProduct();
-                            Future.delayed(const Duration(seconds: 2),
+                            Future.delayed(const Duration(seconds: 0),
                                 () async {
                               Navigator.pop(context);
                               Navigator.pop(context);

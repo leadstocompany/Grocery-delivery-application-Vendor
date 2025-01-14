@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:vendor_app/src/core/utiils_lib/custom_dio_exception.dart';
 import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/data/OTPResponseModel.dart';
 import 'package:vendor_app/src/data/createStoreModel.dart';
 import 'package:vendor_app/src/data/login_response.dart';
 import 'package:vendor_app/src/data/password_model.dart';
@@ -17,11 +18,13 @@ class AuthRepo {
 
   AuthRepo(this._authServices);
 
-  FutureResult<String> sendOtp(data) async {
+  FutureResult<OtpResponseModel> sendOtp(data) async {
     try {
       var response = await _authServices.sendOtp(data);
       final String model = response.toString();
-      return right(model);
+      OtpResponseModel otpResponseModel =
+          otpResponseModelFromJson(response.toString());
+      return right(otpResponseModel);
     } on DioException catch (e) {
       print("dhfgfdgjdhfgfgh  ${e}");
       var error = CustomDioExceptions.handleError(e);
@@ -58,10 +61,8 @@ class AuthRepo {
       if (loginResponse.accessToken != null) {
         await SharedPrefUtils.setToken(
             authToken: loginResponse.accessToken ?? "");
-              await SharedPrefUtils.setRefreshToken(
+        await SharedPrefUtils.setRefreshToken(
             refresh_token: loginResponse.refreshToken ?? "");
-
-           
       }
 
       print("Response status code: ${response.statusCode}");
@@ -101,7 +102,6 @@ class AuthRepo {
     }
   }
 
-  
   FutureResult<String> forgetPassword(data) async {
     try {
       var response = await _authServices.forgetPassword(data);
@@ -142,10 +142,4 @@ class AuthRepo {
       return left(error);
     }
   }
-
-
-
-
-
-  
 }

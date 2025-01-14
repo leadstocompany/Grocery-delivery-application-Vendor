@@ -55,171 +55,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Widget detailsCategory() {
-    final List<Map<String, String>> productsC = [
-      {
-        "image": AppImages.product1,
-        "title": "Mama Gold Rice",
-        "subTitle": "N45,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "N15,000",
-        "price": "Out of Stock"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "N15,000",
-        "price": "In Stock"
-      },
-    ];
-
+   
     return Consumer<ProductProvider>(builder: (context, provider, child) {
       if (provider.isLoadingg) {
         return Center(child: CircularProgressIndicator());
@@ -230,12 +66,10 @@ class _ProductScreenState extends State<ProductScreen> {
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: provider.products1.length,
-            // productsC.length,
+            
             itemBuilder: (context, index) {
               final product = provider.products1[index];
               status = index;
-
-              print("kfjgk  ${product.productImages!.first.url.toString()}");
               return InkWell(
                 onTap: () {
                   context.push(
@@ -267,16 +101,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 },
                               ),
 
-                              // Image.network(
-                              //   product.productImages!.first.url.toString(),
-                              //   height: 100,
-                              //   width: 50,
-                              // ),
-                              // Image.asset(
-                              //   productsC[index]['image'].toString(),
-                              //   // height: 200,
-                              //   // width: 350,
-                              // ),
+                             
                               Gap(5.w),
                               Container(
                                 width: 150,

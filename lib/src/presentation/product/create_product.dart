@@ -379,6 +379,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                     var status =
                                         await provider.createProduct(context);
                                     if (status) {
+                                      provider.getProduct();
                                       _showBottomSheet(context);
                                     }
                                   }
@@ -450,6 +451,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         text: 'Add more Product',
                         textColor: context.appColor.primarycolor,
                         onPressed: () {
+                          Provider.of<ProductProvider>(context, listen: false)
+                              .clearData();
                           Navigator.pop(context);
 
                           //context.clearAndPush(routePath: MyRoutes.LOGIN);

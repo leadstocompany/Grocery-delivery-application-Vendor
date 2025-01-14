@@ -41,15 +41,14 @@ class ProductProvider extends ChangeNotifier {
   Map<String, List<ProductCategoryModel>> subcategories = {};
   Map<String, List<ProductCategoryModel>> products = {};
 
-  void setCategory(ProductCategoryModel category)
-   {
+  void setCategory(ProductCategoryModel category) {
     selectedCategory = category;
     selectedSubcategory = null;
     selectedProduct = null;
-    products.clear(); 
+    products.clear();
     loadSubcategories(category);
     notifyListeners();
-   }
+  }
 
   void setSubcategory(ProductCategoryModel subcategory) {
     selectedSubcategory = subcategory;
@@ -88,13 +87,14 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  
   void toggleStock(bool value) {
     inStock = value;
     notifyListeners();
   }
 
   void clearData() {
+    _isImageLoading = false;
+
     productDescriptionController.clear();
     productUnitController.clear();
     productPriceController.clear();
@@ -265,6 +265,53 @@ class ProductProvider extends ChangeNotifier {
         },
         (response) {
           _showSnackBar(context, "Product deleted successful!", Colors.green);
+
+          return true;
+        },
+      );
+    } catch (e) {
+      context.showLoader(show: false);
+      print("Unexpected error: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> updateProduct(BuildContext context, String id) async {
+    context.showLoader(show: true);
+
+    try {
+      var data = {
+        "stock": int.parse(productStockController.text.isEmpty
+            ? '0'
+            : productStockController.text),
+      };
+
+      print("check stock  ${data}");
+
+      var result = await _authRepo.updateProduct(data, id);
+
+      context.showLoader(show: false);
+
+      return result.fold(
+        (error) {
+          // Show error Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) {
+          _showSnackBar(context, "Product Updated successful!", Colors.green);
 
           return true;
         },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/core/utiils_lib/snack_bar.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/repo/auth_repo.dart';
 
@@ -39,10 +40,34 @@ class PageNotifier extends ChangeNotifier {
       var response = await _authRepo.sendOtp(data);
       print("check response ${response}");
       context.showLoader(show: false);
-      return true;
+
+      return response.fold(
+        (error) {
+          // Show error Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) {
+          _showSnackBar(context, "OTP ${response.data!.otp!}", Colors.green);
+
+          return true;
+        },
+      );
     } catch (e) {
-      print("Error sending OTP: $e");
       context.showLoader(show: false);
+      print("Unexpected error: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
       return false;
     }
   }
@@ -187,5 +212,9 @@ class PageNotifier extends ChangeNotifier {
   void toggleCheckbox(bool value) {
     _isChecked = value;
     notifyListeners();
+  }
+
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    showTopSnackBar(context, message, color);
   }
 }
