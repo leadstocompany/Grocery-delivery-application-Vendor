@@ -23,7 +23,20 @@ class Productdetails extends StatefulWidget {
 class _ProductdetailsState extends State<Productdetails> {
   @override
   void initState() {
-    print("kdjfgjk  ${widget.product}");
+    final provider = Provider.of<ProductProvider>(context, listen: false);
+    provider.productNameController.text = widget.product.name!;
+    provider.productDescriptionController.text = widget.product.description!;
+    provider.productUnitController.text = widget.product.unit!;
+    provider.productPriceController.text = widget.product.basePrice!;
+    provider.productProductDiscountPriceController.text =
+        widget.product.discountPrice!;
+    provider.productStockController.text = widget.product.stock.toString()!;
+    provider.productqlongDescriptionController.text =
+        widget.product.additionalInfo!;
+
+    provider.productStockController.text = widget.product.stock.toString()!;
+    provider.inStock = widget.product.isInStock!;
+    provider.productquantityController.text =  widget.product.quantity.toString()!;
 
     super.initState();
   }
@@ -49,25 +62,11 @@ class _ProductdetailsState extends State<Productdetails> {
         padding: const EdgeInsets.all(16.0),
         child: Consumer<ProductProvider>(
           builder: (context, provider, child) {
-            provider.productNameController.text = widget.product.name!;
-            provider.productDescriptionController.text =
-                widget.product.description!;
-            provider.productUnitController.text = widget.product.unit!;
-            provider.productPriceController.text = widget.product.basePrice!;
-            provider.productProductDiscountPriceController.text =
-                widget.product.discountPrice!;
-            provider.productStockController.text =
-                widget.product.stock.toString()!;
-            provider.productqlongDescriptionController.text =
-                widget.product.additionalInfo!;
-
-            provider.productStockController.text =
-                widget.product.stock.toString()!;
-
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text("Product Name"),
                   CustomTextField(
                     controller: provider.productNameController,
                     readOnly: true,
@@ -86,22 +85,24 @@ class _ProductdetailsState extends State<Productdetails> {
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
-                  CustomTextField(
-                    readOnly: true,
-                    controller: provider.productPriceController,
-                    validator: (val) {
-                      if (val.toString().isEmpty) {
-                        return "Please enter your name";
-                      }
-                      return null;
-                    },
-                    counterWidget: const Offstage(),
-                    onChanged: (value) {},
-                    hintText: 'Basmati Rice',
-                    hintStyle: context.subTitleTxtStyleblack,
-                    fillColor: context.appColor.whiteColor,
-                  ),
-                  Gap(10.h),
+                  // Text("Product Name"),
+                  // CustomTextField(
+                  //   readOnly: true,
+                  //   controller: provider.productPriceController,
+                  //   validator: (val) {
+                  //     if (val.toString().isEmpty) {
+                  //       return "Please enter your name";
+                  //     }
+                  //     return null;
+                  //   },
+                  //   counterWidget: const Offstage(),
+                  //   onChanged: (value) {},
+                  //   hintText: 'Basmati Rice',
+                  //   hintStyle: context.subTitleTxtStyleblack,
+                  //   fillColor: context.appColor.whiteColor,
+                  // ),
+                  // Gap(10.h),
+                  Text("Product description "),
                   CustomTextField(
                     readOnly: true,
                     controller: provider.productDescriptionController,
@@ -118,9 +119,11 @@ class _ProductdetailsState extends State<Productdetails> {
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
+                  Text("Product Unit"),
                   CustomTextField(
                     readOnly: true,
                     controller: provider.productUnitController,
+                    keyBoardType: TextInputType.text,
                     validator: (val) {
                       if (val.toString().isEmpty) {
                         return "Please enter your name";
@@ -136,6 +139,7 @@ class _ProductdetailsState extends State<Productdetails> {
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
+                  Text("Product addtional description "),
                   CustomTextField(
                     readOnly: true,
                     controller: provider.productqlongDescriptionController,
@@ -155,12 +159,12 @@ class _ProductdetailsState extends State<Productdetails> {
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
+                  Text("Product price"),
                   CustomTextField(
-                    readOnly: true,
                     controller: provider.productPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
-                        return "Please enter your name";
+                        return "Please enter product price";
                       }
                       return null;
                     },
@@ -174,8 +178,8 @@ class _ProductdetailsState extends State<Productdetails> {
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
+                  Text("Product discount price"),
                   CustomTextField(
-                    readOnly: true,
                     controller: provider.productProductDiscountPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
@@ -203,6 +207,7 @@ class _ProductdetailsState extends State<Productdetails> {
                     },
                   ),
                   Gap(10.h),
+                  if (provider.inStock) Text("Product stock"),
                   if (provider.inStock)
                     CustomTextField(
                       controller: provider.productStockController,
@@ -230,19 +235,11 @@ class _ProductdetailsState extends State<Productdetails> {
                         onPressed: () async {
                           var status = await provider.updateProduct(
                               context, widget.product.id.toString());
-                          if (status)
-                           {
+                          if (status) {
                             Provider.of<ProductProvider>(context, listen: false)
                                 .getProduct();
                             Navigator.pop(context);
                           }
-
-                          //  ScaffoldMessenger.of(context).showSnackBar(
-                          //     SnackBar(
-                          //       content: Text("Working on progress "),
-                          //       backgroundColor: Colors.red,
-                          //     ),
-                          //   );
                         }),
                   ),
                   Gap(10.h),

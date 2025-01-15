@@ -285,15 +285,23 @@ class ProductProvider extends ChangeNotifier {
 
   Future<bool> updateProduct(BuildContext context, String id) async {
     context.showLoader(show: true);
-
+    print("check stock ${productUnitController.text}");
     try {
       var data = {
+        "quantity": productquantityController.text,
+        "description": productDescriptionController.text,
+        "unit": productUnitController.text,
+        "basePrice": productPriceController.text,
+        "discountPrice": productProductDiscountPriceController.text,
+        "isInStock": inStock,
         "stock": int.parse(productStockController.text.isEmpty
             ? '0'
             : productStockController.text),
+        "name": productNameController!.text,
+        "additionalInfo": productqlongDescriptionController.text,
       };
 
-      print("check stock  ${data}");
+      print("check stock ${data}");
 
       var result = await _authRepo.updateProduct(data, id);
 
