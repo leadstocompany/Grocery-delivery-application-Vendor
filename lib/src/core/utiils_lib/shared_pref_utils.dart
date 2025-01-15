@@ -16,7 +16,7 @@ class SharedPrefUtils {
   static const String INS_RANDOM = "ins_random";
   static const String INS_NearBy = "ins_nearby";
   static const String USER_ID = "user_id";
-  static const String PHONE = "phone";
+  static  String PHONE = "phone";
   static const String BACK_STATUS = "back_status";
   static const String HAND_OF_ACTION = "hand_of_action";
   static const String VERIFIED_USER = "verified_user";

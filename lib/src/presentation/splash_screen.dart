@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 
 import '../core/routes/routes.dart';
 
@@ -23,16 +25,16 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         if (await SharedPrefUtils.getToken() == "1" ||
             await SharedPrefUtils.getToken() == null) {
-          print("chd ${await SharedPrefUtils.getToken()}");
           context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
         } else {
-          print("cheruhiuerheirud ${await SharedPrefUtils.getToken()}");
+          Provider.of<HomeProvider>(context, listen: false)
+              .refreshToken(context);
+          Provider.of<HomeProvider>(context, listen: false).getMe();
+
           context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
         }
       }
-    }
-        //context.read<SplashCubit>().initApp(),
-        );
+    });
   }
 
   @override

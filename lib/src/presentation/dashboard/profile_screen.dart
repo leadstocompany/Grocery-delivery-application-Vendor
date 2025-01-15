@@ -9,7 +9,8 @@ import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/logic/provider/crate_store_provider.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatefulWidget
+ {
   const ProfileScreen({super.key});
 
   @override
@@ -74,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: context.subTitleStyle,
                           ),
                           Text(
-                            "Business Location",
+                            SharedPrefUtils.PHONE ?? "",
                             style: context.subTitleTxtStyle,
                           ),
                         ],
@@ -159,8 +160,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         break;
 
                       case 4:
-                        Provider.of<DaySelectionProvider>(context, listen: false).vendorLogOut(context);
-                        
+                        Provider.of<DaySelectionProvider>(context,
+                                listen: false)
+                            .vendorLogOut(context);
+
                         break;
                     }
                   },

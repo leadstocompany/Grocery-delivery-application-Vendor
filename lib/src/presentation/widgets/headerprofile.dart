@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 
 class HeaderProfile extends StatefulWidget {
   @override
@@ -12,6 +13,9 @@ class HeaderProfile extends StatefulWidget {
 class HeaderState extends State<HeaderProfile> {
   @override
   Widget build(BuildContext context) {
+    var userName = Provider.of<HomeProvider>(context).userName;
+    var phone = Provider.of<HomeProvider>(context).phone;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Row(
@@ -45,11 +49,13 @@ class HeaderState extends State<HeaderProfile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  SharedPrefUtils.USER_NAME ?? "Hello Emekus",
+                  // SharedPrefUtils.USER_NAME ?? "Hello Emekus",
+                  userName,
+
                   style: context.subTitleStyle,
                 ),
                 Text(
-                  "Welcome to ọjà",
+                  phone,
                   style: context.subTitleTxtStyle,
                 ),
               ],

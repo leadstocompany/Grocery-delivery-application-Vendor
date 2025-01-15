@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
@@ -48,16 +49,13 @@ class _StoreManagementState extends State<StoreManagement> {
         title: Text('Store Management',
             style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
       ),
-      body:
-       Consumer<DaySelectionProvider>(
+      body: Consumer<DaySelectionProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (provider.store_model == null) {
             return Center(child: Text('No available'));
-          } else 
-          
-          {
+          } else {
             provider.bankName.text =
                 provider.store_model!.paymentDetails!.bankName;
             provider.accountHoldername.text =
@@ -67,7 +65,6 @@ class _StoreManagementState extends State<StoreManagement> {
             provider.ifscCode.text =
                 provider.store_model!.paymentDetails!.ifscCode;
             return SingleChildScrollView(
-              // Make the body scrollable
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,7 +191,12 @@ class _StoreManagementState extends State<StoreManagement> {
                           child: ButtonElevated(
                               text: 'Edit',
                               backgroundColor: context.appColor.primarycolor,
-                              onPressed: () {}),
+                              onPressed: () {
+                                context.push(
+                                  MyRoutes.UPDATESTORE,
+                                  extra: {'status': '0'},
+                                );
+                              }),
                         ),
                       ],
                     ),
@@ -372,13 +374,17 @@ class _StoreManagementState extends State<StoreManagement> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                dayInfo['day']!,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isOpen ? Colors.black : Colors.grey,
+              Container(
+                width: 80.w,
+                child: Text(
+                  dayInfo['day']!,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isOpen ? Colors.black : Colors.grey,
+                  ),
                 ),
               ),
               Text(

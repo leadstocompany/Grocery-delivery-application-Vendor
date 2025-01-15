@@ -25,6 +25,7 @@ import 'package:vendor_app/src/presentation/product/product_details.dart';
 import 'package:vendor_app/src/presentation/select_account.dart';
 import 'package:vendor_app/src/presentation/splash_screen.dart';
 import 'package:vendor_app/src/presentation/store/store_management.dart';
+import 'package:vendor_app/src/presentation/store/update_store_screen.dart';
 import 'package:vendor_app/src/presentation/terms&conditions/terms_conditions.dart';
 import 'package:vendor_app/src/presentation/transation/transation_history.dart';
 
@@ -72,6 +73,13 @@ class MyRoutes {
         name: CREATESTORE,
         pageBuilder: (context, state) => const CreateStore(),
       ),
+       animatedGoRoute(
+        path: UPDATESTORE,
+        name: UPDATESTORE,
+        pageBuilder: (context, state) => const UpdateScreen(),
+      ),
+
+      
       animatedGoRoute(
         path: SUBMITSCREEN,
         name: SUBMITSCREEN,
@@ -199,6 +207,9 @@ class MyRoutes {
   static const VERIFYPASSWORD = "/verifypassword";
 
   static const FORGETNEWPASSWORD = "/forgetnewpassword";
+
+   static const UPDATESTORE = "/updatestore";
+
 }
 
 GoRoute animatedGoRoute({

@@ -37,10 +37,14 @@ class DaySelectionProvider with ChangeNotifier {
   final TextEditingController storeGSTNumber = TextEditingController();
   final TextEditingController storeGumastaNumber = TextEditingController();
 
-//   final TextEditingController bankAccoutController = TextEditingController();
-//   final TextEditingController accountHolder = TextEditingController();
-//    final TextEditingController accountNumber = TextEditingController();
-//  final TextEditingController ifscCode = TextEditingController();
+  bool _editStore = false;
+
+  bool get editStore => _editStore;
+
+  setEditStore(bool type) {
+    _editStore = type;
+    notifyListeners();
+  }
 
   File? _image;
 
@@ -226,6 +230,7 @@ class DaySelectionProvider with ChangeNotifier {
         notifyListeners();
       },
       (store) {
+        setEditStore(false);
         print("lksjdfdkjf  ${store.createdAt}");
         isLoading = false;
         store_model = store;

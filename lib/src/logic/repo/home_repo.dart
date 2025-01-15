@@ -39,23 +39,26 @@ class HomeRepo {
     }
   }
 
-  FutureResult<String> getMe(data) async {
+  FutureResult<VendorModel> getMe(data) async {
     try {
       var response = await _homeService.getMe(data);
 
       final VendorModel vendorModel = vendorModelFromJson(response.toString());
 
-      if (vendorModel != null) {
+      if (vendorModel != null) 
+      {
         SharedPrefUtils.USER_NAME =
             vendorModel.firstName + " " + vendorModel.lastName;
+            SharedPrefUtils.PHONE = vendorModel.phone;
 
         print("dkfjhdkfhkfk  ${SharedPrefUtils.USER_NAME}");
         await SharedPrefUtils.setStoreId(storeId: vendorModel.storeId ?? "");
+      
       }
 
       final String model = response.toString();
 
-      return right(model);
+      return right(vendorModel);
     } on DioException catch (e) {
       var error = CustomDioExceptions.handleError(e);
       return left(error);

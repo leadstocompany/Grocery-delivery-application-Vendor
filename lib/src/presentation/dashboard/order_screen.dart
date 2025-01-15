@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/headerprofile.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -72,10 +74,8 @@ class _OrderScreenState extends State<OrderScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(3.0)),
                     ),
                     child: InkWell(
-                      onTap: () 
-                      {
-                        setState(()
-                         {
+                      onTap: () {
+                        setState(() {
                           slectedIndex = index;
                         });
                       },
@@ -111,13 +111,10 @@ class _OrderScreenState extends State<OrderScreen> {
         itemBuilder: (context, index) {
           status = index;
           return InkWell(
-            onTap: () 
-            {
-              context.push(MyRoutes.CUSTOMERORDER, extra: 
-              {
-                  "title": poductsC[index].toString(), // String
+            onTap: () {
+              context.push(MyRoutes.CUSTOMERORDER, extra: {
+                "title": poductsC[index].toString(), // String
                 "index": index, // Color
-                 
               });
             },
             child: Padding(
@@ -259,7 +256,4 @@ class _OrderScreenState extends State<OrderScreen> {
         return Color(0xffA32424);
     }
   }
-
-
-
 }
