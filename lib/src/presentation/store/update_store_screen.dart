@@ -29,7 +29,7 @@ class UpdateScreen extends StatelessWidget {
           children: [
             Gap(40.h),
             Text(
-              'Set Up your Store Management',
+              'Update Store Management',
               style: context.subTitleStyle,
             ),
             Gap(30.h),
@@ -161,10 +161,24 @@ class UpdateScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ButtonElevated(
-                text: 'Next',
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    _showBottomSheet(context, createStoreprovider);
+                text: 'Update',
+                onPressed: ()
+                 async {
+                  if (_formKey.currentState?.validate() ?? false)
+                   {
+                   // _showBottomSheet(context, createStoreprovider);
+
+                  
+                                  final status =   await Provider.of<DaySelectionProvider>(
+                            context,
+                            listen: false)
+                        .createStore(context);
+
+                                  if (status) {
+                                    context.clearAndPush(
+                                        routePath: MyRoutes.SUBMITSCREEN);
+                             
+                  }
                   }
                 },
                 backgroundColor: context.appColor.primarycolor,
@@ -227,7 +241,7 @@ class UpdateScreen extends StatelessWidget {
                   Text(
                     'Days',
                     style: context.subTitleTxtStyleblack.copyWith(
-                      color: context.appColor.lightBlackColor,
+                      color: Colors.black,
                     ),
                   ),
                   const Spacer(),
@@ -446,13 +460,14 @@ class UpdateScreen extends StatelessWidget {
                       child: ButtonElevated(
                           text: 'Continue',
                           onPressed: pinProvider.isMatch
-                              ? () async {
+                              ? () async 
+                              {
                                   final status =
                                       await pinProvider.createStore(context);
 
-                                  if (status) 
-                                  {
-                                    context.clearAndPush( routePath: MyRoutes.SUBMITSCREEN);
+                                  if (status) {
+                                    context.clearAndPush(
+                                        routePath: MyRoutes.SUBMITSCREEN);
                                   }
                                 }
                               : null,

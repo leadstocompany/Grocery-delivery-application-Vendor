@@ -215,6 +215,70 @@ class DaySelectionProvider with ChangeNotifier {
     }
   }
 
+
+  Future<bool> updateSore(BuildContext context) async 
+  {
+    context.showLoader(show: true);
+
+    var data = {
+    
+      "operateDates": getOperateDates(selectedDays),
+      "operateTimes": {
+        "startTime": selectedTime,
+        "endTime": selectedClosedTime
+      },
+      "paymentDetails": {
+        "bankName": bankName.text,
+        "accountHolder": accountHoldername.text,
+        "accountNumber": accountNumber.text,
+        "ifscCode": ifscCode.text,
+        "appWithdrawalPin": confirmPin.toString()
+      }
+    };
+
+    try {
+      var result = await _storeRepo.createStore(data);
+
+      context.showLoader(show: false);
+
+      return result.fold(
+        (error) {
+          // Show error Snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false; // Login failed
+        },
+        (response) {
+          // Login success
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Store created successful!"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          return true;
+        },
+      );
+    } catch (e) {
+      context.showLoader(show: false);
+      print("Unexpected error: $e");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+  }
+
+
+
   bool isLoading = false;
 
   StoreModel? store_model;

@@ -31,7 +31,8 @@ class HomeRepo {
       final String model = response.toString();
 
       return right(model);
-    } on DioException catch (e) {
+    } on DioException catch (e) 
+    {
       context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
 
       var error = CustomDioExceptions.handleError(e);

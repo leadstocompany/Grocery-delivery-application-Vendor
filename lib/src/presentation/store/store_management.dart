@@ -51,11 +51,14 @@ class _StoreManagementState extends State<StoreManagement> {
       ),
       body: Consumer<DaySelectionProvider>(
         builder: (context, provider, child) {
-          if (provider.isLoading) {
+          if (provider.isLoading)
+           {
             return Center(child: CircularProgressIndicator());
-          } else if (provider.store_model == null) {
+          } else if (provider.store_model == null) 
+          {
             return Center(child: Text('No available'));
-          } else {
+          } else 
+          {
             provider.bankName.text =
                 provider.store_model!.paymentDetails!.bankName;
             provider.accountHoldername.text =

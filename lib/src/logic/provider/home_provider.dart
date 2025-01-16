@@ -6,10 +6,20 @@ import 'package:vendor_app/src/logic/repo/home_repo.dart';
 class HomeProvider extends ChangeNotifier {
   final _homeRepo = getIt<HomeRepo>();
 
-  Future<void> refreshToken(BuildContext context) async {
+  Future<bool> refreshToken(BuildContext context) async {
     var data = {"refresh_token": "${await SharedPrefUtils.getRefreshToken()}"};
 
     var result = await _homeRepo.refreshToken(data, context);
+    return result.fold(
+      (error) {
+        print("dkjhsfgjkdfkg");
+        return true;
+      },
+      (response) {
+          print("dkjhssfdgdfgdfgfgjkdfkg");
+        return true;
+      },
+    );
   }
 
   String _userName = '';
@@ -27,7 +37,6 @@ class HomeProvider extends ChangeNotifier {
     _phone = phoneNumber;
     notifyListeners();
   }
-
 
   Future<void> getMe() async {
     var data = {};
