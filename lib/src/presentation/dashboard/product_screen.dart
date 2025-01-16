@@ -56,7 +56,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Widget detailsCategory() {
    
-    return Consumer<ProductProvider>(builder: (context, provider, child) {
+    return Consumer<ProductProvider>(builder: (context, provider, child) 
+    {
       if (provider.isLoadingg) {
         return Center(child: CircularProgressIndicator());
       } else if (provider.products1.isEmpty) {
