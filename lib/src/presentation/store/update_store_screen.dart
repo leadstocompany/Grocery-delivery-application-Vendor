@@ -11,8 +11,9 @@ import 'package:vendor_app/src/logic/provider/crate_store_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
-class UpdateScreen extends StatelessWidget {
-  const UpdateScreen({super.key});
+class UpdateStoreScreen extends StatelessWidget {
+  final String storeId;
+  UpdateStoreScreen({super.key, required this.storeId});
 
   @override
   Widget build(BuildContext context) {
@@ -162,23 +163,18 @@ class UpdateScreen extends StatelessWidget {
               width: double.infinity,
               child: ButtonElevated(
                 text: 'Update',
-                onPressed: ()
-                 async {
-                  if (_formKey.currentState?.validate() ?? false)
-                   {
-                   // _showBottomSheet(context, createStoreprovider);
+                onPressed: () async {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    // _showBottomSheet(context, createStoreprovider);
 
-                  
-                                  final status =   await Provider.of<DaySelectionProvider>(
+                    final status = await Provider.of<DaySelectionProvider>(
                             context,
                             listen: false)
-                        .createStore(context);
+                        .updateSore(context, storeId);
 
-                                  if (status) {
-                                    context.clearAndPush(
-                                        routePath: MyRoutes.SUBMITSCREEN);
-                             
-                  }
+                    if (status) {
+                      context.clearAndPush(routePath: MyRoutes.SUBMITSCREEN);
+                    }
                   }
                 },
                 backgroundColor: context.appColor.primarycolor,
@@ -460,15 +456,14 @@ class UpdateScreen extends StatelessWidget {
                       child: ButtonElevated(
                           text: 'Continue',
                           onPressed: pinProvider.isMatch
-                              ? () async 
-                              {
-                                  final status =
-                                      await pinProvider.createStore(context);
+                              ? () async {
+                                  // final status =
+                                  //     await pinProvider.updateSore(context,);
 
-                                  if (status) {
-                                    context.clearAndPush(
-                                        routePath: MyRoutes.SUBMITSCREEN);
-                                  }
+                                  // if (status) {
+                                  //   context.clearAndPush(
+                                  //       routePath: MyRoutes.SUBMITSCREEN);
+                                  // }
                                 }
                               : null,
                           backgroundColor: context.appColor.primarycolor),

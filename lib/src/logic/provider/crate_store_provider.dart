@@ -215,13 +215,10 @@ class DaySelectionProvider with ChangeNotifier {
     }
   }
 
-
-  Future<bool> updateSore(BuildContext context) async 
-  {
+  Future<bool> updateSore(BuildContext context,String id) async {
     context.showLoader(show: true);
 
     var data = {
-    
       "operateDates": getOperateDates(selectedDays),
       "operateTimes": {
         "startTime": selectedTime,
@@ -236,8 +233,10 @@ class DaySelectionProvider with ChangeNotifier {
       }
     };
 
+    print("dfhgkjhg  ${data}");
+
     try {
-      var result = await _storeRepo.createStore(data);
+      var result = await _storeRepo.updateStore(data);
 
       context.showLoader(show: false);
 
@@ -276,8 +275,6 @@ class DaySelectionProvider with ChangeNotifier {
       return false;
     }
   }
-
-
 
   bool isLoading = false;
 

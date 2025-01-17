@@ -23,4 +23,11 @@ class StoreService extends ApiService {
     var response = await api.post(APIURL.vendorLogOut, data: jsonEncode(data));
     return response;
   }
+
+  Future updateStore(data) async {
+    var response = await api.patch(APIURL.updateStore, data: jsonEncode(data));
+    return response;
+  }
+
+  
 }

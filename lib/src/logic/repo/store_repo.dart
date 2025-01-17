@@ -22,6 +22,21 @@ class StoreRepo {
     }
   }
 
+    FutureResult<String> updateStore(data) async {
+    try {
+      var response = await _storeService.updateStore(data);
+
+      final String model = response.toString();
+      return right(model);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+
+  
+
   FutureResult<StoreModel> getStore(data) async 
   {
     try {

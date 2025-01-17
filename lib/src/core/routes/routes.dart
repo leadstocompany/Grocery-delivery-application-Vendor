@@ -76,7 +76,12 @@ class MyRoutes {
        animatedGoRoute(
         path: UPDATESTORE,
         name: UPDATESTORE,
-        pageBuilder: (context, state) => const UpdateScreen(),
+         pageBuilder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            final String status = extra?['storeId'] ?? '';
+            return UpdateStoreScreen(storeId: status);
+          }
+       
       ),
 
       

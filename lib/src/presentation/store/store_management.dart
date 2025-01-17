@@ -197,7 +197,10 @@ class _StoreManagementState extends State<StoreManagement> {
                               onPressed: () {
                                 context.push(
                                   MyRoutes.UPDATESTORE,
-                                  extra: {'status': '0'},
+                                  
+                                  extra: {'storeId':
+                                        provider.store_model!.id
+                                  },
                                 );
                               }),
                         ),
