@@ -22,9 +22,9 @@ class StoreRepo {
     }
   }
 
-    FutureResult<String> updateStore(data) async {
+    FutureResult<String> updateStore(data,id) async {
     try {
-      var response = await _storeService.updateStore(data);
+      var response = await _storeService.updateStore(data,id);
 
       final String model = response.toString();
       return right(model);

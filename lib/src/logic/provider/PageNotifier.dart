@@ -53,12 +53,13 @@ class PageNotifier extends ChangeNotifier {
           return false; // Login failed
         },
         (response) {
-          _showSnackBar(context, "OTP ${response.data!.otp!}", Colors.green);
+         // _showSnackBar(context, "OTP ${response.data!.otp!}", Colors.green);
 
           return true;
         },
       );
-    } catch (e) {
+    } catch (e) 
+    {
       context.showLoader(show: false);
       print("Unexpected error: $e");
 

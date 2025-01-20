@@ -18,10 +18,9 @@ class UpdateStoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-
     final createStoreprovider =
         Provider.of<DaySelectionProvider>(context, listen: false);
-
+    print("djfgh  ${storeId}");
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -165,16 +164,7 @@ class UpdateStoreScreen extends StatelessWidget {
                 text: 'Update',
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
-                    // _showBottomSheet(context, createStoreprovider);
-
-                    final status = await Provider.of<DaySelectionProvider>(
-                            context,
-                            listen: false)
-                        .updateSore(context, storeId);
-
-                    if (status) {
-                      context.clearAndPush(routePath: MyRoutes.SUBMITSCREEN);
-                    }
+                    _showBottomSheet(context, createStoreprovider);
                   }
                 },
                 backgroundColor: context.appColor.primarycolor,
@@ -457,13 +447,20 @@ class UpdateStoreScreen extends StatelessWidget {
                           text: 'Continue',
                           onPressed: pinProvider.isMatch
                               ? () async {
-                                  // final status =
-                                  //     await pinProvider.updateSore(context,);
+                                  final status =
+                                      await Provider.of<DaySelectionProvider>(
+                                              context,
+                                              listen: false)
+                                          .updateSore(context, storeId);
 
-                                  // if (status) {
-                                  //   context.clearAndPush(
-                                  //       routePath: MyRoutes.SUBMITSCREEN);
-                                  // }
+                                  if (status) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+
+                                    print("jsghghg  ");
+                                    // context.clearAndPush(
+                                    //     routePath: MyRoutes.SUBMITSCREEN);
+                                  }
                                 }
                               : null,
                           backgroundColor: context.appColor.primarycolor),

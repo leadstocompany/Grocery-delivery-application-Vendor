@@ -51,14 +51,11 @@ class _StoreManagementState extends State<StoreManagement> {
       ),
       body: Consumer<DaySelectionProvider>(
         builder: (context, provider, child) {
-          if (provider.isLoading)
-           {
+          if (provider.isLoading) {
             return Center(child: CircularProgressIndicator());
-          } else if (provider.store_model == null) 
-          {
+          } else if (provider.store_model == null) {
             return Center(child: Text('No available'));
-          } else 
-          {
+          } else {
             provider.bankName.text =
                 provider.store_model!.paymentDetails!.bankName;
             provider.accountHoldername.text =
@@ -197,10 +194,7 @@ class _StoreManagementState extends State<StoreManagement> {
                               onPressed: () {
                                 context.push(
                                   MyRoutes.UPDATESTORE,
-                                  
-                                  extra: {'storeId':
-                                        provider.store_model!.id
-                                  },
+                                  extra: {'storeId': provider.store_model!.id},
                                 );
                               }),
                         ),
@@ -383,7 +377,7 @@ class _StoreManagementState extends State<StoreManagement> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 80.w,
+                width: 60.w,
                 child: Text(
                   dayInfo['day']!,
                   style: TextStyle(
@@ -401,7 +395,7 @@ class _StoreManagementState extends State<StoreManagement> {
                 ),
               ),
               Text(
-                isOpen ? closeTime : "",
+                isOpen ? closeTime : "     --      ",
                 style: TextStyle(
                   fontSize: 14,
                   color: isOpen ? Colors.green : Colors.red,

@@ -16,7 +16,7 @@ class HomeProvider extends ChangeNotifier {
         return true;
       },
       (response) {
-          print("dkjhssfdgdfgdfgfgjkdfkg");
+        print("dkjhssfdgdfgdfgfgjkdfkg");
         return true;
       },
     );
@@ -47,7 +47,7 @@ class HomeProvider extends ChangeNotifier {
       return result.fold(
         (error) {},
         (response) {
-          setUserName(response.firstName);
+          setUserName(response.firstName + " " + response.lastName);
           setPhone(response.phone);
 
           SharedPrefUtils.USER_NAME =

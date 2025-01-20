@@ -419,8 +419,9 @@ class ProductProvider extends ChangeNotifier {
   String _uploadedUrl = '';
 
   Future<bool> uploadImage(BuildContext context) async {
+    context.showLoader(show: true);
     final result = await _authRepo.uploadImage(selectedImage!);
-
+    context.showLoader(show: false);
     return result.fold(
       (error) {
         // _showSnackBar(context, error.message, Colors.red);

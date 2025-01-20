@@ -157,7 +157,7 @@ class SetupBussiness extends StatelessWidget {
                     Gap(10.h),
                     CustomTextField(
                       controller: createStoreprovider.storeGSTNumber,
-                        keyBoardType: TextInputType.number,
+                      keyBoardType: TextInputType.number,
                       validator: (val) {
                         if (val.toString().isEmpty) {
                           return "GST Number (optional)";
@@ -204,9 +204,9 @@ class SetupBussiness extends StatelessWidget {
                                   width: 200.w,
                                   child: Text(
                                     overflow: TextOverflow.ellipsis,
-                                    imageProvider.image == null
+                                    imageProvider.selectedImage == null
                                         ? 'Upload shop Picture'
-                                        : imageProvider.image!.path
+                                        : imageProvider.selectedImage!.path
                                             .split('/')
                                             .last,
                                     style:
@@ -223,15 +223,17 @@ class SetupBussiness extends StatelessWidget {
                               height: 25,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final XFile? pickedFile = await _picker
-                                      .pickImage(source: ImageSource.gallery);
-                                  if (pickedFile != null) {
-                                    // Update the image in the provider
+                                  createStoreprovider.pickImage(context);
 
-                                    context
-                                        .read<DaySelectionProvider>()
-                                        .setImage(File(pickedFile.path));
-                                  }
+                                  // final XFile? pickedFile = await _picker
+                                  //     .pickImage(source: ImageSource.gallery);
+                                  // if (pickedFile != null) {
+                                  //   // Update the image in the provider
+
+                                  //   context
+                                  //       .read<DaySelectionProvider>()
+                                  //       .setImage(File(pickedFile.path));
+                                  // }
                                 },
                                 child: Text(
                                   'Upload',
@@ -260,24 +262,31 @@ class SetupBussiness extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16), // Add some spacing if necessary
+
               SizedBox(
                 width: double.infinity,
-                child: ButtonElevated(
-                  text: status == "0" ? "Save details" : 'Save & Next',
-                  onPressed: () {
-                    if (status == "0") {
-                      Navigator.pop(context);
-                      _showBottomSheet(context);
-                    } else {
-                      context.push(MyRoutes.CREATESTORE);
-                    }
-
-                    // if (_formKey.currentState?.validate() ?? false) {
-                    //   // Perform action on valid form
-                    // }
-                  },
-                  backgroundColor: context.appColor.primarycolor,
-                ),
+                child: Consumer<DaySelectionProvider>(
+                    builder: (context, imageProvider, child) {
+                  return ButtonElevated(
+                    text: status == "0" ? "Save details" : 'Save & Next',
+                    onPressed: imageProvider.isImageLoading
+                        ? () {
+                            if (status == "0") {
+                              Navigator.pop(context);
+                              _showBottomSheet(context);
+                            } else {
+                              if (_formKey.currentState?.validate() ?? false) {
+                                print("kjdfhgkjgh");
+                                context.push(MyRoutes.CREATESTORE);
+                              }
+                            }
+                          }
+                        : null,
+                    backgroundColor: imageProvider.isImageLoading
+                        ? context.appColor.primarycolor
+                        : context.appColor.greyColor,
+                  );
+                }),
               ),
               Gap(25.h),
               Gap(30.h),

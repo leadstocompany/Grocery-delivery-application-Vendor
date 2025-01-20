@@ -8,9 +8,9 @@ import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/logic/provider/crate_store_provider.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 
-class ProfileScreen extends StatefulWidget
- {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
@@ -20,6 +20,7 @@ class ProfileScreen extends StatefulWidget
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    var userName = Provider.of<HomeProvider>(context).userName;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -71,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            SharedPrefUtils.USER_NAME ?? "Hello Emekus",
+                            userName,
                             style: context.subTitleStyle,
                           ),
                           Text(

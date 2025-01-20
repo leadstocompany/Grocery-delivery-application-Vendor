@@ -22,10 +22,10 @@ class HomeRepo {
 
       if (loginResponse.accessToken != null) {
         print("chwckData ${loginResponse.accessToken}");
-        await SharedPrefUtils.setToken(
+           await SharedPrefUtils.setToken(
             authToken: loginResponse.accessToken ?? "");
-        await SharedPrefUtils.setRefreshToken(
-            refresh_token: loginResponse.refreshToken ?? "");
+          await SharedPrefUtils.setRefreshToken( refresh_token: loginResponse.refreshToken ?? "");
+            context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
       }
 
       final String model = response.toString();
@@ -40,7 +40,8 @@ class HomeRepo {
     }
   }
 
-  FutureResult<VendorModel> getMe(data) async {
+  FutureResult<VendorModel> getMe(data) async
+   {
     try {
       var response = await _homeService.getMe(data);
 

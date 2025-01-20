@@ -19,21 +19,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () async 
-    {
+    Future.delayed(const Duration(seconds: 2), () async {
       if (await SharedPrefUtils.isFreshInstall()) {
         context.clearAndPush(routePath: MyRoutes.ONBOARDING);
       } else {
         if (await SharedPrefUtils.getToken() == "1" ||
             await SharedPrefUtils.getToken() == null) {
           context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
-        } else 
-        {
+        } else {
           Provider.of<HomeProvider>(context, listen: false)
               .refreshToken(context);
           Provider.of<HomeProvider>(context, listen: false).getMe();
 
-          context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
+          // context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
         }
       }
     });

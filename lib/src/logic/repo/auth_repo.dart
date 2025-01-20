@@ -18,13 +18,13 @@ class AuthRepo {
 
   AuthRepo(this._authServices);
 
-  FutureResult<OtpResponseModel> sendOtp(data) async {
+  FutureResult<String> sendOtp(data) async {
     try {
       var response = await _authServices.sendOtp(data);
+
       final String model = response.toString();
-      OtpResponseModel otpResponseModel =
-          otpResponseModelFromJson(response.toString());
-      return right(otpResponseModel);
+    //  OtpResponseModel otpResponseModel = otpResponseModelFromJson(response.toString());
+      return right(model);
     } on DioException catch (e) {
       print("dhfgfdgjdhfgfgh  ${e}");
       var error = CustomDioExceptions.handleError(e);

@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/core/utiils_lib/snack_bar.dart';
 import 'package:vendor_app/src/data/store_model.dart';
 import 'package:vendor_app/src/logic/repo/auth_repo.dart';
+import 'package:vendor_app/src/logic/repo/product_repo.dart';
 import 'package:vendor_app/src/logic/repo/store_repo.dart';
 
 class DaySelectionProvider with ChangeNotifier {
@@ -53,6 +56,23 @@ class DaySelectionProvider with ChangeNotifier {
   void setImage(File? image) {
     _image = image;
     notifyListeners();
+  }
+
+  final ImagePicker _picker = ImagePicker();
+  File? _selectedImage;
+
+  File? get selectedImage => _selectedImage;
+
+  // Method to pick an image
+  Future<void> pickImage(BuildContext context) async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _selectedImage = File(pickedFile.path);
+      uploadImage(context);
+      notifyListeners();
+    }
   }
 
   ////  create store /////////////////////////////////////////////////////
@@ -159,7 +179,7 @@ class DaySelectionProvider with ChangeNotifier {
       "storeAddress": storeAddress.text,
       "gstNumber": storeGSTNumber.text,
       "gumastaNumber": storeGumastaNumber.text,
-      "storePicture": image!.path.split('/').last,
+      "storePicture": _uploadedUrl,
       "operateDates": getOperateDates(selectedDays),
       "operateTimes": {
         "startTime": selectedTime,
@@ -215,16 +235,52 @@ class DaySelectionProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> updateSore(BuildContext context,String id) async {
+  bool _isImageLoading = false;
+  bool get isImageLoading => _isImageLoading;
+
+  String _uploadedUrl = '';
+
+  final _productRepo = getIt<ProductRepo>();
+
+  Future<bool> uploadImage(BuildContext context) async {
+    context.showLoader(show: true);
+    _isImageLoading = false;
+    final result = await _productRepo.uploadImage(selectedImage!);
+    context.showLoader(show: false);
+
+    return result.fold(
+      (error) {
+        _showSnackBar(context, error.message, Colors.red);
+        return false;
+      },
+      (uploadImage) {
+        _isImageLoading = true;
+        _uploadedUrl = uploadImage.data!.url.toString();
+        notifyListeners();
+
+        _showSnackBar(context, "Image uploaxded successfully!", Colors.green);
+        return true;
+      },
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    showTopSnackBar(context, message, color);
+  }
+
+  Future<bool> updateSore(BuildContext context, String id) async {
     context.showLoader(show: true);
 
-    var data = {
+    var data =
+     {
       "operateDates": getOperateDates(selectedDays),
-      "operateTimes": {
+      "operateTimes":
+       {
         "startTime": selectedTime,
         "endTime": selectedClosedTime
       },
-      "paymentDetails": {
+      "paymentDetails": 
+      {
         "bankName": bankName.text,
         "accountHolder": accountHoldername.text,
         "accountNumber": accountNumber.text,
@@ -236,7 +292,7 @@ class DaySelectionProvider with ChangeNotifier {
     print("dfhgkjhg  ${data}");
 
     try {
-      var result = await _storeRepo.updateStore(data);
+      var result = await _storeRepo.updateStore(data,id);
 
       context.showLoader(show: false);
 

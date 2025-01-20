@@ -24,8 +24,8 @@ class StoreService extends ApiService {
     return response;
   }
 
-  Future updateStore(data) async {
-    var response = await api.patch(APIURL.updateStore, data: jsonEncode(data));
+  Future updateStore(data,id) async {
+    var response = await api.patch(APIURL.updateStore+id, data: jsonEncode(data));
     return response;
   }
 

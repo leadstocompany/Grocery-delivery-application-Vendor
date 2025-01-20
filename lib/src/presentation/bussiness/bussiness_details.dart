@@ -221,14 +221,22 @@ class _DetailsBussinessState extends State<DetailsBussiness> {
                           ),
                           Gap(10.h),
                           Container(
-                              height: 150.h,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(
-                                      AppImages.onboarding3,
-                                    )),
-                              )),
+                            height: 150.h,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: provider.store_model!.storePicture !=
+                                            null &&
+                                        provider.store_model!.storePicture
+                                            .isNotEmpty
+                                    ? NetworkImage(provider.store_model!
+                                        .storePicture) // Use the network image if available
+                                    : AssetImage(AppImages.onboarding3)
+                                        as ImageProvider, // Use asset image otherwise
+                              ),
+                            ),
+                          ),
+                        
                           Gap(10.h),
                         ],
                       ),
