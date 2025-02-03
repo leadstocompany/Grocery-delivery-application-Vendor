@@ -99,7 +99,9 @@ class PhoneScreen extends StatelessWidget {
 
                 final number = phoneController.text;
 
-                if (number.length == 10) {
+                if (number.length == 10) 
+                {
+                  
                   final success =
                       await pageNotifier.sendOtp(number, context, country_code);
 

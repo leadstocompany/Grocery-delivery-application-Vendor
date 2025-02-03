@@ -77,7 +77,8 @@ class OnboardingScreen extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                           color: Colors.white),
                     ),
-                    onPressed: () {
+                    onPressed: () 
+                    {
                       SharedPrefUtils.setFreshInstall(isFresh: false).then(
                         (value) => context.clearAndPush(
                             routePath: MyRoutes.SELECTACCOUNT, args: 0),

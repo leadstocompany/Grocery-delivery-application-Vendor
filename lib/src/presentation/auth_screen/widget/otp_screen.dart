@@ -180,11 +180,13 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
             ),
             controller: TextEditingController(text: _otpCode),
-            onChanged: (value) {
+            onChanged: (value)
+            {
               _otpCode = value;
             }, // Autofill OTP
 
             onCompleted: (value) async {
+              
               _otpCode = value.toString();
               final success = await pageNotifier.verifiOtp(value, context);
 

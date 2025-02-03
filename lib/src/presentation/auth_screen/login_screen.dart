@@ -53,8 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     CustomTextField(
                       controller: pageNotifier.emailOrPasswordController,
-                      validator: (val) {
-                        if (val.toString().isEmpty) {
+                      validator: (val) 
+                      {
+                        if (val.toString().isEmpty) 
+                        {
                           return "Please enter your phone number";
                         }
                         return null;
@@ -119,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: context.appColor.primarycolor,
                     text: AppString.continueTxt,
                     onPressed: () async {
-                      if (_formKey.currentState?.validate() ?? false) {
+                      if (_formKey.currentState?.validate() ?? false)
+                       {
                         var status = await pageNotifier.login(context);
                         if (status)
                          {

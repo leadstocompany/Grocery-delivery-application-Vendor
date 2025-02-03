@@ -181,7 +181,8 @@ extension ThemeExt on BuildContext {
 }
 
 /// Build context extensions
-extension ContextExtension on BuildContext {
+extension ContextExtension on BuildContext
+ {
   void to({required Widget screen}) {
     Navigator.push(this, MaterialPageRoute(builder: (context) => screen));
   }

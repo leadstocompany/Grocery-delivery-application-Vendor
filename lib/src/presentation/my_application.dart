@@ -21,7 +21,8 @@ class MyApplication extends StatefulWidget {
 class _MyApplicationState extends State<MyApplication> {
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    return 
+    ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -31,14 +32,11 @@ class _MyApplicationState extends State<MyApplication> {
         //  overlayWidgetBuilder: (progress) => const GlobalLoader(),
         child: MultiProvider(
           providers: [
-             ChangeNotifierProvider(create: (_) => PageNotifier()),
-             ChangeNotifierProvider(create: (_) => DaySelectionProvider()),
-              ChangeNotifierProvider(create: (_) => LoginProvider()),
-                ChangeNotifierProvider(create: (_) => ProductProvider()),
-                   ChangeNotifierProvider(create: (_) => HomeProvider()),
-              
-
-            
+            ChangeNotifierProvider(create: (_) => PageNotifier()),
+            ChangeNotifierProvider(create: (_) => DaySelectionProvider()),
+            ChangeNotifierProvider(create: (_) => LoginProvider()),
+            ChangeNotifierProvider(create: (_) => ProductProvider()),
+            ChangeNotifierProvider(create: (_) => HomeProvider()),
           ],
           child: MaterialApp.router(
             routerConfig: MyRoutes.router,
@@ -55,6 +53,7 @@ class _MyApplicationState extends State<MyApplication> {
         ),
       ),
     );
+ 
+ 
   }
 }
- 
