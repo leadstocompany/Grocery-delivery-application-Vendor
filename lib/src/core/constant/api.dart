@@ -8,10 +8,11 @@ class APIURL {
   static const String getStore = "${BASE_URL}stores/";
   static const String updateStore = "${BASE_URL}stores/";
   static const String forgetPassword = "${BASE_URL}auth/forgot-password/vendor";
-  static const String verifyForgetPassword = "${BASE_URL}auth/forgot-password-verify-otp/vendor";
+  static const String verifyForgetPassword =
+      "${BASE_URL}auth/forgot-password-verify-otp/vendor";
   static const String reset_password = "${BASE_URL}auth/reset-password/vendor";
   static const String get_category = "${BASE_URL}categories";
-  static const String getProduct = "${BASE_URL}products";
+  static const String getProduct = "${BASE_URL}products/vendor";
   static const String getCategoryByLevel = "${BASE_URL}categories/by-level/1";
   static const String getMe = "${BASE_URL}auth/me";
   static const String refresh_token = "${BASE_URL}auth/refresh-token";

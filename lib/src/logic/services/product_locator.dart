@@ -18,7 +18,7 @@ class ProductService extends ApiService {
   }
 
   Future createProduct(data) async {
-    var response = await api.post(APIURL.getProduct, data: jsonEncode(data));
+    var response = await api.post(APIURL.createProduct, data: jsonEncode(data));
     return response;
   }
 
