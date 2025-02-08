@@ -4,11 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/data/myOrder.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class CustomerOrder extends StatefulWidget {
-  final Map<String, dynamic> orderDetails;
-  const CustomerOrder({super.key, required this.orderDetails});
+  final DatumOrder order;
+
+  const CustomerOrder({super.key, required this.order});
 
   @override
   State<CustomerOrder> createState() => _CustomerOrderState();
@@ -21,9 +23,6 @@ class _CustomerOrderState extends State<CustomerOrder> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    title = widget.orderDetails['title'];
-    status = widget.orderDetails['index'];
   }
 
   @override
@@ -44,11 +43,11 @@ class _CustomerOrderState extends State<CustomerOrder> {
             style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            cardOrder(widget.orderDetails),
+            cardOrder(),
             Gap(20.h),
             detailsCategory(),
             if (title == "New Order") orderProcess(),
@@ -84,54 +83,60 @@ class _CustomerOrderState extends State<CustomerOrder> {
     );
   }
 
-  Widget cardOrder(final Map<String, dynamic> orderDetails) {
+  Widget cardOrder() {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: context.appColor.greyColor100),
         color: context.appColor.whiteColor,
         borderRadius: BorderRadius.all(Radius.circular(3.0)),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Raiden Lord",
-                      style: context.subTitleTextStyleBloack,
-                    ),
-                    Text(
-                      "16, First Love Estate, Ikorodu",
-                      style: context.subTitleTxtStyle,
-                    ),
-                    Text(
-                      "08092346578",
-                      style: context.subTitleTxtStyle,
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Container(
-                    decoration: BoxDecoration(
-                      color: getStatus(),
-                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        "New Order",
-                        style: context.buttonTestStyle
-                            .copyWith(color: getTextColor()),
-                      ),
-                    ))
-              ],
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          children: [
+            Flexible(
+              flex: 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${widget.order.user?.firstName ?? "Unknown"} ${widget.order.user?.lastName ?? ""}",
+                    style: context.subTitleTextStyleBloack,
+                  ),
+                  Text(
+                    widget.order.deliveryAddress?.landmark ??
+                        "No Address Available",
+                    style: context.subTitleTxtStyle,
+                  ),
+                  Text(
+                    widget.order.user?.phone ?? "No Phone Available",
+                    style: context.subTitleTxtStyle,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Spacer(),
+            Flexible(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: getStatus() ?? Colors.grey, // Default color if null
+                  borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    widget.order.orderStatus,
+                    style: context.buttonTestStyle.copyWith(
+                      color:
+                          getTextColor() ?? Colors.white, // Default text color
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -177,8 +182,9 @@ class _CustomerOrderState extends State<CustomerOrder> {
             height: 320.h,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: productsC.length,
+              itemCount: widget.order.orderItems!.length,
               itemBuilder: (context, index) {
+                var orderitem = widget.order.orderItems![index];
                 return InkWell(
                   onTap: () {},
                   child: Padding(
@@ -201,11 +207,11 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      productsC[index]['title'].toString(),
+                                      orderitem.productName,
                                       style: context.buttonTestStyle.copyWith(),
                                     ),
                                     Text(
-                                      productsC[index]['subTitle'].toString(),
+                                      orderitem.quantity.toString(),
                                       style: context.buttonTestStyle.copyWith(
                                           color: context.appColor.greyColor),
                                     ),
@@ -213,14 +219,13 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  productsC[index]['price'].toString(),
+                                  orderitem.price.toString(),
                                   style: context.buttonTestStyle.copyWith(),
                                 ),
                               ],
                             ),
                           ),
                           Divider(
-                            //color: context.appColor.greyColor ,
                             thickness: 0.2,
                           )
                         ],
@@ -262,10 +267,8 @@ class _CustomerOrderState extends State<CustomerOrder> {
   Widget orderProcess() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: 
-      Center(
-        child: 
-        Column(
+      child: Center(
+        child: Column(
           children: [
             Center(
               child: Padding(
@@ -392,7 +395,4 @@ class _CustomerOrderState extends State<CustomerOrder> {
         return Color(0xffA32424);
     }
   }
-
-
-
 }

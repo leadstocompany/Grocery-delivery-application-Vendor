@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/headerprofile.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -16,6 +17,12 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
+  @override
+  void initState() {
+    Provider.of<HomeProvider>(context, listen: false).getMyOrder(context);
+    super.initState();
+  }
+
   final List<String> items = [
     'All',
     'Awaiting Pickup',
@@ -104,72 +111,82 @@ class _OrderScreenState extends State<OrderScreen> {
       'Cancelled',
     ];
 
-    return Expanded(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: poductsC.length,
-        itemBuilder: (context, index) {
-          status = index;
-          return InkWell(
-            onTap: () {
-              context.push(MyRoutes.CUSTOMERORDER, extra: {
-                "title": poductsC[index].toString(), // String
-                "index": index, // Color
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+    return Consumer<HomeProvider>(
+      builder: (context, orderProvider, child) {
+        if (orderProvider.isloading) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (orderProvider.orderList.isEmpty) {
+          return Center(child: Text('No orders found!'));
+        }
+        return Expanded(
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: orderProvider.orderList.length,
+            itemBuilder: (context, index) {
+              var orderItem = orderProvider.orderList[index];
+              status = index;
+              return InkWell(
+                onTap: ()
+                 {
+                  context.push(MyRoutes.CUSTOMERORDER,  extra: orderItem);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          child: Row(
                             children: [
-                              Text(
-                                "Raiden Lord",
-                                style: context.subTitleTextStyleBloack,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${orderItem.user!.firstName + " " + orderItem.user!.lastName}",
+                                    style: context.subTitleTextStyleBloack,
+                                  ),
+                                  Text(
+                                    "${orderItem.orderNumber}",
+                                    style: context.subTitleTxtStyle,
+                                  ),
+                                  Text(
+                                    orderItem.createdAt.toString(),
+                                    style: context.subTitleTxtStyle,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Order ID  #212323",
-                                style: context.subTitleTxtStyle,
-                              ),
-                              Text(
-                                "Today |  9:00 am",
-                                style: context.subTitleTxtStyle,
-                              ),
+                              Spacer(),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    color: getStatus(),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3.0)),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      orderItem.orderStatus,
+                                      style: context.buttonTestStyle
+                                          .copyWith(color: getTextColor()),
+                                    ),
+                                  ))
                             ],
                           ),
-                          Spacer(),
-                          Container(
-                              decoration: BoxDecoration(
-                                color: getStatus(),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(3.0)),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  poductsC[index],
-                                  style: context.buttonTestStyle
-                                      .copyWith(color: getTextColor()),
-                                ),
-                              ))
-                        ],
-                      ),
+                        ),
+                        Divider()
+                      ],
                     ),
-                    Divider()
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 

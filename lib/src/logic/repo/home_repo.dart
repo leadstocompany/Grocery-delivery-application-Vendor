@@ -7,6 +7,7 @@ import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/login_response.dart';
+import 'package:vendor_app/src/data/myOrder.dart';
 import 'package:vendor_app/src/data/vendor_model.dart';
 import 'package:vendor_app/src/logic/services/home_locator.dart';
 
@@ -39,6 +40,23 @@ class HomeRepo {
       return left(error);
     }
   }
+
+    FutureResult<MyOrder> getOrder(data) async {
+    try {
+      var response = await _homeService.getOrder(data);
+       MyOrder productCategory = myOrderFromJson(response.toString());
+      return right(productCategory);
+   
+    } on DioException catch (e) 
+    {
+      
+
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+  
 
   FutureResult<VendorModel> getMe(data) async
    {

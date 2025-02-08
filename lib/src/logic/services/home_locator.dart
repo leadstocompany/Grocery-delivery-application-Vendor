@@ -20,6 +20,13 @@ class HomeService extends ApiService {
     return response;
   }
 
+  Future getOrder(data) async {
+    var response = await api.get(APIURL.myOrder, data: jsonEncode(data));
+    //response.statusCode
+
+    return response;
+  }
+
 
   
 

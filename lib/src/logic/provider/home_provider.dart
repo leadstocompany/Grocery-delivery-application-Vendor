@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/data/myOrder.dart';
 import 'package:vendor_app/src/logic/repo/home_repo.dart';
 
 class HomeProvider extends ChangeNotifier {
@@ -57,5 +58,32 @@ class HomeProvider extends ChangeNotifier {
         },
       );
     } catch (e) {}
+  }
+
+  List<DatumOrder> orderList = [];
+  bool isloading = true;
+
+  Future<void> getMyOrder(BuildContext context) async 
+  {
+    var data = {};
+    try {
+      var result = await _homeRepo.getOrder(data);
+
+      return result.fold(
+        (error) {
+          isloading = false;
+          notifyListeners();
+        },
+        (response) 
+        {
+          orderList = response.data!;
+          isloading = false;
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      isloading = false;
+      notifyListeners();
+    }
   }
 }

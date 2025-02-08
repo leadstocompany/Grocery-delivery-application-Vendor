@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:vendor_app/src/core/utiils_lib/globle_variable.dart';
+import 'package:vendor_app/src/data/myOrder.dart';
 import 'package:vendor_app/src/data/prdouct_model.dart';
 import 'package:vendor_app/src/presentation/auth_screen/forget_password.dart';
 import 'package:vendor_app/src/presentation/auth_screen/forget_password_screen.dart';
@@ -73,18 +74,14 @@ class MyRoutes {
         name: CREATESTORE,
         pageBuilder: (context, state) => const CreateStore(),
       ),
-       animatedGoRoute(
-        path: UPDATESTORE,
-        name: UPDATESTORE,
-         pageBuilder: (context, state) {
+      animatedGoRoute(
+          path: UPDATESTORE,
+          name: UPDATESTORE,
+          pageBuilder: (context, state) {
             final extra = state.extra as Map<String, dynamic>?;
             final String status = extra?['storeId'] ?? '';
             return UpdateStoreScreen(storeId: status);
-          }
-       
-      ),
-
-      
+          }),
       animatedGoRoute(
         path: SUBMITSCREEN,
         name: SUBMITSCREEN,
@@ -109,14 +106,8 @@ class MyRoutes {
         path: CUSTOMERORDER,
         name: CUSTOMERORDER,
         pageBuilder: (context, state) {
-          // Extract data from `state.extra`
-          final Map<String, dynamic> orderDetails =
-              state.extra as Map<String, dynamic>;
-
-          return CustomerOrder(
-            orderDetails:
-                orderDetails, // Pass the data to the destination widget
-          );
+          final order = state.extra as DatumOrder; // Cast extra as Datum
+          return CustomerOrder(order: order);
         },
       ),
       animatedGoRoute(
@@ -213,8 +204,7 @@ class MyRoutes {
 
   static const FORGETNEWPASSWORD = "/forgetnewpassword";
 
-   static const UPDATESTORE = "/updatestore";
-
+  static const UPDATESTORE = "/updatestore";
 }
 
 GoRoute animatedGoRoute({
