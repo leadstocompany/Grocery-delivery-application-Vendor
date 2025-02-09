@@ -50,7 +50,9 @@ class _CustomerOrderState extends State<CustomerOrder> {
             cardOrder(),
             Gap(20.h),
             detailsCategory(),
-            if (title == "New Order") orderProcess(),
+            //if (title == "New Order") 
+            orderProcess(),
+           
             Gap(20.h),
             if (title == "Awaiting Pickup" || title == "Completed") ...{
               Text(

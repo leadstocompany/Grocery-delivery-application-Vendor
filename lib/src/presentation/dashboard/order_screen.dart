@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
@@ -102,6 +103,11 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
+  String formatDate(String isoDate) {
+    DateTime dateTime = DateTime.parse(isoDate);
+    return DateFormat("MMMM d, y").format(dateTime);
+  }
+
   Widget detailsCategory() {
     final List<String> poductsC = [
       'New Order',
@@ -128,9 +134,8 @@ class _OrderScreenState extends State<OrderScreen> {
               var orderItem = orderProvider.orderList[index];
               status = index;
               return InkWell(
-                onTap: ()
-                 {
-                  context.push(MyRoutes.CUSTOMERORDER,  extra: orderItem);
+                onTap: () {
+                  context.push(MyRoutes.CUSTOMERORDER, extra: orderItem);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -154,7 +159,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                     style: context.subTitleTxtStyle,
                                   ),
                                   Text(
-                                    orderItem.createdAt.toString(),
+                                    formatDate(orderItem.createdAt.toString()),
                                     style: context.subTitleTxtStyle,
                                   ),
                                 ],
