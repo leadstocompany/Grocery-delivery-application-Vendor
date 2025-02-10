@@ -151,7 +151,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${orderItem.user!.firstName + " " + orderItem.user!.lastName}",
+                                    "${orderItem.customer!.name ?? ''}",
                                     style: context.subTitleTextStyleBloack,
                                   ),
                                   Text(
@@ -167,7 +167,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               Spacer(),
                               Container(
                                   decoration: BoxDecoration(
-                                    color: getStatus(),
+                                    color: getStatus(orderItem.orderStatus),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(3.0)),
                                   ),
@@ -249,9 +249,9 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  Color getStatus() {
-    switch (status) {
-      case 0:
+  Color getStatus(orderStatus) {
+    switch (orderStatus) {
+      case "PENDING":
         return Color(0xff315731);
       case 1:
         return Color.fromARGB(255, 240, 218, 178);

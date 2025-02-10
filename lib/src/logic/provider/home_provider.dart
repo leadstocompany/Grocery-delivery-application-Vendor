@@ -65,6 +65,7 @@ class HomeProvider extends ChangeNotifier {
 
   Future<void> getMyOrder(BuildContext context) async 
   {
+    print("kjdfghkldfjhgkjdfkg");
     var data = {};
     try {
       var result = await _homeRepo.getOrder(data);
@@ -74,8 +75,7 @@ class HomeProvider extends ChangeNotifier {
           isloading = false;
           notifyListeners();
         },
-        (response) 
-        {
+        (response) {
           orderList = response.data!;
           isloading = false;
           notifyListeners();

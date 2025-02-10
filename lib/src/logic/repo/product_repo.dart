@@ -8,6 +8,7 @@ import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/data/prdouct_model.dart';
 import 'package:vendor_app/src/data/upload_image.dart';
+import 'package:vendor_app/src/data/upload_multiple_images.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/services/product_locator.dart';
 import 'package:vendor_app/src/logic/services/service_locator.dart';
@@ -119,7 +120,18 @@ class ProductRepo {
       return left(error);
     }
   }
-  
+  FutureResult<UploadMultipleImages> uploadImages(List<File> imageFiles) async 
+  {
+    try {
+      final response = await _productServices.uploadImages( imageFiles);
+      UploadMultipleImages upload = uploadMultipleImagesFromJson(response.toString());
+      return right(upload);
+    } on DioException catch (e) {
+      final error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
 
 
 

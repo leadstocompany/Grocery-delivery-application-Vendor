@@ -10,6 +10,7 @@ import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
+import 'package:vendor_app/src/presentation/product/highlight_field.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -172,40 +173,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         ),
                       if (provider.selectedSubcategory != null) Gap(15.h),
 
-                      // Container(
-                      //   height: 40.h,
-                      //   padding:
-                      //       EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      //   decoration: BoxDecoration(
-                      //     color: Colors.white,
-                      //     borderRadius: BorderRadius.circular(8),
-                      //     border: Border.all(color: Colors.grey),
-                      //   ),
-                      //   child: DropdownButtonFormField<String>(
-                      //     value: provider.selectedproducctQuentity.isNotEmpty
-                      //         ? provider.selectedproducctQuentity
-                      //         : null,
-                      //     hint: Text(
-                      //       'Select Products Quantity',
-                      //       style: context.subTitleTxtStyleblack,
-                      //     ),
-                      //     items: provider.categories
-                      //         .map((category) => DropdownMenuItem(
-                      //               value: category,
-                      //               child: Text(
-                      //                 category,
-                      //                 style: context.buttonTestStyle,
-                      //               ),
-                      //             ))
-                      //         .toList(),
-                      //     onChanged: (value) {
-                      //       provider.setProductQuentity(value!);
-                      //     },
-                      //     decoration: InputDecoration.collapsed(
-                      //         hintText: ''), // Removes default underline
-                      //   ),
-                      // ),
-
                       Gap(10.h),
                       CustomTextField(
                         controller: provider.productDescriptionController,
@@ -349,23 +316,77 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                             borderRadius: BorderRadius.circular(10)),
                         child: InkWell(
                           onTap: () {
-                            provider..pickImage(context);
+                            provider.pickImages(context);
                           },
-                          child: provider.selectedImage == null
+                          child: provider.selectedImages.isEmpty
                               ? Center(
                                   child: Icon(
                                     Icons.camera,
                                     size: 100,
                                   ),
                                 )
-                              : Image.file(
-                                  provider.selectedImage!,
-                                  fit: BoxFit.cover,
+                              : Wrap(
+                                  children:
+                                      provider.selectedImages.map((image) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Image.file(image,
+                                          width: 100, height: 100),
+                                    );
+                                  }).toList(),
                                 ),
                         ),
                       ),
+                      Gap(10.h),
 
-                      Gap(50.h),
+                      // Container(
+                      //   height: 300,
+                      //   child: ListView.builder(
+                      //     itemCount: provider.highlights.length,
+                      //     itemBuilder: (context, index) {
+                      //       return HighlightField(
+                      //         index: index,
+                      //         keyText: provider.highlights[index]["key"] ?? "",
+                      //         valueText:
+                      //             provider.highlights[index]["value"] ?? "",
+                      //       );
+                      //     },
+                      //   ),
+                      // ),
+                      // SizedBox(height: 16),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     ElevatedButton.icon(
+                      //       onPressed: provider.addHighlight,
+                      //       icon: Icon(Icons.add),
+                      //       label: Text("Add Highlight"),
+                      //     ),
+                      //     ElevatedButton.icon(
+                      //       onPressed: () {
+                      //         if (provider.highlights.isNotEmpty) {
+                      //           provider.removeHighlight(
+                      //               provider.highlights.length - 1);
+                      //         }
+                      //       },
+                      //       icon: Icon(Icons.remove),
+                      //       label: Text("Remove Last"),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(height: 20),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     List<Map<String, String>> highlights =
+                      //         provider.highlights;
+                      //     print("Final Highlights JSON: $highlights");
+                      //   },
+                      //   child: Text("Submit"),
+                      // ),
+
+                      //  highlights(),
+
+                      Gap(20.h),
 
                       SizedBox(
                         width: double.infinity,
@@ -376,6 +397,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                 : context.appColor.greyColor,
                             onPressed: provider.isImageLoading
                                 ? () async {
+                                    List<Map<String, String>> highlights =
+                                        provider.highlights;
+                                    print("Final Highlights JSON: $highlights");
                                     var status =
                                         await provider.createProduct(context);
                                     if (status) {
@@ -394,76 +418,133 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         }));
   }
 
-  // Function to show the Bottom Sheet
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Centered App Logo
-              Center(
-                child: Image.asset(
-                  AppImages.applogo, // Replace with your logo path
-                  height: 100.h, // Adjust height as necessary
-                ),
-              ),
-
-              Align(
-                alignment: Alignment.center,
-                child: Text('Product added', style: context.subTitleStyle),
-              ),
-
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 300,
-                  child: Text(
-                      'Your Product has been added to the list \nand is visible to customers',
-                      textAlign: TextAlign.center,
-                      style:
-                          context.subTitleTextStyle.copyWith(fontSize: 13.sp)),
-                ),
-              ),
-              Gap(20.h),
-              Center(
-                child: SizedBox(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ButtonElevated(
-                        text: 'View',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                        backgroundColor: context.appColor.primarycolor),
+  Widget highlights() {
+    return Consumer<ProductProvider>(builder: (context, provider, child) {
+      return Column(
+        children: [
+          provider.highlights.isEmpty
+              ? SizedBox.shrink() // Prevents blank screen when empty
+              : Container(
+                  height: 150,
+                  child: ListView.builder(
+                    // physics: NeverScrollableScrollPhysics(),
+                    itemCount: provider.highlights.length,
+                    itemBuilder: (context, index) {
+                      return HighlightField(
+                        index: index,
+                        keyText: provider.highlights[index]["key"] ?? "",
+                        valueText: provider.highlights[index]["value"] ?? "",
+                      );
+                    },
                   ),
                 ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  provider.addHighlight(); // Ensure this method exists
+                },
+                icon: Icon(Icons.add),
+                label: Text("Add Highlight"),
               ),
-              Gap(10.h),
-              Center(
-                  child: SizedBox(
-                      width: double.infinity,
-                      child: ButtonElevated(
-                        text: 'Add more Product',
-                        textColor: context.appColor.primarycolor,
-                        onPressed: () {
-                          Provider.of<ProductProvider>(context, listen: false)
-                              .clearData();
-                          Navigator.pop(context);
-
-                          //context.clearAndPush(routePath: MyRoutes.LOGIN);
-                        },
-                        backgroundColor: context.appColor.whiteColor,
-                        borderColor: context.appColor.primarycolor,
-                      )))
+              provider.highlights.isEmpty
+                  ? SizedBox.shrink()
+                  : ElevatedButton.icon(
+                      onPressed: () {
+                        if (provider.highlights.isNotEmpty) {
+                          provider
+                              .removeHighlight(provider.highlights.length - 1);
+                        }
+                      },
+                      icon: Icon(Icons.remove),
+                      label: Text("Remove Last"),
+                    ),
             ],
           ),
-        );
-      },
-    );
+          // SizedBox(height: 20),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     List<Map<String, String>> highlights = provider.highlights;
+          //     print("Final Highlights JSON: $highlights");
+          //   },
+          //   child: Text("Submit"),
+          // ),
+        ],
+      );
+    });
   }
+}
+
+// Function to show the Bottom Sheet
+void _showBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Centered App Logo
+            Center(
+              child: Image.asset(
+                AppImages.applogo, // Replace with your logo path
+                height: 100.h, // Adjust height as necessary
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.center,
+              child: Text('Product added', style: context.subTitleStyle),
+            ),
+
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: 300,
+                child: Text(
+                    'Your Product has been added to the list \nand is visible to customers',
+                    textAlign: TextAlign.center,
+                    style: context.subTitleTextStyle.copyWith(fontSize: 13.sp)),
+              ),
+            ),
+            Gap(20.h),
+            Center(
+              child: SizedBox(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ButtonElevated(
+                      text: 'View',
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      backgroundColor: context.appColor.primarycolor),
+                ),
+              ),
+            ),
+            Gap(10.h),
+            Center(
+                child: SizedBox(
+                    width: double.infinity,
+                    child: ButtonElevated(
+                      text: 'Add more Product',
+                      textColor: context.appColor.primarycolor,
+                      onPressed: () {
+                        Provider.of<ProductProvider>(context, listen: false)
+                            .clearData();
+                        Navigator.pop(context);
+
+                        //context.clearAndPush(routePath: MyRoutes.LOGIN);
+                      },
+                      backgroundColor: context.appColor.whiteColor,
+                      borderColor: context.appColor.primarycolor,
+                    )))
+          ],
+        ),
+      );
+    },
+  );
 }

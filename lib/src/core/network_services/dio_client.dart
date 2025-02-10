@@ -179,7 +179,8 @@ class DioClient {
 
 
 Future<Response> uploadImage(String url, File imageFile,
-      {Map<String, dynamic>? additionalFields,
+      {
+        Map<String, dynamic>? additionalFields,
       Options? options,
       CancelToken? cancelToken,
       ProgressCallback? onSendProgress,
@@ -193,8 +194,58 @@ Future<Response> uploadImage(String url, File imageFile,
 
     try {
       String fileName = imageFile.path.split('/').last;
+     
       FormData formData = FormData.fromMap({
         "image": await MultipartFile.fromFile(imageFile.path, filename: fileName),
+        ...?additionalFields,
+      });
+
+      final Response response = await _dio.post(
+        url,
+        data: formData,
+        options: options ??
+            Options(headers: {
+              "authorization": "Bearer ${await SharedPrefUtils.getToken()}"
+            }),
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+
+
+Future<Response> uploadImages(
+    String url,
+    List<File> imageFiles, {
+    Map<String, dynamic>? additionalFields,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+    bool hideSoftKeyboard = true,
+  }) async {
+    if (hideSoftKeyboard) {
+      hideKeyBoard();
+    }
+
+    debugLog("UPLOAD IMAGE Bearer token: ${await SharedPrefUtils.getToken()}");
+
+    try {
+      List<MultipartFile> imageList = [];
+      for (var imageFile in imageFiles) {
+        String fileName = imageFile.path.split('/').last;
+        imageList.add(
+            await MultipartFile.fromFile(imageFile.path, filename: fileName));
+      }
+
+      FormData formData = FormData.fromMap({
+        "images": imageList, // Sending multiple images
         ...?additionalFields,
       });
 

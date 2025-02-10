@@ -50,9 +50,9 @@ class _CustomerOrderState extends State<CustomerOrder> {
             cardOrder(),
             Gap(20.h),
             detailsCategory(),
-            //if (title == "New Order") 
+            //if (title == "New Order")
             orderProcess(),
-           
+
             Gap(20.h),
             if (title == "Awaiting Pickup" || title == "Completed") ...{
               Text(
@@ -102,16 +102,16 @@ class _CustomerOrderState extends State<CustomerOrder> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${widget.order.user?.firstName ?? "Unknown"} ${widget.order.user?.lastName ?? ""}",
+                    "${widget.order.customer!.name ?? "Unknown"} ",
                     style: context.subTitleTextStyleBloack,
                   ),
                   Text(
-                    widget.order.deliveryAddress?.landmark ??
+                    " ${widget.order.deliveryAddress?.addressLine}  ${widget.order.deliveryAddress?.city}" ??
                         "No Address Available",
                     style: context.subTitleTxtStyle,
                   ),
                   Text(
-                    widget.order.user?.phone ?? "No Phone Available",
+                    widget.order.customer?.phone ?? "No Phone Available",
                     style: context.subTitleTxtStyle,
                   ),
                 ],
@@ -184,9 +184,9 @@ class _CustomerOrderState extends State<CustomerOrder> {
             height: 320.h,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: widget.order.orderItems!.length,
+              itemCount: widget.order.items!.length,
               itemBuilder: (context, index) {
-                var orderitem = widget.order.orderItems![index];
+                var orderitem = widget.order.items![index];
                 return InkWell(
                   onTap: () {},
                   child: Padding(
@@ -254,7 +254,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
                   child: Text(
-                    "N275,000",
+                    "${widget.order.storeSubtotal}",
                     style: context.buttonTestStyle.copyWith(),
                   ),
                 ),
@@ -280,7 +280,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "₹ 2300",
+                      "₹${widget.order.storeSubtotal}",
                       style: context.subTitleTextStyleBloack
                           .copyWith(fontWeight: FontWeight.bold),
                     ),

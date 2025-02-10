@@ -7,6 +7,7 @@ import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/snack_bar.dart';
 import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/data/prdouct_model.dart';
+import 'package:vendor_app/src/data/upload_multiple_images.dart';
 import 'package:vendor_app/src/logic/repo/product_repo.dart';
 
 import 'package:flutter/material.dart';
@@ -104,7 +105,6 @@ class ProductProvider extends ChangeNotifier {
     productquantityController.clear();
     productqlongDescriptionController.clear();
     _isImageLoading = false;
-    _selectedImage = null;
 
     selectedCategory = null;
     selectedSubcategory = null;
@@ -153,21 +153,41 @@ class ProductProvider extends ChangeNotifier {
 
   // Load subcategories for a selected category
 
-  final ImagePicker _picker = ImagePicker();
-  File? _selectedImage;
+  // final ImagePicker _picker = ImagePicker();
+  // File? _selectedImage;
 
-  File? get selectedImage => _selectedImage;
+  // File? get selectedImage => _selectedImage;
 
-  // Method to pick an image
-  Future<void> pickImage(BuildContext context) async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+  // Future<void> pickImage(BuildContext context) async {
+  //   final XFile? pickedFile =
+  //       await _picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      _selectedImage = File(pickedFile.path);
-      uploadImage(context);
-      notifyListeners();
+  //   if (pickedFile != null) {
+  //     _selectedImage = File(pickedFile.path);
+  //     uploadImage(context);
+  //     notifyListeners();
+  //   }
+  // }
+
+  List<File> _selectedImages = [];
+
+  List<File> get selectedImages => _selectedImages;
+
+  Future<void> pickImages(BuildContext context) async {
+    final ImagePicker picker = ImagePicker();
+    final List<XFile>? pickedFiles = await picker.pickMultiImage();
+
+    if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      _selectedImages = pickedFiles.map((e) => File(e.path)).toList();
+
+      uploadImages(context);
+      notifyListeners(); // Notify UI of changes
     }
+  }
+
+  void clearImages() {
+    _selectedImages.clear();
+    notifyListeners();
   }
 
   TextEditingController productDescriptionController = TextEditingController();
@@ -180,9 +200,13 @@ class ProductProvider extends ChangeNotifier {
   TextEditingController productquantityController = TextEditingController();
   TextEditingController productqlongDescriptionController =
       TextEditingController();
-
+  List<String> uploadedUrl = [];
   Future<bool> createProduct(BuildContext context) async {
     context.showLoader(show: true);
+
+    for (var item in _uploadedUrls) {
+      uploadedUrl.add(item.url!);
+    }
 
     try {
       var data = {
@@ -198,7 +222,7 @@ class ProductProvider extends ChangeNotifier {
             : productStockController.text),
         "name": selectedProduct!.name,
         "additionalInfo": productqlongDescriptionController.text,
-        "productImages": [_uploadedUrl]
+        "productImages": uploadedUrl
       };
 
       print("hjhdfjg  ${data}");
@@ -361,84 +385,66 @@ class ProductProvider extends ChangeNotifier {
     );
   }
 
-//  Future<bool> uploadImage(BuildContext context) async
-//  {
-//     context.showLoader(show: true);
-
-//     try {
-//       var data = {
-//         "image": selectedImage!.path,
-
-//       };
-//       var result = await _authRepo.uploadImage(data);
-//       context.showLoader(show: false);
-
-//       return result.fold(
-//         (error)
-//          {
-//           // Show error Snackbar
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             SnackBar(
-//               content: Text(error.message),
-//               backgroundColor: Colors.red,
-//             ),
-//           );
-//           return false; // Login failed
-//         },
-//         (response)
-//         {
-
-//           print("check thie respodnse ${ response.status}");
-
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             SnackBar(
-//               content: Text("Product created successful!"),
-//               backgroundColor: Colors.green,
-//             ),
-//           );
-//           return true;
-//         },
-//       );
-//     } catch (e) {
-//       context.showLoader(show: false);
-//       print("Unexpected error: $e");
-
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(
-//           content: Text("Something went wrong. Please try again."),
-//           backgroundColor: Colors.red,
-//         ),
-//       );
-//       return false;
-//     }
-//   }
-
   bool _isImageLoading = false;
   bool get isImageLoading => _isImageLoading;
 
-  String _uploadedUrl = '';
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    showTopSnackBar(context, message, color);
+  }
 
-  Future<bool> uploadImage(BuildContext context) async {
+  List<ImageDatum> _uploadedUrls = []; // Store uploaded URLs
+
+  Future<bool> uploadImages(
+    BuildContext context,
+  ) async {
+    if (selectedImages.isEmpty) {
+      _showSnackBar(context, "Please select images first!", Colors.red);
+      return false;
+    }
+
     context.showLoader(show: true);
-    final result = await _authRepo.uploadImage(selectedImage!);
+    final result = await _authRepo.uploadImages(selectedImages);
     context.showLoader(show: false);
+
     return result.fold(
       (error) {
-        // _showSnackBar(context, error.message, Colors.red);
+        _showSnackBar(context, "Failed to upload images!", Colors.red);
         return false;
       },
       (uploadImage) {
         _isImageLoading = true;
-        _uploadedUrl = uploadImage.data!.url.toString();
+        _uploadedUrls = uploadImage.data!;
+
         notifyListeners();
 
-        _showSnackBar(context, "Image uploaxded successfully!", Colors.green);
+        _showSnackBar(context, "Images uploaded successfully!", Colors.green);
         return true;
       },
     );
   }
 
-  void _showSnackBar(BuildContext context, String message, Color color) {
-    showTopSnackBar(context, message, color);
+
+
+
+
+  List<Map<String, String>> _highlights = [];
+
+  List<Map<String, String>> get highlights => _highlights;
+
+  void addHighlight() {
+    _highlights.add({"key": "", "value": ""});
+    notifyListeners();
+  }
+
+  void removeHighlight(int index) {
+    if (_highlights.isNotEmpty) {
+      _highlights.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  void updateHighlight(int index, String key, String value) {
+    _highlights[index] = {"key": key, "value": value};
+    notifyListeners();
   }
 }

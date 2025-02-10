@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:vendor_app/src/core/constant/api.dart';
 import 'package:vendor_app/src/core/network_services/api_services.dart';
+import 'package:vendor_app/src/data/upload_image.dart';
 
 class ProductService extends ApiService {
   // Future createStore(data) async
@@ -47,7 +48,8 @@ class ProductService extends ApiService {
   // }
 
   Future<Response> uploadImage(File imageFile,
-      {Map<String, dynamic>? additionalFields}) async {
+      {Map<String, dynamic>? additionalFields}) async
+       {
     const String url = APIURL.uploadImage;
     return await api.uploadImage(
       url,
@@ -55,4 +57,21 @@ class ProductService extends ApiService {
       additionalFields: additionalFields,
     );
   }
+
+
+Future<Response> uploadImages(List<File> imageFiles,
+      {Map<String, dynamic>? additionalFields}) async 
+      {
+    const String url = APIURL.uploadImages;
+    return await api.uploadImages(
+      url,
+      imageFiles,
+      additionalFields: additionalFields,
+    );
+  }
+
+
+
+
+  
 }
