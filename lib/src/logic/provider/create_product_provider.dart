@@ -51,6 +51,8 @@ class ProductProvider extends ChangeNotifier {
 
   final _authRepo = getIt<ProductRepo>();
 
+  List<ProductImage> productImage = [];
+
   // Dynamic Data
   List<ProductCategoryModel> categories = [];
   Map<String, List<ProductCategoryModel>> subcategories = {};
@@ -319,8 +321,7 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteProduct(BuildContext context, String id) async 
-  {
+  Future<bool> deleteProduct(BuildContext context, String id) async {
     context.showLoader(show: true);
 
     try {
@@ -347,10 +348,8 @@ class ProductProvider extends ChangeNotifier {
           return true;
         },
       );
-    } catch (e)
-     {
+    } catch (e) {
       context.showLoader(show: false);
-      
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -364,6 +363,10 @@ class ProductProvider extends ChangeNotifier {
 
   Future<bool> updateProduct(BuildContext context, String id) async {
     context.showLoader(show: true);
+
+    for (var item in _uploadedUrls) {
+      uploadedUrl.add(item.url!);
+    }
     print("check stock ${productUnitController.text}");
     try {
       var data = {
@@ -377,6 +380,7 @@ class ProductProvider extends ChangeNotifier {
             ? '0'
             : productStockController.text),
         "name": productNameController!.text,
+        "productImages": uploadedUrl,
         "additionalInfo": productqlongDescriptionController.text,
       };
 

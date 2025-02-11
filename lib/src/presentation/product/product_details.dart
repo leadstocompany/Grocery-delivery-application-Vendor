@@ -33,12 +33,14 @@ class _ProductdetailsState extends State<Productdetails> {
     provider.productStockController.text = widget.product.stock.toString()!;
     provider.productqlongDescriptionController.text =
         widget.product.additionalInfo!;
-
     provider.productStockController.text = widget.product.stock.toString()!;
     provider.inStock = widget.product.isInStock!;
     provider.productquantityController.text =
         widget.product.quantity.toString()!;
 
+    provider.productImage = widget.product.productImages!;
+    print("kjdfghkjldfgh ${provider.productImage.first.url}");
+    provider.selectedImages.clear();
     super.initState();
   }
 
@@ -227,6 +229,43 @@ class _ProductdetailsState extends State<Productdetails> {
                       hintStyle: context.subTitleTxtStyleblack,
                       fillColor: context.appColor.whiteColor,
                     ),
+                  Gap(10.h),
+                  SizedBox(
+                    child: Container(
+                      height: 120.h,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: context.appColor.greyColor400),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: InkWell(
+                        onTap: () {
+                          provider.pickImages(context);
+                        },
+                        child: provider.selectedImages.isEmpty
+                            ? Wrap(
+                                children: provider.productImage.map((image) {
+                                  return Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Image(
+                                          image: NetworkImage(image.url),
+                                          width: 100,
+                                          height: 100));
+                                }).toList(),
+                              )
+                            : Wrap(
+                                children: provider.selectedImages.map((image) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Image.file(image,
+                                        width: 100, height: 100),
+                                  );
+                                }).toList(),
+                              ),
+                      ),
+                    ),
+                  ),
+
                   Gap(10.h),
                   SizedBox(
                     width: double.infinity,

@@ -33,6 +33,20 @@ class _OrderScreenState extends State<OrderScreen> {
   ];
   int slectedIndex = 0;
   int status = 0;
+  String convertUtcToIst(String utcTime) {
+    // Parse the UTC time string
+    DateTime utcDateTime = DateTime.parse(utcTime).toUtc();
+
+    // Convert to IST (UTC +5:30)
+    DateTime istDateTime =
+        utcDateTime.add(const Duration(hours: 5, minutes: 30));
+
+    // Format the IST datetime with AM/PM
+    String formattedDateTime =
+        DateFormat("dd-MM-yyyy hh:mm a").format(istDateTime);
+
+    return formattedDateTime; // Example: 11-02-2025 10:44 AM
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,11 +119,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
   String formatDate(String isoDate) {
     DateTime dateTime = DateTime.parse(isoDate);
-    return DateFormat("MMMM d, y").format(dateTime);
+    return DateFormat("MMMM d, y hh:mm a").format(dateTime);
   }
 
-  Widget detailsCategory() 
-  {
+  Widget detailsCategory() {
     final List<String> poductsC = [
       'New Order',
       'Awaiting Pickup',

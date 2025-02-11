@@ -98,7 +98,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
         child: Row(
           children: [
             Flexible(
-              flex: 4,
+              flex: 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -119,20 +119,17 @@ class _CustomerOrderState extends State<CustomerOrder> {
               ),
             ),
             Spacer(),
-            Flexible(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: getStatus() ?? Colors.grey, // Default color if null
-                  borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    widget.order.orderStatus,
-                    style: context.buttonTestStyle.copyWith(
-                      color: getTextColor() ?? Colors.white, // Default text color
-                    ),
+            Container(
+              decoration: BoxDecoration(
+                color: getStatus() ?? Colors.grey, // Default color if null
+                borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  widget.order.orderStatus,
+                  style: context.buttonTestStyle.copyWith(
+                    color: getTextColor() ?? Colors.white, // Default text color
                   ),
                 ),
               ),
