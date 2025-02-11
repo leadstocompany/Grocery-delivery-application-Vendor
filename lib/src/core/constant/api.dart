@@ -6,6 +6,7 @@ class APIURL {
   static const String vendorRegister = "${BASE_URL}auth/register/vendor";
   static const String createStore = "${BASE_URL}stores";
   static const String getStore = "${BASE_URL}stores/";
+
   static const String updateStore = "${BASE_URL}stores/";
   static const String forgetPassword = "${BASE_URL}auth/forgot-password/vendor";
   static const String verifyForgetPassword =
@@ -26,6 +27,6 @@ class APIURL {
 
    static const String productTags = "${BASE_URL}product-tags";
 
-
+//erre
   
 }
