@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
+import 'package:vendor_app/src/core/utiils_lib/network_image.dart';
 import 'package:vendor_app/src/data/myOrder.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
@@ -51,7 +52,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
             Gap(20.h),
             detailsCategory(),
             //if (title == "New Order")
-            orderProcess(),
+            //orderProcess(),
 
             Gap(20.h),
             if (title == "Awaiting Pickup" || title == "Completed") ...{
@@ -130,8 +131,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                   child: Text(
                     widget.order.orderStatus,
                     style: context.buttonTestStyle.copyWith(
-                      color:
-                          getTextColor() ?? Colors.white, // Default text color
+                      color: getTextColor() ?? Colors.white, // Default text color
                     ),
                   ),
                 ),
@@ -144,32 +144,32 @@ class _CustomerOrderState extends State<CustomerOrder> {
   }
 
   Widget detailsCategory() {
-    final List<Map<String, String>> productsC = [
-      {
-        "image": AppImages.product1,
-        "title": "Mama Gold Rice",
-        "subTitle": "2 bags",
-        "price": "N90,000"
-      },
-      {
-        "image": AppImages.product3,
-        "title": "Tatashe",
-        "subTitle": "1 Paint rubber",
-        "price": "N25,000"
-      },
-      {
-        "image": AppImages.product2,
-        "title": "Mama Gold Rice",
-        "subTitle": "2 bags",
-        "price": "N90,000"
-      },
-      {
-        "image": AppImages.product4,
-        "title": "Tomatoes",
-        "subTitle": "1 Basket",
-        "price": "N30,000"
-      },
-    ];
+    // final List<Map<String, String>> productsC = [
+    //   {
+    //     "image": AppImages.product1,
+    //     "title": "Mama Gold Rice",
+    //     "subTitle": "2 bags",
+    //     "price": "N90,000"
+    //   },
+    //   {
+    //     "image": AppImages.product3,
+    //     "title": "Tatashe",
+    //     "subTitle": "1 Paint rubber",
+    //     "price": "N25,000"
+    //   },
+    //   {
+    //     "image": AppImages.product2,
+    //     "title": "Mama Gold Rice",
+    //     "subTitle": "2 bags",
+    //     "price": "N90,000"
+    //   },
+    //   {
+    //     "image": AppImages.product4,
+    //     "title": "Tomatoes",
+    //     "subTitle": "1 Basket",
+    //     "price": "N30,000"
+    //   },
+    // ];
 
     return Container(
       height: 350.h,
@@ -199,10 +199,12 @@ class _CustomerOrderState extends State<CustomerOrder> {
                             padding: const EdgeInsets.only(left: 8.0, right: 8),
                             child: Row(
                               children: [
-                                Image.asset(
-                                  productsC[index]['image'].toString(),
-                                  // height: 200,
-                                  // width: 350,
+                                AppNetworkImage(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  width: 48,
+                                  imageUrl: orderitem.productImage,
+                                  backGroundColor: Colors.transparent,
                                 ),
                                 Gap(5.w),
                                 Column(
@@ -221,7 +223,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  orderitem.price.toString(),
+                                  orderitem.totalOrderItemPrice ?? " ",
                                   style: context.buttonTestStyle.copyWith(),
                                 ),
                               ],

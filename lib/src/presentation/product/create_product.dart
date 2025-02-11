@@ -9,6 +9,7 @@ import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
 import 'package:vendor_app/src/data/ProductCategoryModel.dart';
+import 'package:vendor_app/src/data/product_tags.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 import 'package:vendor_app/src/presentation/product/highlight_field.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
@@ -28,6 +29,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     super.initState();
     // Fetch products on screen load
     Provider.of<ProductProvider>(context, listen: false).getCategoryByLevel();
+    Provider.of<ProductProvider>(context, listen: false).productTags();
   }
 
   @override
@@ -173,6 +175,33 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         ),
                       if (provider.selectedSubcategory != null) Gap(15.h),
 
+                      if (provider.selectProductCommission.text.isNotEmpty) ...{
+                        Gap(10.h),
+                        CustomTextField(
+                          controller: provider.selectProductCommission,
+                          counterWidget: const Offstage(),
+                          onChanged: (value) {},
+                          readOnly: true,
+                          hintStyle: context.subTitleTxtStyleblack,
+                          fillColor: context.appColor.whiteColor,
+                        ),
+                      },
+
+                      Gap(10.h),
+                      CustomTextField(
+                        controller: provider.productNameController,
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter Name";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {},
+                        hintText: 'Product name',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
                       Gap(10.h),
                       CustomTextField(
                         controller: provider.productDescriptionController,
@@ -188,6 +217,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         hintStyle: context.subTitleTxtStyleblack,
                         fillColor: context.appColor.whiteColor,
                       ),
+
                       Gap(10.h),
                       CustomTextField(
                         controller: provider.productquantityController,
@@ -339,53 +369,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ),
                       Gap(10.h),
 
-                      // Container(
-                      //   height: 300,
-                      //   child: ListView.builder(
-                      //     itemCount: provider.highlights.length,
-                      //     itemBuilder: (context, index) {
-                      //       return HighlightField(
-                      //         index: index,
-                      //         keyText: provider.highlights[index]["key"] ?? "",
-                      //         valueText:
-                      //             provider.highlights[index]["value"] ?? "",
-                      //       );
-                      //     },
-                      //   ),
-                      // ),
-                      // SizedBox(height: 16),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     ElevatedButton.icon(
-                      //       onPressed: provider.addHighlight,
-                      //       icon: Icon(Icons.add),
-                      //       label: Text("Add Highlight"),
-                      //     ),
-                      //     ElevatedButton.icon(
-                      //       onPressed: () {
-                      //         if (provider.highlights.isNotEmpty) {
-                      //           provider.removeHighlight(
-                      //               provider.highlights.length - 1);
-                      //         }
-                      //       },
-                      //       icon: Icon(Icons.remove),
-                      //       label: Text("Remove Last"),
-                      //     ),
-                      //   ],
-                      // ),
-                      // SizedBox(height: 20),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     List<Map<String, String>> highlights =
-                      //         provider.highlights;
-                      //     print("Final Highlights JSON: $highlights");
-                      //   },
-                      //   child: Text("Submit"),
-                      // ),
+                      ElevatedButton(
+                        onPressed: () => _showDropdownMenu(context, provider),
+                        child: Text(provider.selectedTags.isEmpty
+                            ? "Select Product Tags"
+                            : provider.selectedTags
+                                .map((tag) => tag.name)
+                                .join(", ")),
+                      ),
+                      Gap(1.h),
 
-                      //  highlights(),
-
+                      highlights(),
                       Gap(20.h),
 
                       SizedBox(
@@ -397,9 +391,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                 : context.appColor.greyColor,
                             onPressed: provider.isImageLoading
                                 ? () async {
-                                    List<Map<String, String>> highlights =
-                                        provider.highlights;
-                                    print("Final Highlights JSON: $highlights");
                                     var status =
                                         await provider.createProduct(context);
                                     if (status) {
@@ -418,25 +409,76 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         }));
   }
 
+  // Widget highlights() {
+  //   return Consumer<ProductProvider>(builder: (context, provider, child) {
+  //     return Column(
+  //       children: [
+  //         provider.highlights.isEmpty
+  //             ? SizedBox.shrink() // Prevents blank screen when empty
+  //             : Container(
+  //                 height: 150,
+  //                 child: ListView.builder(
+  //                   // physics: NeverScrollableScrollPhysics(),
+  //                   itemCount: provider.highlights.length,
+  //                   itemBuilder: (context, index) {
+  //                     return HighlightField(
+  //                       index: index,
+  //                       keyText: provider.highlights[index]["key"] ?? "",
+  //                       valueText: provider.highlights[index]["value"] ?? "",
+  //                     );
+  //                   },
+  //                 ),
+  //               ),
+  //         SizedBox(height: 16),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             ElevatedButton.icon(
+  //               onPressed: () {
+  //                 provider.addHighlight(); // Ensure this method exists
+  //               },
+  //               icon: Icon(Icons.add),
+  //               label: Text("Add Highlight"),
+  //             ),
+  //             provider.highlights.isEmpty
+  //                 ? SizedBox.shrink()
+  //                 : ElevatedButton.icon(
+  //                     onPressed: () {
+  //                       if (provider.highlights.isNotEmpty) {
+  //                         provider
+  //                             .removeHighlight(provider.highlights.length - 1);
+  //                       }
+  //                     },
+  //                     icon: Icon(Icons.remove),
+  //                     label: Text("Remove Last"),
+  //                   ),
+  //           ],
+  //         ),
+  //         // SizedBox(height: 20),
+  //         // ElevatedButton(
+  //         //   onPressed: () {
+  //         //     List<Map<String, String>> highlights = provider.highlights;
+  //         //     print("Final Highlights JSON: $highlights");
+  //         //   },
+  //         //   child: Text("Submit"),
+  //         // ),
+  //       ],
+  //     );
+  //   });
+  // }
   Widget highlights() {
     return Consumer<ProductProvider>(builder: (context, provider, child) {
       return Column(
         children: [
           provider.highlights.isEmpty
-              ? SizedBox.shrink() // Prevents blank screen when empty
-              : Container(
-                  height: 150,
-                  child: ListView.builder(
-                    // physics: NeverScrollableScrollPhysics(),
-                    itemCount: provider.highlights.length,
-                    itemBuilder: (context, index) {
-                      return HighlightField(
-                        index: index,
-                        keyText: provider.highlights[index]["key"] ?? "",
-                        valueText: provider.highlights[index]["value"] ?? "",
-                      );
-                    },
-                  ),
+              ? SizedBox.shrink()
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: provider.highlights.length,
+                  itemBuilder: (context, index) {
+                    return HighlightField(index: index);
+                  },
                 ),
           SizedBox(height: 16),
           Row(
@@ -444,7 +486,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  provider.addHighlight(); // Ensure this method exists
+                  provider.addHighlight();
                 },
                 icon: Icon(Icons.add),
                 label: Text("Add Highlight"),
@@ -453,31 +495,53 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   ? SizedBox.shrink()
                   : ElevatedButton.icon(
                       onPressed: () {
-                        if (provider.highlights.isNotEmpty) {
-                          provider
-                              .removeHighlight(provider.highlights.length - 1);
-                        }
+                        provider
+                            .removeHighlight(provider.highlights.length - 1);
                       },
                       icon: Icon(Icons.remove),
                       label: Text("Remove Last"),
                     ),
             ],
           ),
-          // SizedBox(height: 20),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     List<Map<String, String>> highlights = provider.highlights;
-          //     print("Final Highlights JSON: $highlights");
-          //   },
-          //   child: Text("Submit"),
-          // ),
         ],
       );
     });
   }
+
+  void _showDropdownMenu(BuildContext context, ProductProvider provider) async {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double centerX = screenSize.width / 2;
+    final double centerY = screenSize.height / 2;
+
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        centerX - 100,
+        centerY - 100,
+        centerX + 100,
+        centerY + 100,
+      ),
+      items: provider.tagsList.map((DatumTags tag) {
+        return PopupMenuItem<DatumTags>(
+          value: tag,
+          child: Consumer<ProductProvider>(
+            builder: (context, provider, child) {
+              return CheckboxListTile(
+                title: Text(tag.name),
+                value: provider.selectedTags.contains(tag),
+                onChanged: (bool? isChecked) {
+                  provider.toggleTag(tag);
+                  Navigator.pop(context);
+                },
+              );
+            },
+          ),
+        );
+      }).toList(),
+    );
+  }
 }
 
-// Function to show the Bottom Sheet
 void _showBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,

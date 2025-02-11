@@ -7,6 +7,7 @@ import 'package:vendor_app/src/core/utiils_lib/response_type_def.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/data/prdouct_model.dart';
+import 'package:vendor_app/src/data/product_tags.dart';
 import 'package:vendor_app/src/data/upload_image.dart';
 import 'package:vendor_app/src/data/upload_multiple_images.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
@@ -39,6 +40,8 @@ class ProductRepo {
     }
   }
 
+  
+
   FutureResult<List<ProductCategoryModel>> getCategoryByLevel(data) async 
   {
     try {
@@ -62,6 +65,23 @@ class ProductRepo {
         }
       }
       return right(productModels);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+
+    FutureResult<ProductTagsModel> productTags(data) async {
+    try {
+      var response = await _productServices.productTags(data);
+
+      final ProductTagsModel prdouctModel =
+          productTagsModelFromJson(response.toString());
+
+   
+
+      return right(prdouctModel);
     } on DioException catch (e) {
       var error = CustomDioExceptions.handleError(e);
       return left(error);

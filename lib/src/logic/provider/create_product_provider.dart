@@ -7,6 +7,7 @@ import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/snack_bar.dart';
 import 'package:vendor_app/src/data/ProductCategoryModel.dart';
 import 'package:vendor_app/src/data/prdouct_model.dart';
+import 'package:vendor_app/src/data/product_tags.dart';
 import 'package:vendor_app/src/data/upload_multiple_images.dart';
 import 'package:vendor_app/src/logic/repo/product_repo.dart';
 
@@ -17,6 +18,19 @@ import 'package:vendor_app/src/logic/repo/product_repo.dart';
 import 'package:vendor_app/src/logic/services/product_locator.dart';
 
 class ProductProvider extends ChangeNotifier {
+  TextEditingController productDescriptionController = TextEditingController();
+  TextEditingController productUnitController = TextEditingController();
+  TextEditingController productPriceController = TextEditingController();
+  TextEditingController productProductDiscountPriceController =
+      TextEditingController();
+  TextEditingController productStockController = TextEditingController();
+  TextEditingController productNameController = TextEditingController();
+  TextEditingController productquantityController = TextEditingController();
+  TextEditingController productqlongDescriptionController =
+      TextEditingController();
+
+  TextEditingController selectProductCommission = TextEditingController();
+
   ProductCategoryModel? selectedCategory;
   // String selectedSubcategory = '';
   // String selectedProduct = '';
@@ -54,7 +68,7 @@ class ProductProvider extends ChangeNotifier {
   void setSubcategory(ProductCategoryModel subcategory) {
     selectedSubcategory = subcategory;
     selectedProduct = null;
-    loadProducts(subcategory); // Load products for the selected subcategory
+    loadProducts(subcategory);
     notifyListeners();
   }
 
@@ -77,9 +91,12 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+// jhdgjsfhjhdfjkgjdkfgkjh
   void setProduct(ProductCategoryModel product) {
     productId = product.id!;
     selectedProduct = product;
+    selectProductCommission.text =
+        product.commissionPercentage + "%  Admin commission";
     notifyListeners();
   }
 
@@ -151,23 +168,50 @@ class ProductProvider extends ChangeNotifier {
     );
   }
 
-  // Load subcategories for a selected category
+  List<DatumTags> tagsList = [];
+  List<DatumTags> selectedTags = [];
 
-  // final ImagePicker _picker = ImagePicker();
-  // File? _selectedImage;
+  Future<void> productTags() async {
+    try {
+      // Clear existing data before fetching new data
+      clearData();
 
-  // File? get selectedImage => _selectedImage;
+      isLoading = true;
+      notifyListeners();
 
-  // Future<void> pickImage(BuildContext context) async {
-  //   final XFile? pickedFile =
-  //       await _picker.pickImage(source: ImageSource.gallery);
+      final result = await _authRepo.productTags({});
 
-  //   if (pickedFile != null) {
-  //     _selectedImage = File(pickedFile.path);
-  //     uploadImage(context);
-  //     notifyListeners();
-  //   }
-  // }
+      result.fold(
+        (error) {
+          isLoading = false;
+          notifyListeners();
+          print("Error fetching product tags: $error"); // Debugging
+        },
+        (categoryList) {
+          if (categoryList.data != null) {
+            tagsList = categoryList.data!;
+          } else {
+            tagsList = []; // Ensure no null assignment
+          }
+          isLoading = false;
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      isLoading = false;
+      notifyListeners();
+      print("Exception in productTags: $e"); // Catch unexpected errors
+    }
+  }
+
+  void toggleTag(DatumTags tag) {
+    if (selectedTags.contains(tag)) {
+      selectedTags.remove(tag);
+    } else {
+      selectedTags.add(tag);
+    }
+    notifyListeners();
+  }
 
   List<File> _selectedImages = [];
 
@@ -190,22 +234,29 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  TextEditingController productDescriptionController = TextEditingController();
-  TextEditingController productUnitController = TextEditingController();
-  TextEditingController productPriceController = TextEditingController();
-  TextEditingController productProductDiscountPriceController =
-      TextEditingController();
-  TextEditingController productStockController = TextEditingController();
-  TextEditingController productNameController = TextEditingController();
-  TextEditingController productquantityController = TextEditingController();
-  TextEditingController productqlongDescriptionController =
-      TextEditingController();
+  clearfielsd() {
+    selectedImages.clear();
+    _uploadedUrls.clear();
+    selectedTags.clear();
+    selectedTags.clear();
+    highlights.clear();
+    notifyListeners();
+  }
+
   List<String> uploadedUrl = [];
+
+  List<String> tafIds = [];
+
+  //
   Future<bool> createProduct(BuildContext context) async {
     context.showLoader(show: true);
 
     for (var item in _uploadedUrls) {
       uploadedUrl.add(item.url!);
+    }
+
+    for (var item in selectedTags) {
+      tafIds.add(item.id!);
     }
 
     try {
@@ -220,9 +271,11 @@ class ProductProvider extends ChangeNotifier {
         "stock": int.parse(productStockController.text.isEmpty
             ? '0'
             : productStockController.text),
-        "name": selectedProduct!.name,
+        "name": productNameController.text,
         "additionalInfo": productqlongDescriptionController.text,
-        "productImages": uploadedUrl
+        "productImages": uploadedUrl,
+        "productHighlights": getHighlights(),
+        "productTagIds": tafIds
       };
 
       print("hjhdfjg  ${data}");
@@ -242,7 +295,7 @@ class ProductProvider extends ChangeNotifier {
           return false; // Login failed
         },
         (response) {
-          // Login success
+          clearfielsd();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Product created successful!"),
@@ -266,7 +319,8 @@ class ProductProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteProduct(BuildContext context, String id) async {
+  Future<bool> deleteProduct(BuildContext context, String id) async 
+  {
     context.showLoader(show: true);
 
     try {
@@ -282,7 +336,7 @@ class ProductProvider extends ChangeNotifier {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(error.message),
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.green,
             ),
           );
           return false; // Login failed
@@ -293,9 +347,10 @@ class ProductProvider extends ChangeNotifier {
           return true;
         },
       );
-    } catch (e) {
+    } catch (e)
+     {
       context.showLoader(show: false);
-      print("Unexpected error: $e");
+      
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -423,28 +478,53 @@ class ProductProvider extends ChangeNotifier {
     );
   }
 
+  // List<Map<String, String>> _highlights = [];
 
+  // List<Map<String, String>> get highlights => _highlights;
 
+  // void addHighlight() {
+  //   _highlights.add({"key": "", "value": ""});
+  //   notifyListeners();
+  // }
 
+  // void removeHighlight(int index) {
+  //   if (_highlights.isNotEmpty) {
+  //     _highlights.removeAt(index);
+  //     notifyListeners();
+  //   }
+  // }
 
-  List<Map<String, String>> _highlights = [];
+  // void updateHighlight(int index, String key, String value) {
+  //   _highlights[index] = {"key": key, "value": value};
+  //   notifyListeners();
+  // }
 
-  List<Map<String, String>> get highlights => _highlights;
+  List<Map<String, String>> highlights = [];
+  List<TextEditingController> keyControllers = [];
+  List<TextEditingController> valueControllers = [];
 
   void addHighlight() {
-    _highlights.add({"key": "", "value": ""});
+    highlights.add({"key": "", "value": ""});
+    keyControllers.add(TextEditingController());
+    valueControllers.add(TextEditingController());
     notifyListeners();
   }
 
   void removeHighlight(int index) {
-    if (_highlights.isNotEmpty) {
-      _highlights.removeAt(index);
-      notifyListeners();
-    }
+    highlights.removeAt(index);
+    keyControllers[index].dispose();
+    valueControllers[index].dispose();
+    keyControllers.removeAt(index);
+    valueControllers.removeAt(index);
+    notifyListeners();
   }
 
   void updateHighlight(int index, String key, String value) {
-    _highlights[index] = {"key": key, "value": value};
+    highlights[index] = {"key": key, "value": value};
     notifyListeners();
+  }
+
+  List<Map<String, String>> getHighlights() {
+    return highlights;
   }
 }

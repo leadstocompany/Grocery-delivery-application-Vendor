@@ -41,11 +41,11 @@ class ProductService extends ApiService {
     return response;
   }
 
-  // Future uploadImage(data) async
-  // {
-  //   var response = await api.post(APIURL.uploadImage, data: jsonEncode(data));
-  //   return response;
-  // }
+  Future productTags(data) async
+  {
+    var response = await api.get(APIURL.productTags, data: jsonEncode(data));
+    return response;
+  }
 
   Future<Response> uploadImage(File imageFile,
       {Map<String, dynamic>? additionalFields}) async

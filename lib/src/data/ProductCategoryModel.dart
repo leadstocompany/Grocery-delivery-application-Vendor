@@ -8,7 +8,7 @@
 
 // dynamic productCategoryModelToJson(List<ProductCategoryModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-// class ProductCategoryModel 
+// class ProductCategoryModel
 // {
 //     dynamic id;
 //     dynamic name;
@@ -94,24 +94,25 @@ class ProductCategoryModel {
   DateTime? updatedAt;
   String? parentCategoryId;
   String? path;
+  dynamic commissionPercentage;
   ProductCategoryModel? parentCategory;
   List<ProductCategoryModel>? childCategories;
 
-  ProductCategoryModel({
-    this.id,
-    this.name,
-    this.description,
-    this.image,
-    this.slug,
-    this.level,
-    this.isActive,
-    this.createdAt,
-    this.updatedAt,
-    this.parentCategoryId,
-    this.path,
-    this.parentCategory,
-    this.childCategories,
-  });
+  ProductCategoryModel(
+      {this.id,
+      this.name,
+      this.description,
+      this.image,
+      this.slug,
+      this.level,
+      this.isActive,
+      this.createdAt,
+      this.updatedAt,
+      this.parentCategoryId,
+      this.path,
+      this.parentCategory,
+      this.childCategories,
+      this.commissionPercentage});
 
   factory ProductCategoryModel.fromJson(Map<String, dynamic> json) =>
       ProductCategoryModel(
@@ -137,6 +138,7 @@ class ProductCategoryModel {
             ? []
             : List<ProductCategoryModel>.from(json["childCategories"]
                 .map((x) => ProductCategoryModel.fromJson(x))),
+        commissionPercentage: json["commissionPercentage"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -155,5 +157,6 @@ class ProductCategoryModel {
         "childCategories": childCategories == null
             ? []
             : List<dynamic>.from(childCategories!.map((x) => x.toJson())),
+        "commissionPercentage": commissionPercentage,
       };
 }

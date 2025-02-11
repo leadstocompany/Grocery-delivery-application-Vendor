@@ -36,7 +36,8 @@ class _ProductdetailsState extends State<Productdetails> {
 
     provider.productStockController.text = widget.product.stock.toString()!;
     provider.inStock = widget.product.isInStock!;
-    provider.productquantityController.text =  widget.product.quantity.toString()!;
+    provider.productquantityController.text =
+        widget.product.quantity.toString()!;
 
     super.initState();
   }
@@ -250,12 +251,12 @@ class _ProductdetailsState extends State<Productdetails> {
                             text: 'Delete Product',
                             textColor: context.appColor.redColor,
                             onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Working on progress "),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content: Text("Working on progress "),
+                              //     backgroundColor: Colors.red,
+                              //   ),
+                              // );
                               _showBottomSheet(context);
 
                               //context.clearAndPush(routePath: MyRoutes.LOGIN);

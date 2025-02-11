@@ -108,7 +108,8 @@ class _OrderScreenState extends State<OrderScreen> {
     return DateFormat("MMMM d, y").format(dateTime);
   }
 
-  Widget detailsCategory() {
+  Widget detailsCategory() 
+  {
     final List<String> poductsC = [
       'New Order',
       'Awaiting Pickup',
