@@ -214,7 +214,8 @@ class UserNameScreen extends StatelessWidget {
             child: ButtonElevated(
               text: AppString.continueTxt,
               backgroundColor: context.appColor.primarycolor,
-              onPressed: () async {
+              onPressed: () async 
+              {
                 if (_formKey.currentState?.validate() ?? false) {
                   await SharedPrefUtils.setFistName(
                       firstName: pageNotifier.name.text ?? "");

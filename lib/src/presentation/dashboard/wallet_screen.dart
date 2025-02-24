@@ -18,7 +18,8 @@ class WalletScreen extends StatefulWidget {
   State<WalletScreen> createState() => _WalletScreenState();
 }
 
-class _WalletScreenState extends State<WalletScreen> {
+class _WalletScreenState extends State<WalletScreen> 
+{
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   @override

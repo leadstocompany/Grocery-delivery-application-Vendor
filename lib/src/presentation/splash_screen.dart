@@ -24,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
         context.clearAndPush(routePath: MyRoutes.ONBOARDING);
       } else {
         if (await SharedPrefUtils.getToken() == "1" ||
-            await SharedPrefUtils.getToken() == null) {
+            await SharedPrefUtils.getToken() == null)
+             {
           context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
         } else {
           Provider.of<HomeProvider>(context, listen: false)

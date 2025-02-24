@@ -102,8 +102,7 @@ class PhoneScreen extends StatelessWidget {
                 if (number.length == 10) 
                 {
                   
-                  final success =
-                      await pageNotifier.sendOtp(number, context, country_code);
+                  final success = await pageNotifier.sendOtp(number, context, country_code);
 
                   if (success) {
                     pageNotifier.goToNextPage(); // Change page

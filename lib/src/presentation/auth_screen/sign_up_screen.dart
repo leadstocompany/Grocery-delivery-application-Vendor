@@ -17,9 +17,11 @@ class LoginHostScreen extends StatefulWidget {
   State<LoginHostScreen> createState() => _LoginHostScreenState();
 }
 
-class _LoginHostScreenState extends State<LoginHostScreen> {
+class _LoginHostScreenState extends State<LoginHostScreen> 
+{
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     return ChangeNotifierProvider(
       create: (context) => PageNotifier(),
       child: WillPopScope(
