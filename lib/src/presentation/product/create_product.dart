@@ -274,6 +274,33 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
                       Gap(10.h),
                       CustomTextField(
+                        // controller:
+                        //     provider.productProductDiscountPriceController,
+                        keyBoardType: TextInputType.number,
+                        validator: (val) {
+                          if (val.toString().isEmpty) {
+                            return "Please enter Discount Price";
+                          }
+                          return null;
+                        },
+                        counterWidget: const Offstage(),
+                        onChanged: (value) {
+                          setState(() {
+                            provider.productProductDiscountPriceController
+                                .text = (double.parse(
+                                        provider.productPriceController.text) *
+                                    (1 - double.parse(value) / 100))
+                                .toString();
+                          });
+//
+                        },
+                        hintText: 'Discount Price %',
+                        hintStyle: context.subTitleTxtStyleblack,
+                        fillColor: context.appColor.whiteColor,
+                      ),
+                      Gap(10.h),
+                      CustomTextField(
+                        readOnly: true,
                         controller:
                             provider.productProductDiscountPriceController,
                         keyBoardType: TextInputType.number,
@@ -285,7 +312,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         },
                         counterWidget: const Offstage(),
                         onChanged: (value) {},
-                        hintText: 'Discount Price',
+                        hintText: 'After Discount product Price',
                         hintStyle: context.subTitleTxtStyleblack,
                         fillColor: context.appColor.whiteColor,
                       ),
@@ -409,63 +436,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         }));
   }
 
-  // Widget highlights() {
-  //   return Consumer<ProductProvider>(builder: (context, provider, child) {
-  //     return Column(
-  //       children: [
-  //         provider.highlights.isEmpty
-  //             ? SizedBox.shrink() // Prevents blank screen when empty
-  //             : Container(
-  //                 height: 150,
-  //                 child: ListView.builder(
-  //                   // physics: NeverScrollableScrollPhysics(),
-  //                   itemCount: provider.highlights.length,
-  //                   itemBuilder: (context, index) {
-  //                     return HighlightField(
-  //                       index: index,
-  //                       keyText: provider.highlights[index]["key"] ?? "",
-  //                       valueText: provider.highlights[index]["value"] ?? "",
-  //                     );
-  //                   },
-  //                 ),
-  //               ),
-  //         SizedBox(height: 16),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             ElevatedButton.icon(
-  //               onPressed: () {
-  //                 provider.addHighlight(); // Ensure this method exists
-  //               },
-  //               icon: Icon(Icons.add),
-  //               label: Text("Add Highlight"),
-  //             ),
-  //             provider.highlights.isEmpty
-  //                 ? SizedBox.shrink()
-  //                 : ElevatedButton.icon(
-  //                     onPressed: () {
-  //                       if (provider.highlights.isNotEmpty) {
-  //                         provider
-  //                             .removeHighlight(provider.highlights.length - 1);
-  //                       }
-  //                     },
-  //                     icon: Icon(Icons.remove),
-  //                     label: Text("Remove Last"),
-  //                   ),
-  //           ],
-  //         ),
-  //         // SizedBox(height: 20),
-  //         // ElevatedButton(
-  //         //   onPressed: () {
-  //         //     List<Map<String, String>> highlights = provider.highlights;
-  //         //     print("Final Highlights JSON: $highlights");
-  //         //   },
-  //         //   child: Text("Submit"),
-  //         // ),
-  //       ],
-  //     );
-  //   });
-  // }
   Widget highlights() {
     return Consumer<ProductProvider>(builder: (context, provider, child) {
       return Column(
@@ -526,13 +496,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           value: tag,
           child: Consumer<ProductProvider>(
             builder: (context, provider, child) {
-              return CheckboxListTile(
-                title: Text(tag.name),
-                value: provider.selectedTags.contains(tag),
-                onChanged: (bool? isChecked) {
-                  provider.toggleTag(tag);
-                  Navigator.pop(context);
-                },
+              return SizedBox(
+                width: 200, // Set a fixed width or use double.infinity
+                child: CheckboxListTile(
+                  title: Text(tag.name, overflow: TextOverflow.ellipsis),
+                  value: provider.selectedTags.contains(tag),
+                  onChanged: (bool? isChecked) {
+                    provider.toggleTag(tag);
+                    Navigator.pop(context);
+                  },
+                ),
               );
             },
           ),

@@ -21,6 +21,8 @@ class Productdetails extends StatefulWidget {
 }
 
 class _ProductdetailsState extends State<Productdetails> {
+  TextEditingController calculatedicountpercentage = TextEditingController();
+
   @override
   void initState() {
     final provider = Provider.of<ProductProvider>(context, listen: false);
@@ -39,9 +41,30 @@ class _ProductdetailsState extends State<Productdetails> {
         widget.product.quantity.toString()!;
 
     provider.productImage = widget.product.productImages!;
-    print("kjdfghkjldfgh ${provider.productImage.first.url}");
+
     provider.selectedImages.clear();
+
+    calculatedicountpercentage.text = calculateDiscountPercentage(
+            double.parse(widget.product.basePrice!),
+            double.parse(widget.product.discountPrice!))
+        .toString();
+
     super.initState();
+  }
+
+  int calculateDiscountPercentage(double basePrice, double discountPrice) {
+    print(
+        "Base Price (Before Discount): $basePrice, Discount Price (After Discount): $discountPrice");
+
+    if (basePrice <= 0 || discountPrice <= 0 || discountPrice > basePrice) {
+      print("Error: Invalid price values.");
+      return 0;
+    }
+
+    double discountAmount = basePrice - discountPrice;
+    double discountPercentage = (discountAmount / basePrice) * 100;
+
+    return discountPercentage.round();
   }
 
   @override
@@ -181,8 +204,51 @@ class _ProductdetailsState extends State<Productdetails> {
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
+
                   Text("Product discount price"),
                   CustomTextField(
+                    controller: calculatedicountpercentage,
+                    keyBoardType: TextInputType.number,
+                    validator: (val) {
+                      if (val.toString().isEmpty) {
+                        return "Please enter Discount Price";
+                      }
+                      return null;
+                    },
+                    counterWidget: const Offstage(),
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        provider.productProductDiscountPriceController.clear();
+                        return;
+                      }
+
+                      double discount = double.tryParse(value) ?? 0;
+                      double productPrice = double.tryParse(
+                              provider.productPriceController.text) ??
+                          0;
+
+                      double discountedPrice =
+                          productPrice * (1 - discount / 100);
+
+                      provider.productProductDiscountPriceController.value =
+                          TextEditingValue(
+                        text: discountedPrice
+                            .toStringAsFixed(2), // Keep proper decimal format
+                        selection: TextSelection.collapsed(
+                            offset: discountedPrice.toStringAsFixed(2).length),
+                      );
+//
+                    },
+                    hintText: 'Discount Price %',
+                    hintStyle: context.subTitleTxtStyleblack,
+                    fillColor: context.appColor.whiteColor,
+                  ),
+
+                  ///
+
+                  Text("Product after discount price"),
+                  CustomTextField(
+                    readOnly: true,
                     controller: provider.productProductDiscountPriceController,
                     validator: (val) {
                       if (val.toString().isEmpty) {
@@ -200,6 +266,7 @@ class _ProductdetailsState extends State<Productdetails> {
                     fillColor: context.appColor.whiteColor,
                   ),
                   Gap(10.h),
+
                   SwitchListTile(
                     title: Text('Mark Product in stock'),
                     hoverColor: context.appColor.primarycolor,
@@ -230,9 +297,11 @@ class _ProductdetailsState extends State<Productdetails> {
                       fillColor: context.appColor.whiteColor,
                     ),
                   Gap(10.h),
+                
+
                   SizedBox(
                     child: Container(
-                      height: 120.h,
+                      // height: 120.h,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                           border:
@@ -243,16 +312,24 @@ class _ProductdetailsState extends State<Productdetails> {
                           provider.pickImages(context);
                         },
                         child: provider.selectedImages.isEmpty
-                            ? Wrap(
-                                children: provider.productImage.map((image) {
-                                  return Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Image(
-                                          image: NetworkImage(image.url),
-                                          width: 100,
-                                          height: 100));
-                                }).toList(),
-                              )
+                            ? provider.productImage.isNotEmpty
+                                ? Wrap(
+                                    children:
+                                        provider.productImage.map((image) {
+                                      return Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Image(
+                                              image: NetworkImage(image.url),
+                                              width: 100,
+                                              height: 100));
+                                    }).toList(),
+                                  )
+                                : Center(
+                                    child: Icon(
+                                      Icons.camera,
+                                      size: 100,
+                                    ),
+                                  )
                             : Wrap(
                                 children: provider.selectedImages.map((image) {
                                   return Padding(

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
@@ -18,6 +21,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final ImagePicker _picker = ImagePicker();
+
+  String? profile;
+  File? _image;
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        profile = pickedFile.path;
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var userName = Provider.of<HomeProvider>(context).userName;
@@ -46,24 +65,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     InkWell(
-                      onTap: () {},
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(25),
-                        child: Image.network(
-                          "",
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              AppImages.Avatar,
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        ),
+                      onTap: () {
+                        _pickImage();
+                      },
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: _image != null
+                            ? FileImage(_image!)
+                            : (profile != null && profile!.isNotEmpty
+                                ? NetworkImage(profile!)
+                                : const AssetImage(
+                                    "assets/default_profile.png")),
                       ),
+
+                      // ClipRRect(
+                      //   borderRadius: BorderRadius.circular(25),
+                      //   child: Image.network(
+                      //     "",
+                      //     width: 50,
+                      //     height: 50,
+                      //     fit: BoxFit.cover,
+                      //     errorBuilder: (context, error, stackTrace) {
+                      //       return Image.asset(
+                      //         AppImages.Avatar,
+                      //         width: 50,
+                      //         height: 50,
+                      //         fit: BoxFit.cover,
+                      //       );
+                      //     },
+                      //   ),
+                      // ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -157,6 +189,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       case 2:
                         context.push(
                           MyRoutes.SETTING,
+                        );
+                        break;
+
+                      case 3:
+                        context.push(
+                          MyRoutes.LIVESUPPORT,
                         );
                         break;
 

@@ -13,6 +13,7 @@ import 'package:vendor_app/src/presentation/auth_screen/login_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/sign_up_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/approval_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/bussiness_details.dart';
+import 'package:vendor_app/src/presentation/message/message_screen.dart';
 import 'package:vendor_app/src/presentation/profile/Setting_screen.dart';
 import 'package:vendor_app/src/presentation/store/create_store.dart';
 import 'package:vendor_app/src/presentation/bussiness/setup_bussiness.dart';
@@ -165,6 +166,14 @@ class MyRoutes {
         name: FORGETNEWPASSWORD,
         pageBuilder: (context, state) => ForgetNewPassword(),
       ),
+        animatedGoRoute(
+        path: LIVESUPPORT,
+        name: LIVESUPPORT,
+        pageBuilder: (context, state) => MessageScreen(),
+      ),
+
+
+      
     ],
   );
 
@@ -205,6 +214,10 @@ class MyRoutes {
   static const FORGETNEWPASSWORD = "/forgetnewpassword";
 
   static const UPDATESTORE = "/updatestore";
+    static const LIVESUPPORT = "/messageScreen";
+
+
+  
 }
 
 GoRoute animatedGoRoute({

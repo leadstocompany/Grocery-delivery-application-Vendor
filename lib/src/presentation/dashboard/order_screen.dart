@@ -8,6 +8,7 @@ import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
 import 'package:vendor_app/src/logic/provider/home_provider.dart';
+import 'package:vendor_app/src/presentation/data_notfound.dart';
 import 'package:vendor_app/src/presentation/widgets/headerprofile.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -24,13 +25,6 @@ class _OrderScreenState extends State<OrderScreen> {
     super.initState();
   }
 
-  final List<String> items = [
-    'All',
-    'Awaiting Pickup',
-    'In Transit',
-    'Completed',
-    'Cancelled',
-  ];
   int slectedIndex = 0;
   int status = 0;
   String convertUtcToIst(String utcTime) {
@@ -72,9 +66,10 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget categoryList() {
     final List<String> items = [
       'All',
-      'Awaiting Pickup',
-      'In Transit',
-      'Completed',
+      'Pending',
+      'Procesing',
+      'Shipped',
+      'Delivered',
       'Cancelled',
     ];
     return Container(
@@ -124,10 +119,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Widget detailsCategory() {
     final List<String> poductsC = [
-      'New Order',
-      'Awaiting Pickup',
-      'In Transit',
-      'Completed',
+      'Pending',
+      'Procesing',
+      'Shipped',
+      'Delivered',
       'Cancelled',
     ];
 
@@ -138,7 +133,13 @@ class _OrderScreenState extends State<OrderScreen> {
         }
 
         if (orderProvider.orderList.isEmpty) {
-          return Center(child: Text('No orders found!'));
+          return Padding(
+            padding: const EdgeInsets.only(top: 150),
+            child: DataNotFound(
+              imagePath: 'assets/images/notfound.jpg',
+              message: "No Order Available! ",
+            ),
+          );
         }
         return Expanded(
           child: ListView.builder(
@@ -210,57 +211,72 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget orderList() {
-    return Expanded(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          status = index;
-          return Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Order ID  #212323",
-                              style: context.subTitleTextStyleBloack,
-                            ),
-                            Text(
-                              "Today | 9:00 am",
-                              style: context.subTitleTxtStyle,
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        Row(
-                          children: [
-                            Text("3 Items "),
-                            Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              color: context.appColor.primarycolor,
-                              size: 20,
-                            )
-                          ],
-                        )
-                      ],
+    return Consumer<HomeProvider>(builder: (context, orderProvider, child) {
+      if (orderProvider.isloading) {
+        return Center(child: CircularProgressIndicator());
+      }
+
+      if (orderProvider.orderList.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 150),
+          child: DataNotFound(
+            imagePath: 'assets/images/notfound.jpg',
+            message: "No Order Available! ",
+          ),
+        );
+      }
+      return Expanded(
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            status = index;
+            return Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Order ID  #212323",
+                                style: context.subTitleTextStyleBloack,
+                              ),
+                              Text(
+                                "Today | 9:00 am",
+                                style: context.subTitleTxtStyle,
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Row(
+                            children: [
+                              Text("3 Items "),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: context.appColor.primarycolor,
+                                size: 20,
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Divider()
-                ],
+                    Divider()
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      ),
-    );
+            );
+          },
+        ),
+      );
+    });
   }
 
   Color getStatus(orderStatus) {

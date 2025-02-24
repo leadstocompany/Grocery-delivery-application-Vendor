@@ -18,48 +18,232 @@ class WalletScreen extends StatefulWidget {
   State<WalletScreen> createState() => _WalletScreenState();
 }
 
-class _WalletScreenState extends State<WalletScreen> 
-{
+class _WalletScreenState extends State<WalletScreen> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: Padding(
+  //       padding: const EdgeInsets.all(15.0),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Gap(10.h),
+  //           Text(
+  //             "Wallet",
+  //             style: context.titleStyle.copyWith(color: Colors.black),
+  //           ),
+  //           Gap(10.h),
+  //           cardWidget(),
+  //           Gap(30.h),
+  //           Row(
+  //             children: [
+  //               Text(
+  //                 "Recent Transaction",
+  //                 style: context.titleStyle.copyWith(color: Colors.black),
+  //               ),
+  //               Spacer(),
+  //               InkWell(
+  //                 onTap: () {
+  //                   context.push(MyRoutes.TRANSACTIONHISTORY);
+  //                 },
+  //                 child: Text(
+  //                   "View All",
+  //                   style: context.subTitleTxtStyleblack
+  //                       .copyWith(fontSize: 15.sp)
+  //                       .copyWith(color: context.appColor.primarycolor),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           recentHistory(),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  final List<Map<String, dynamic>> transactions = [
+    {
+      'date': 'Nov 1st, to, Nov 7th 2025',
+      'transactions': [
+        {'title': 'Product name', 'id': '#212323', 'amount': '\$50,000'},
+        {'title': 'Delivery Refund', 'id': '#212324', 'amount': '\$20,000'},
+      ],
+    },
+    {
+      'date': 'Oct 24st, to, Oct 30th 2025',
+      'transactions': [
+        {'title': 'Product name', 'id': '#212322', 'amount': '\$30,000'},
+        {'title': 'Product name', 'id': '#212322', 'amount': '\$30,000'},
+        {'title': 'Product name', 'id': '#212322', 'amount': '\$30,000'},
+      ],
+    },
+    {
+      'date': '2023-10-06',
+      'transactions': [
+        {'title': 'Product name', 'id': '#212321', 'amount': '\$10,000'},
+        {'title': 'Product name', 'id': '#212321', 'amount': '\$10,000'},
+      ],
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text('Wallet History',
+            style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
+        actions: [],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Gap(10.h),
-            Text(
-              "Wallet",
-              style: context.titleStyle.copyWith(color: Colors.black),
-            ),
-            Gap(10.h),
-            cardWidget(),
-            Gap(30.h),
-            Row(
-              children: [
-                Text(
-                  "Recent Transaction",
-                  style: context.titleStyle.copyWith(color: Colors.black),
+        child: ListView.builder(
+          itemCount: transactions.length,
+          itemBuilder: (context, dateIndex) {
+            final transactionDate = transactions[dateIndex];
+
+            return Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color.fromARGB(255, 234, 231, 231)),
+                  color: context.appColor.whiteColor,
+                  borderRadius: BorderRadius.all(Radius.circular(3.0)),
                 ),
-                Spacer(),
-                InkWell(
-                  onTap: () {
-                    context.push(MyRoutes.TRANSACTIONHISTORY);
-                  },
-                  child: Text(
-                    "View All",
-                    style: context.subTitleTxtStyleblack
-                        .copyWith(fontSize: 15.sp)
-                        .copyWith(color: context.appColor.primarycolor),
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 8),
+                      child: Row(
+                        children: [
+                          Text(
+                            transactionDate['date'],
+                            style: context.buttonTestStyle.copyWith(),
+                          ),
+                          Spacer(),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xffFFDEDE),
+                              borderRadius: BorderRadius.circular(5.r),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8),
+                              child: Text(
+                                "Pending",
+                                style:
+                                    context.subTitleTextStyleBloack.copyWith(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Total Order",
+                            style: context.buttonTestStyle.copyWith(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900),
+                          ),
+                          Text(
+                            "100",
+                            style: context.buttonTestStyle.copyWith(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900),
+                          ),
+                          Text(
+                            "₹10000",
+                            style: context.buttonTestStyle.copyWith(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900),
+                          ),
+                        ],
+                      ),
+                    ),
+                    for (var i = 0;
+                        i < transactionDate['transactions'].length;
+                        i++) ...{
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              AppImages.product1,
+                              // height: 200,
+                              // width: 350,
+                            ),
+                            Gap(5.w),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  transactionDate['transactions'][i]['title'] ??
+                                      "",
+                                  style: context.buttonTestStyle
+                                      .copyWith(fontSize: 12.sp),
+                                ),
+                                Text(
+                                  transactionDate['transactions'][i]['id'] ??
+                                      '',
+                                  style: context.buttonTestStyle.copyWith(
+                                      color: context.appColor.greyColor),
+                                ),
+                                Text(
+                                    transactionDate['transactions'][i]
+                                            ['amount'] ??
+                                        '',
+                                    style: context.buttonTestStyle.copyWith(
+                                        fontSize: 12.sp, color: Colors.black)),
+                              ],
+                            ),
+                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      transactionDate['transactions'][i]
+                                              ['ammount'] ??
+                                          '',
+                                      style: context.buttonTestStyle.copyWith(
+                                          fontSize: 12.sp,
+                                          color: Colors.black)),
+
+                                  Text('November25th, 2023',
+                                      style:
+                                          context.subTitleTxtStyle.copyWith()),
+                                  // Here you can format the date if needed
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (i < transactionDate['transactions'].length - 1)
+                        Divider(
+                          thickness: 0.2,
+                        )
+                    }
+                  ],
                 ),
-              ],
-            ),
-            recentHistory(),
-          ],
+              ),
+            );
+          },
         ),
       ),
     );

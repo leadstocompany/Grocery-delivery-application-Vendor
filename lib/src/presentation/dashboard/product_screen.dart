@@ -7,6 +7,7 @@ import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/logic/provider/create_product_provider.dart';
+import 'package:vendor_app/src/presentation/data_notfound.dart';
 import 'package:vendor_app/src/presentation/widgets/headerprofile.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -55,19 +56,22 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Widget detailsCategory() {
-   
-    return Consumer<ProductProvider>(builder: (context, provider, child) 
-    {
+    return Consumer<ProductProvider>(builder: (context, provider, child) {
       if (provider.isLoadingg) {
         return Center(child: CircularProgressIndicator());
       } else if (provider.products1.isEmpty) {
-        return Center(child: Text('No products available'));
+        return Padding(
+          padding: const EdgeInsets.only(top: 150),
+          child: DataNotFound(
+            imagePath: 'assets/images/notfound.jpg',
+            message: "No Order Available! ",
+          ),
+        );
       } else {
         return Expanded(
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: provider.products1.length,
-            
             itemBuilder: (context, index) {
               final product = provider.products1[index];
               status = index;
@@ -101,8 +105,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                       .broken_image); // Fallback icon for invalid URLs
                                 },
                               ),
-
-                             
                               Gap(5.w),
                               Container(
                                 width: 150,

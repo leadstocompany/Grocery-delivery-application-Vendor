@@ -368,21 +368,38 @@ class ProductProvider extends ChangeNotifier {
       uploadedUrl.add(item.url!);
     }
     print("check stock ${productUnitController.text}");
+    var data;
     try {
-      var data = {
-        "quantity": productquantityController.text,
-        "description": productDescriptionController.text,
-        "unit": productUnitController.text,
-        "basePrice": productPriceController.text,
-        "discountPrice": productProductDiscountPriceController.text,
-        "isInStock": inStock,
-        "stock": int.parse(productStockController.text.isEmpty
-            ? '0'
-            : productStockController.text),
-        "name": productNameController!.text,
-        "productImages": uploadedUrl,
-        "additionalInfo": productqlongDescriptionController.text,
-      };
+      if (uploadedUrl.isNotEmpty) {
+        data = {
+          "quantity": productquantityController.text,
+          "description": productDescriptionController.text,
+          "unit": productUnitController.text,
+          "basePrice": productPriceController.text,
+          "discountPrice": productProductDiscountPriceController.text,
+          "isInStock": inStock,
+          "stock": int.parse(productStockController.text.isEmpty
+              ? '0'
+              : productStockController.text),
+          "name": productNameController!.text,
+          "productImages": uploadedUrl,
+          "additionalInfo": productqlongDescriptionController.text,
+        };
+      } else {
+        data = {
+          "quantity": productquantityController.text,
+          "description": productDescriptionController.text,
+          "unit": productUnitController.text,
+          "basePrice": productPriceController.text,
+          "discountPrice": productProductDiscountPriceController.text,
+          "isInStock": inStock,
+          "stock": int.parse(productStockController.text.isEmpty
+              ? '0'
+              : productStockController.text),
+          "name": productNameController!.text,
+          "additionalInfo": productqlongDescriptionController.text,
+        };
+      }
 
       print("check stock ${data}");
 
@@ -402,6 +419,8 @@ class ProductProvider extends ChangeNotifier {
           return false; // Login failed
         },
         (response) {
+          _uploadedUrls.clear();
+          uploadedUrl.clear();
           _showSnackBar(context, "Product Updated successful!", Colors.green);
 
           return true;
