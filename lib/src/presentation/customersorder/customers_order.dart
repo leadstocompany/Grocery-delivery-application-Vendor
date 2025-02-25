@@ -1,11 +1,15 @@
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/network_image.dart';
 import 'package:vendor_app/src/data/myOrder.dart';
+import 'package:vendor_app/src/logic/provider/home_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class CustomerOrder extends StatefulWidget {
@@ -43,44 +47,46 @@ class _CustomerOrderState extends State<CustomerOrder> {
         title: Text('Customer’s Order',
             style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            cardOrder(),
-            Gap(20.h),
-            detailsCategory(),
-            //if (title == "New Order")
-            //orderProcess(),
-
-            Gap(20.h),
-            if (title == "Awaiting Pickup" || title == "Completed") ...{
-              Text(
-                'Agent’s Information',
-                style: context.titleStyleRegular.copyWith(),
-              ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              cardOrder(),
               Gap(20.h),
-              CustomerInformation()
-            },
-            if (title == "Cancelled") ...{
-              Text(
-                'Agent’s Information',
-                style: context.titleStyleRegular.copyWith(),
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.circle, size: 15, color: Colors.black),
-                      Text(
-                        ' Order cancelled by the customer. ',
-                        style: context.subTitleTextStyleBloack.copyWith(),
-                      ),
-                    ],
-                  ))
-            }
-          ],
+              detailsCategory(),
+              //  if (title == "New Order")
+              orderProcess(),
+
+              Gap(20.h),
+              if (title == "Awaiting Pickup" || title == "Completed") ...{
+                Text(
+                  'Agent’s Information',
+                  style: context.titleStyleRegular.copyWith(),
+                ),
+                Gap(20.h),
+                CustomerInformation()
+              },
+              if (title == "Cancelled") ...{
+                Text(
+                  'Agent’s Information',
+                  style: context.titleStyleRegular.copyWith(),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.circle, size: 15, color: Colors.black),
+                        Text(
+                          ' Order cancelled by the customer. ',
+                          style: context.subTitleTextStyleBloack.copyWith(),
+                        ),
+                      ],
+                    ))
+              }
+            ],
+          ),
         ),
       ),
     );
@@ -141,33 +147,6 @@ class _CustomerOrderState extends State<CustomerOrder> {
   }
 
   Widget detailsCategory() {
-    // final List<Map<String, String>> productsC = [
-    //   {
-    //     "image": AppImages.product1,
-    //     "title": "Mama Gold Rice",
-    //     "subTitle": "2 bags",
-    //     "price": "N90,000"
-    //   },
-    //   {
-    //     "image": AppImages.product3,
-    //     "title": "Tatashe",
-    //     "subTitle": "1 Paint rubber",
-    //     "price": "N25,000"
-    //   },
-    //   {
-    //     "image": AppImages.product2,
-    //     "title": "Mama Gold Rice",
-    //     "subTitle": "2 bags",
-    //     "price": "N90,000"
-    //   },
-    //   {
-    //     "image": AppImages.product4,
-    //     "title": "Tomatoes",
-    //     "subTitle": "1 Basket",
-    //     "price": "N30,000"
-    //   },
-    // ];
-
     return Container(
       height: 350.h,
       decoration: BoxDecoration(
@@ -300,7 +279,9 @@ class _CustomerOrderState extends State<CustomerOrder> {
               width: double.infinity,
               child: ButtonElevated(
                 text: 'Process Order',
-                onPressed: () {},
+                onPressed: () {
+                  _showBottomSheet(context);
+                },
                 backgroundColor: context.appColor.primarycolor,
               ),
             ),
@@ -364,6 +345,125 @@ class _CustomerOrderState extends State<CustomerOrder> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: context.appColor.greyColor400),
+            color: context.appColor.whiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0)),
+          ),
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Centered App Logo
+              Center(
+                child: Image.asset(
+                  AppImages.applogo, // Replace with your logo path
+                  height: 100.h, // Adjust height as necessary
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.center,
+                child: Text('Please Enter OTP', style: context.subTitleStyle),
+              ),
+
+              Gap(20.h),
+              Pinput(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                length: 6,
+                defaultPinTheme: PinTheme(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5.h,
+                    horizontal: 8.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: context.appColor.whiteColor,
+                    borderRadius: BorderRadius.circular(4.r),
+                    border: Border.all(
+                        color: context.appColor.greyColor400, width: 1),
+                  ),
+                  textStyle:
+                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                ),
+                focusedPinTheme: PinTheme(
+                  decoration: BoxDecoration(
+                    color: context.appColor.greyColor100,
+                    borderRadius: BorderRadius.circular(4.r),
+                    border:
+                        Border.all(color: context.appColor.primary, width: 1),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5.h,
+                    horizontal: 8.w,
+                  ),
+                  textStyle:
+                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                ),
+                onChanged: (value) {
+                  // Optionally handle intermediate changes if needed
+                  // But do not call `pageNotifier.goToNextPage()` here
+                },
+                onCompleted: (value) async 
+                {
+             //     print("kjdfhgkfgkhk   ${widget.order.items.i.toString()}");
+                  var status =
+                      await Provider.of<HomeProvider>(context, listen: false)
+                          .getAssignedOtp(
+                              context, widget.order.id.toString(), value);
+                  if (status) {
+                    Navigator.pop(context);
+                    ArtSweetAlert.show(
+                        context: context,
+                        artDialogArgs: ArtDialogArgs(
+                            type: ArtSweetAlertType.success,
+                            title: "Status Update",
+                            text: "Your product successfully picked up"));
+                  } else {
+                    ArtSweetAlert.show(
+                        context: context,
+                        artDialogArgs: ArtDialogArgs(
+                            type: ArtSweetAlertType.success,
+                            title: "Internal server errorr",
+                            text: ""));
+                  }
+                },
+              ),
+              Gap(50.h),
+
+              Center(
+                child: SizedBox(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ButtonElevated(
+                        text: 'Process Order',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          ArtSweetAlert.show(
+                              context: context,
+                              artDialogArgs: ArtDialogArgs(
+                                  type: ArtSweetAlertType.success,
+                                  title: "Money Sent",
+                                  text: "Your funds is on its way to you"));
+                        },
+                        backgroundColor: context.appColor.primarycolor),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

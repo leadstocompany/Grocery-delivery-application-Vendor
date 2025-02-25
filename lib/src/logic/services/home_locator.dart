@@ -27,7 +27,12 @@ class HomeService extends ApiService {
     return response;
   }
 
+  Future getAssignedOtp(data) async {
+    var response = await api.post(APIURL.vendorOtpSubmit, data: jsonEncode(data));
+    //response.statusCode
 
+    return response;
+  }
   
 
 

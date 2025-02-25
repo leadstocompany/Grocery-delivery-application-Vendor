@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
+import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/myOrder.dart';
 import 'package:vendor_app/src/logic/repo/home_repo.dart';
@@ -63,8 +64,7 @@ class HomeProvider extends ChangeNotifier {
   List<DatumOrder> orderList = [];
   bool isloading = true;
 
-  Future<void> getMyOrder(BuildContext context) async 
-  {
+  Future<void> getMyOrder(BuildContext context) async {
     print("kjdfghkldfjhgkjdfkg");
     var data = {};
     try {
@@ -84,6 +84,33 @@ class HomeProvider extends ChangeNotifier {
     } catch (e) {
       isloading = false;
       notifyListeners();
+    }
+  }
+
+  bool isSendOtp = false;
+
+  Future<bool> getAssignedOtp(
+      BuildContext context, String orderItemId, String otpCode) async {
+    context.showLoader(show: true);
+
+    var data = {"orderItemId": orderItemId, "otpCode": otpCode};
+    try {
+      var result = await _homeRepo.getAssignedOtp(data);
+
+      return result.fold(
+        (error) {
+          context.showLoader(show: false);
+          return false;
+        },
+        (response) {
+          context.showLoader(show: false);
+            return true;
+        },
+      );
+    } catch (e) {
+     
+      context.showLoader(show: false);
+        return false;
     }
   }
 }
