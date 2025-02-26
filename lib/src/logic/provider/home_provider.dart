@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
@@ -104,13 +105,76 @@ class HomeProvider extends ChangeNotifier {
         },
         (response) {
           context.showLoader(show: false);
-            return true;
+          return true;
         },
       );
     } catch (e) {
-     
       context.showLoader(show: false);
-        return false;
+      return false;
     }
   }
+
+  Future<bool> updateStatus(
+      BuildContext context, String orderStatus, String orderItemId) async {
+    context.showLoader(show: true);
+
+    var data = {"status": orderStatus, "comment": "string"};
+    try {
+      var result = await _homeRepo.updateStatus(data, orderItemId);
+
+      return result.fold(
+        (error) {
+          context.showLoader(show: false);
+          return false;
+        },
+        (response) {
+          context.showLoader(show: false);
+          Fluttertoast.showToast(
+            msg: "Product Shipped successfully!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
+          orderStatus = orderStatus;
+          notifyListeners();
+
+          return true;
+        },
+      );
+    } catch (e) {
+      context.showLoader(show: false);
+
+      print("lkjdgkfjhfdkg");
+
+      Fluttertoast.showToast(
+        msg: "Status already updated",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
+
+      return false;
+    }
+  }
+
+  String orderStatus = '';
+
+  String? _selectedStatus;
+
+  String? get selectedStatus => _selectedStatus;
+
+  void updateselectedStatus(
+      BuildContext context, String newValue, String orderItemId) {
+    _selectedStatus = newValue;
+    notifyListeners(); // Notify UI to update
+  }
+
+  final List<String> statusOptions = [
+    "SHIPPED",
+    "CANCELLED",
+  ];
 }

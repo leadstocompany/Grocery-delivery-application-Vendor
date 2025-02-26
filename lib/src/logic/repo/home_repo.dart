@@ -70,6 +70,23 @@ class HomeRepo {
     }
   }
 
+   FutureResult<String> updateStatus(data,orderItemId) async {
+    try {
+      var response = await _homeService.updateStatus(data,orderItemId);
+
+    
+
+    final String model = response.toString();
+      return right(model);
+    } on DioException catch (e) {
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
+    }
+  }
+
+
+  
+
   
 
   FutureResult<VendorModel> getMe(data) async

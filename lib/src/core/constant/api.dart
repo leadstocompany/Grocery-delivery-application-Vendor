@@ -28,5 +28,8 @@ class APIURL {
  static const String vendorOtpSubmit =
       "${BASE_URL}delivery/verify-delivery-partner-otp";
 
+
+       static const String updateStatus = "${BASE_URL}orders/items/";
+
 //erre
 }

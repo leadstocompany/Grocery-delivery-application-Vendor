@@ -102,6 +102,7 @@ dependencies:
   intl:
   # sms_autofill: ^2.4.1
   geolocator: 
+  fluttertoast:
 
 
 

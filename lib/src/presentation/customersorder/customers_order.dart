@@ -2,6 +2,7 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +58,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
               Gap(20.h),
               detailsCategory(),
               //  if (title == "New Order")
-              orderProcess(),
+              //  orderProcess(),
 
               Gap(20.h),
               if (title == "Awaiting Pickup" || title == "Completed") ...{
@@ -124,22 +125,22 @@ class _CustomerOrderState extends State<CustomerOrder> {
                 ],
               ),
             ),
-            Spacer(),
-            Container(
-              decoration: BoxDecoration(
-                color: getStatus() ?? Colors.grey, // Default color if null
-                borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  widget.order.orderStatus,
-                  style: context.buttonTestStyle.copyWith(
-                    color: getTextColor() ?? Colors.white, // Default text color
-                  ),
-                ),
-              ),
-            ),
+            // Spacer(),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     color: getStatus() ?? Colors.grey, // Default color if null
+            //     borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(4.0),
+            //     child: Text(
+            //       widget.order.orderStatus,
+            //       style: context.buttonTestStyle.copyWith(
+            //         color: getTextColor() ?? Colors.white, // Default text color
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -148,100 +149,239 @@ class _CustomerOrderState extends State<CustomerOrder> {
 
   Widget detailsCategory() {
     return Container(
-      height: 350.h,
-      decoration: BoxDecoration(
-        border: Border.all(color: context.appColor.greyColor100),
-        color: context.appColor.whiteColor,
-        borderRadius: BorderRadius.all(Radius.circular(3.0)),
-      ),
-      child: Column(
-        children: [
-          Container(
-            height: 320.h,
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: widget.order.items!.length,
-              itemBuilder: (context, index) {
-                var orderitem = widget.order.items![index];
-                return InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8),
-                            child: Row(
-                              children: [
-                                AppNetworkImage(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.08,
-                                  width: 48,
-                                  imageUrl: orderitem.productImage,
-                                  backGroundColor: Colors.transparent,
-                                ),
-                                Gap(5.w),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      orderitem.productName,
-                                      style: context.buttonTestStyle.copyWith(),
+        height: 450.h,
+        decoration: BoxDecoration(
+          border: Border.all(color: context.appColor.greyColor100),
+          color: context.appColor.whiteColor,
+          borderRadius: BorderRadius.all(Radius.circular(3.0)),
+        ),
+        child: Column(
+          children: [
+            Container(
+              height: 400.h,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: widget.order.items!.length,
+                itemBuilder: (context, index) {
+                  var orderitem = widget.order.items![index];
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .orderStatus = orderitem.status;
+
+                  print("kdjgkjfdkgjh  ${orderitem.status}");
+
+                  return Consumer<HomeProvider>(
+                      builder: (context, statusProvider, child) {
+                    return InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    // double.infinity,
+                                    child: ButtonElevated(
+                                      height: 30,
+                                      text: '   Process Order   ',
+                                      onPressed: () {
+                                        _showBottomSheet(context, orderitem.id);
+                                      },
+                                      backgroundColor:
+                                          context.appColor.primarycolor,
                                     ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: getStatus() ?? Colors.grey,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(3.0)),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        statusProvider.orderStatus,
+                                        style: context.buttonTestStyle.copyWith(
+                                          color: getTextColor() ?? Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, right: 8),
+                                child: Row(
+                                  children: [
+                                    AppNetworkImage(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.08,
+                                      width: 48,
+                                      imageUrl: orderitem.productImage,
+                                      backGroundColor: Colors.transparent,
+                                    ),
+                                    Gap(5.w),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          orderitem.productName,
+                                          style: context.buttonTestStyle
+                                              .copyWith(),
+                                        ),
+                                        Text(
+                                          orderitem.quantity.toString(),
+                                          style: context.buttonTestStyle
+                                              .copyWith(
+                                                  color: context
+                                                      .appColor.greyColor),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
                                     Text(
-                                      orderitem.quantity.toString(),
-                                      style: context.buttonTestStyle.copyWith(
-                                          color: context.appColor.greyColor),
+                                      orderitem.totalOrderItemPrice ?? " ",
+                                      style: context.buttonTestStyle.copyWith(),
                                     ),
                                   ],
                                 ),
-                                Spacer(),
-                                Text(
-                                  orderitem.totalOrderItemPrice ?? " ",
-                                  style: context.buttonTestStyle.copyWith(),
-                                ),
-                              ],
-                            ),
+                              ),
+                              Row(
+                                children: [
+                                  Spacer(),
+
+                                  // SizedBox(
+                                  //   // double.infinity,
+                                  //   child: ButtonElevated(
+                                  //     height: 30,
+                                  //     text: ' Update Status ',
+                                  //     onPressed: () async {
+                                  //       //               var status =
+                                  //       // await Provider.of<HomeProvider>(context, listen: false)
+                                  //       //     .updateStatus(context, id, value);
+                                  //     },
+                                  //     backgroundColor: context.appColor.secondary,
+                                  //   ),
+                                  // ),
+
+                                  if (statusProvider.orderStatus == "PENDING")
+                                    Container(
+                                        width: 150,
+                                        height: 35,
+                                        child: DropdownButtonFormField<String>(
+                                          value: statusProvider.selectedStatus,
+                                          hint: Text("Select Status"),
+                                          onChanged: (String? newValue) async {
+                                            if (newValue != null) {
+                                              statusProvider
+                                                  .updateselectedStatus(context,
+                                                      newValue, orderitem.id);
+
+                                              var status = await statusProvider
+                                                  .updateStatus(context,
+                                                      newValue, orderitem.id);
+                                              Provider.of<HomeProvider>(context,
+                                                      listen: false)
+                                                  .getMyOrder(
+                                                context,
+                                              );
+                                            }
+                                          },
+                                          items: statusProvider.statusOptions
+                                              .map((String status) {
+                                            return DropdownMenuItem<String>(
+                                              value: status,
+                                              child: Text(status),
+                                            );
+                                          }).toList(),
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 1),
+                                          ),
+                                        )),
+
+                                  // Update Status Button
+                                  // Consumer<HomeProvider>(
+                                  //   builder: (context, statusProvider, child) {
+                                  //     return SizedBox(
+                                  //       child: ElevatedButton(
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           backgroundColor: Theme.of(context)
+                                  //               .colorScheme
+                                  //               .secondary,
+                                  //           padding: EdgeInsets.symmetric(
+                                  //               vertical: 10, horizontal: 20),
+                                  //         ),
+                                  //         onPressed: () async {
+                                  //           if (statusProvider.selectedStatus !=
+                                  //               null) {
+                                  //             print(
+                                  //                 "Updating status to: ${statusProvider.selectedStatus}");
+                                  //           } else {
+                                  //             ScaffoldMessenger.of(context)
+                                  //                 .showSnackBar(
+                                  //               SnackBar(
+                                  //                   content: Text(
+                                  //                       "Please select a status first!")),
+                                  //             );
+                                  //           }
+                                  //         },
+                                  //         child: Text("Update Status"),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ),
+                                ],
+                              ),
+                              Divider(
+                                thickness: 0.2,
+                              )
+                            ],
                           ),
-                          Divider(
-                            thickness: 0.2,
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              },
+                    );
+                  });
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8),
-            child: Row(
-              children: [
-                Gap(5.w),
-                Padding(
-                  padding: EdgeInsets.only(left: 65.w),
-                  child: Text(
-                    "Total",
-                    style: context.buttonTestStyle.copyWith(),
-                  ),
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: Text(
-                    "${widget.order.storeSubtotal}",
-                    style: context.buttonTestStyle.copyWith(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 8.0, right: 8),
+            //   child: Row(
+            //     children: [
+            //       Gap(5.w),
+            //       Padding(
+            //         padding: EdgeInsets.only(left: 65.w),
+            //         child: Text(
+            //           "Total",
+            //           style: context.buttonTestStyle.copyWith(),
+            //         ),
+            //       ),
+            //       Spacer(),
+            //       Padding(
+            //         padding: const EdgeInsets.only(right: 10.0),
+            //         child: Text(
+            //           "${widget.order.storeSubtotal}",
+            //           style: context.buttonTestStyle.copyWith(),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ));
+
+    ;
   }
 
   Widget orderProcess() {
@@ -280,7 +420,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
               child: ButtonElevated(
                 text: 'Process Order',
                 onPressed: () {
-                  _showBottomSheet(context);
+                  //   _showBottomSheet(context);
                 },
                 backgroundColor: context.appColor.primarycolor,
               ),
@@ -348,7 +488,8 @@ class _CustomerOrderState extends State<CustomerOrder> {
     );
   }
 
-  void _showBottomSheet(BuildContext context) {
+  String otpcode = '';
+  void _showBottomSheet(BuildContext context, id) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -364,19 +505,16 @@ class _CustomerOrderState extends State<CustomerOrder> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Centered App Logo
               Center(
                 child: Image.asset(
-                  AppImages.applogo, // Replace with your logo path
-                  height: 100.h, // Adjust height as necessary
+                  AppImages.applogo,
+                  height: 100.h,
                 ),
               ),
-
               Align(
                 alignment: Alignment.center,
                 child: Text('Please Enter OTP', style: context.subTitleStyle),
               ),
-
               Gap(20.h),
               Pinput(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -410,18 +548,18 @@ class _CustomerOrderState extends State<CustomerOrder> {
                   textStyle:
                       context.subTitleTextStyle.copyWith(fontSize: 20.sp),
                 ),
-                onChanged: (value) {
-                  // Optionally handle intermediate changes if needed
-                  // But do not call `pageNotifier.goToNextPage()` here
-                },
-                onCompleted: (value) async 
-                {
-             //     print("kjdfhgkfgkhk   ${widget.order.items.i.toString()}");
+                onChanged: (value) {},
+                onCompleted: (value) async {
+                  otpcode = value;
+
                   var status =
                       await Provider.of<HomeProvider>(context, listen: false)
-                          .getAssignedOtp(
-                              context, widget.order.id.toString(), value);
+                          .getAssignedOtp(context, id, value);
                   if (status) {
+                    Provider.of<HomeProvider>(context, listen: false)
+                        .getMyOrder(
+                      context,
+                    );
                     Navigator.pop(context);
                     ArtSweetAlert.show(
                         context: context,
@@ -434,27 +572,55 @@ class _CustomerOrderState extends State<CustomerOrder> {
                         context: context,
                         artDialogArgs: ArtDialogArgs(
                             type: ArtSweetAlertType.success,
-                            title: "Internal server errorr",
+                            title: "Invalid, used, or expired OTP",
                             text: ""));
                   }
                 },
               ),
               Gap(50.h),
-
               Center(
                 child: SizedBox(
                   child: SizedBox(
                     width: double.infinity,
                     child: ButtonElevated(
                         text: 'Process Order',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          ArtSweetAlert.show(
-                              context: context,
-                              artDialogArgs: ArtDialogArgs(
-                                  type: ArtSweetAlertType.success,
-                                  title: "Money Sent",
-                                  text: "Your funds is on its way to you"));
+                        onPressed: () async {
+                          if (otpcode.length < 6) {
+                            Fluttertoast.showToast(
+                              msg: "Please enter volid otp",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 14.0,
+                            );
+                          } else {
+                            var status = await Provider.of<HomeProvider>(
+                                    context,
+                                    listen: false)
+                                .getAssignedOtp(context, id, otpcode);
+                            if (status) {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .getMyOrder(
+                                context,
+                              );
+                              Navigator.pop(context);
+                              ArtSweetAlert.show(
+                                  context: context,
+                                  artDialogArgs: ArtDialogArgs(
+                                      type: ArtSweetAlertType.success,
+                                      title: "Status Update",
+                                      text:
+                                          "Your product successfully picked up"));
+                            } else {
+                              ArtSweetAlert.show(
+                                  context: context,
+                                  artDialogArgs: ArtDialogArgs(
+                                      type: ArtSweetAlertType.success,
+                                      title: "Internal server errorr",
+                                      text: ""));
+                            }
+                          }
                         },
                         backgroundColor: context.appColor.primarycolor),
                   ),
