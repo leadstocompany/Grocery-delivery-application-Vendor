@@ -277,7 +277,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                         height: 35,
                                         child: DropdownButtonFormField<String>(
                                           value: statusProvider.selectedStatus,
-                                          hint: Text("Select Status"),
+                                          hint: Text("Update Status"),
                                           onChanged: (String? newValue) async {
                                             if (newValue != null) {
                                               statusProvider
@@ -617,7 +617,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                   context: context,
                                   artDialogArgs: ArtDialogArgs(
                                       type: ArtSweetAlertType.success,
-                                      title: "Internal server errorr",
+                                      title: "Invalid, used, or expired OTP",
                                       text: ""));
                             }
                           }
