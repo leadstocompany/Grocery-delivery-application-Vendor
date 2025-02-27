@@ -42,22 +42,33 @@ class _OrderScreenState extends State<OrderScreen> {
     return formattedDateTime; // Example: 11-02-2025 10:44 AM
   }
 
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      Provider.of<HomeProvider>(context, listen: false).getMyOrder(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('lkdjgjh');
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Gap(10.h),
-            HeaderProfile(),
-            categoryList(),
-            if (slectedIndex == 0) ...{
-              detailsCategory(),
-            } else ...{
-              orderList()
-            }
-          ],
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Gap(10.h),
+              HeaderProfile(),
+              categoryList(),
+              if (slectedIndex == 0) ...{
+                detailsCategory(),
+              } else ...{
+                orderList()
+              }
+            ],
+          ),
         ),
       ),
     );
@@ -118,14 +129,6 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Widget detailsCategory() {
-    final List<String> poductsC = [
-      'Pending',
-      'Procesing',
-      'Shipped',
-      'Delivered',
-      'Cancelled',
-    ];
-
     return Consumer<HomeProvider>(
       builder: (context, orderProvider, child) {
         if (orderProvider.isloading) {
@@ -180,20 +183,21 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ],
                               ),
                               Spacer(),
-                              Container(
-                                  decoration: BoxDecoration(
-                                    color: getStatus(orderItem.orderStatus),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(3.0)),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Text(
-                                      orderItem.orderStatus,
-                                      style: context.buttonTestStyle
-                                          .copyWith(color: getTextColor()),
-                                    ),
-                                  ))
+
+                              // Container(
+                              //     decoration: BoxDecoration(
+                              //       color: getStatus(orderItem.orderStatus),
+                              //       borderRadius:
+                              //           BorderRadius.all(Radius.circular(3.0)),
+                              //     ),
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.all(4.0),
+                              //       child: Text(
+                              //         orderItem.orderStatus,
+                              //         style: context.buttonTestStyle
+                              //             .copyWith(color: getTextColor()),
+                              //       ),
+                              //     ))
                             ],
                           ),
                         ),
@@ -216,7 +220,7 @@ class _OrderScreenState extends State<OrderScreen> {
         return Center(child: CircularProgressIndicator());
       }
 
-      if (orderProvider.orderList.isEmpty) {
+      if (!orderProvider.orderList.isEmpty) {
         return Padding(
           padding: const EdgeInsets.only(top: 150),
           child: DataNotFound(

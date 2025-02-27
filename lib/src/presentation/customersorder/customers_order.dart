@@ -271,7 +271,9 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                   //   ),
                                   // ),
 
-                                  if (statusProvider.orderStatus == "PENDING")
+                                  if (statusProvider.orderStatus == "PENDING" ||
+                                      statusProvider.orderStatus ==
+                                          "PROCESSING")
                                     Container(
                                         width: 150,
                                         height: 35,
@@ -292,6 +294,8 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                                   .getMyOrder(
                                                 context,
                                               );
+
+                                              Navigator.pop(context);
                                             }
                                           },
                                           items: statusProvider.statusOptions
@@ -561,6 +565,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                       context,
                     );
                     Navigator.pop(context);
+                    Navigator.pop(context);
                     ArtSweetAlert.show(
                         context: context,
                         artDialogArgs: ArtDialogArgs(
@@ -584,7 +589,8 @@ class _CustomerOrderState extends State<CustomerOrder> {
                     width: double.infinity,
                     child: ButtonElevated(
                         text: 'Process Order',
-                        onPressed: () async {
+                        onPressed: () async 
+                        {
                           if (otpcode.length < 6) {
                             Fluttertoast.showToast(
                               msg: "Please enter volid otp",
@@ -599,11 +605,13 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                     context,
                                     listen: false)
                                 .getAssignedOtp(context, id, otpcode);
-                            if (status) {
+                            if (status)
+                             {
                               Provider.of<HomeProvider>(context, listen: false)
                                   .getMyOrder(
                                 context,
                               );
+                              Navigator.pop(context);
                               Navigator.pop(context);
                               ArtSweetAlert.show(
                                   context: context,
@@ -612,7 +620,8 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                       title: "Status Update",
                                       text:
                                           "Your product successfully picked up"));
-                            } else {
+                            } else 
+                            {
                               ArtSweetAlert.show(
                                   context: context,
                                   artDialogArgs: ArtDialogArgs(
