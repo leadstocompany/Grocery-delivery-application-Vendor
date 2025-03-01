@@ -180,13 +180,11 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
             ),
             controller: TextEditingController(text: _otpCode),
-            onChanged: (value)
-            {
+            onChanged: (value) {
               _otpCode = value;
             }, // Autofill OTP
 
             onCompleted: (value) async {
-              
               _otpCode = value.toString();
               final success = await pageNotifier.verifiOtp(value, context);
 
@@ -205,16 +203,16 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
           Gap(20.h),
 
-          Align(
-              alignment: Alignment.center,
-              child: TextButton(
-                onPressed: () async {},
-                child: Text(
-                  AppString.resend,
-                  style: context.buttonTxtStyle
-                      .copyWith(color: context.appColor.primary),
-                ),
-              )),
+          // Align(
+          //     alignment: Alignment.center,
+          //     child: TextButton(
+          //       onPressed: () async {},
+          //       child: Text(
+          //         AppString.resend,
+          //         style: context.buttonTxtStyle
+          //             .copyWith(color: context.appColor.primary),
+          //       ),
+          //     )),
 
           const Spacer(),
           SizedBox(
@@ -241,12 +239,12 @@ class _OtpScreenState extends State<OtpScreen> {
                         );
                       }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.grey,
-                          content: Text("Please enter a valid OTP."),
-                        ),
-                      );
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     backgroundColor: Colors.grey,
+                      //     content: Text("Please enter a valid OTP."),
+                      //   ),
+                      // );
                     }
                   })),
           Gap(15.h),

@@ -229,57 +229,64 @@ class _OrderScreenState extends State<OrderScreen> {
           ),
         );
       }
-      return Expanded(
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            status = index;
-            return Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Order ID  #212323",
-                                style: context.subTitleTextStyleBloack,
-                              ),
-                              Text(
-                                "Today | 9:00 am",
-                                style: context.subTitleTxtStyle,
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          Row(
-                            children: [
-                              Text("3 Items "),
-                              Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: context.appColor.primarycolor,
-                                size: 20,
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Divider()
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      );
+      return Padding(
+          padding: const EdgeInsets.only(top: 150),
+          child: DataNotFound(
+            imagePath: 'assets/images/notfound.jpg',
+            message: "No Order Available! ",
+          ));
+      // Expanded(
+      //   child:
+      //   ListView.builder(
+      //     scrollDirection: Axis.vertical,
+      //     itemCount: 10,
+      //     itemBuilder: (context, index) {
+      //       status = index;
+      //       return Padding(
+      //         padding: const EdgeInsets.all(5.0),
+      //         child: Padding(
+      //           padding: const EdgeInsets.all(10.0),
+      //           child: Column(
+      //             children: [
+      //               Padding(
+      //                 padding: const EdgeInsets.only(left: 8.0, right: 8),
+      //                 child: Row(
+      //                   children: [
+      //                     Column(
+      //                       crossAxisAlignment: CrossAxisAlignment.start,
+      //                       children: [
+      //                         Text(
+      //                           "Order ID  #212323",
+      //                           style: context.subTitleTextStyleBloack,
+      //                         ),
+      //                         Text(
+      //                           "Today | 9:00 am",
+      //                           style: context.subTitleTxtStyle,
+      //                         ),
+      //                       ],
+      //                     ),
+      //                     Spacer(),
+      //                     Row(
+      //                       children: [
+      //                         Text("3 Items "),
+      //                         Icon(
+      //                           Icons.arrow_forward_ios_rounded,
+      //                           color: context.appColor.primarycolor,
+      //                           size: 20,
+      //                         )
+      //                       ],
+      //                     )
+      //                   ],
+      //                 ),
+      //               ),
+      //               Divider()
+      //             ],
+      //           ),
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // );
     });
   }
 

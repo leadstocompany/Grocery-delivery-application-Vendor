@@ -23,7 +23,7 @@ class AuthRepo {
       var response = await _authServices.sendOtp(data);
 
       final String model = response.toString();
-    //  OtpResponseModel otpResponseModel = otpResponseModelFromJson(response.toString());
+      //  OtpResponseModel otpResponseModel = otpResponseModelFromJson(response.toString());
       return right(model);
     } on DioException catch (e) {
       print("dhfgfdgjdhfgfgh  ${e}");
@@ -69,25 +69,8 @@ class AuthRepo {
 
       return right(loginResponse);
     } on DioException catch (e) {
-      print("DioException occurred: $e");
-
-      if (e.response != null) {
-        int statusCode = e.response!.statusCode ?? 0;
-        var errorData = e.response!.data; // Error body from the server
-
-        String errorMessage =
-            errorData['message']['message'] ?? 'Unknown error';
-
-        print("Error: $errorMessage (Status Code: $statusCode)");
-
-        // Custom error handling
-        var error = CustomDioExceptions.handleError(e);
-        return left(error);
-      } else {
-        // Handle other DioExceptions without a response (e.g., network issues)
-        var error = CustomDioExceptions.handleError(e);
-        return left(error);
-      }
+      var error = CustomDioExceptions.handleError(e);
+      return left(error);
     }
   }
 

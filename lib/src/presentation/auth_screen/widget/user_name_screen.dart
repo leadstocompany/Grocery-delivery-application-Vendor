@@ -169,7 +169,7 @@ class UserNameScreen extends StatelessWidget {
                     return null;
                   },
                   maxLength: 64,
-                  counterWidget: const Offstage(),
+                 // counterWidget: const Offstage(),
                   hintText: AppString.lastName,
                   fillColor: context.appColor.greyColor100,
                 ),

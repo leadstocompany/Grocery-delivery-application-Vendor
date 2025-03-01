@@ -149,7 +149,7 @@ class HomeProvider extends ChangeNotifier {
       print("lkjdgkfjhfdkg");
 
       Fluttertoast.showToast(
-        msg: "Status already updated",
+        msg: "$e",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,

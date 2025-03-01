@@ -313,7 +313,7 @@ class ProductProvider extends ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -353,7 +353,7 @@ class ProductProvider extends ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -432,7 +432,7 @@ class ProductProvider extends ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );

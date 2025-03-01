@@ -54,14 +54,12 @@ class LoginProvider extends ChangeNotifier {
           return true;
         },
       );
-    } catch (e) 
-    {
+    } catch (e) {
       context.showLoader(show: false);
-
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("${e}"),
           backgroundColor: Colors.red,
         ),
       );
@@ -111,7 +109,7 @@ class LoginProvider extends ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -162,7 +160,7 @@ class LoginProvider extends ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -213,7 +211,7 @@ class LoginProvider extends ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );

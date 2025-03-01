@@ -6,8 +6,7 @@ import 'package:vendor_app/src/core/utiils_lib/snack_bar.dart';
 import 'package:vendor_app/src/data/vendor_otpModel.dart';
 import 'package:vendor_app/src/logic/repo/auth_repo.dart';
 
-class PageNotifier extends ChangeNotifier
- {
+class PageNotifier extends ChangeNotifier {
   int _currentIndex = 0;
   final int _totalPages = 4; // Set total number of pages
   final PageController _pageController = PageController();
@@ -30,8 +29,7 @@ class PageNotifier extends ChangeNotifier
   String numberwithCode = '';
 
   Future<bool> sendOtp(
-      String number, BuildContext context, String country_code) async
-       {
+      String number, BuildContext context, String country_code) async {
     context.showLoader(show: true);
 
     var data = {"phone": country_code + number};
@@ -40,7 +38,7 @@ class PageNotifier extends ChangeNotifier
 
     try {
       var response = await _authRepo.sendOtp(data);
-      print("check response ${response}");
+   
       context.showLoader(show: false);
 
       return response.fold(
@@ -55,19 +53,18 @@ class PageNotifier extends ChangeNotifier
           return false; // Login failed
         },
         (response) {
-         // _showSnackBar(context, "OTP ${response.data!.otp!}", Colors.green);
+          // _showSnackBar(context, "OTP ${response.data!.otp!}", Colors.green);
 
           return true;
         },
       );
-    } catch (e) 
-    {
+    } catch (e) {
       context.showLoader(show: false);
       print("Unexpected error: $e");
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -114,7 +111,7 @@ class PageNotifier extends ChangeNotifier
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );
@@ -168,7 +165,7 @@ class PageNotifier extends ChangeNotifier
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Something went wrong. Please try again."),
+          content: Text("$e"),
           backgroundColor: Colors.red,
         ),
       );
