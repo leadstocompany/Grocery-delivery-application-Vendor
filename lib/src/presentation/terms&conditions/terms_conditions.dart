@@ -112,7 +112,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
               '• Support hours: Monday to Friday, 9 AM – 6 PM (local time).',
             ),
             SizedBox(height: 20),
-            
+
             Row(
               children: [
                 Consumer<PageNotifier>(
@@ -176,86 +176,94 @@ class TermsAndConditionsScreen extends StatelessWidget {
       context: context,
       isDismissible: false,
       enableDrag: false,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Centered App Logo
-              Center(
-                child: Image.asset(
-                  AppImages.applogo, // Replace with your logo path
-                  height: 100.h, // Adjust height as necessary
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Create Account', style: context.subTitleStyle),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Set up your store and get your business ready for activation',
-                  style: context.subTitleTextStyle,
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: ListTile(
-                  leading: SvgPicture.asset(AppImages.icon1),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Add business information',
-                        style: context.subTitleStyle,
-                      ),
-                      Text(
-                        'Add more information about your business',
-                        style: context.subTitleTxtStyle,
-                      ),
-                    ],
+        return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context)
+                  .viewInsets
+                  .bottom, // Adjusts for keyboard
+            ),
+            child: SingleChildScrollView(
+                child: Container(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Centered App Logo
+                  Center(
+                    child: Image.asset(
+                      AppImages.applogo, // Replace with your logo path
+                      height: 100.h, // Adjust height as necessary
+                    ),
                   ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: ListTile(
-                  leading: SvgPicture.asset(AppImages.icon2),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Set-up your store',
-                        style: context.subTitleStyle,
-                      ),
-                      Text(
-                        'Create and customise your online store',
-                        style: context.subTitleTxtStyle,
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Create Account', style: context.subTitleStyle),
                   ),
-                ),
-              ),
-              Center(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ButtonElevated(
-                    text: 'Continue to Setup',
-                    onPressed: () {
-                      context.clearAndPush(
-                        routePath: MyRoutes.SETUPBUSSINESS,
-                        args: {'status': '1'},
-                      );
-                    },
-                    backgroundColor: context.appColor.primarycolor,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Set up your store and get your business ready for activation',
+                      style: context.subTitleTextStyle,
+                    ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: ListTile(
+                      leading: SvgPicture.asset(AppImages.icon1),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Add business information',
+                            style: context.subTitleStyle,
+                          ),
+                          Text(
+                            'Add more information about your business',
+                            style: context.subTitleTxtStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: ListTile(
+                      leading: SvgPicture.asset(AppImages.icon2),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Set-up your store',
+                            style: context.subTitleStyle,
+                          ),
+                          Text(
+                            'Create and customise your online store',
+                            style: context.subTitleTxtStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ButtonElevated(
+                        text: 'Continue to Setup',
+                        onPressed: () {
+                          context.clearAndPush(
+                            routePath: MyRoutes.SETUPBUSSINESS,
+                            args: {'status': '1'},
+                          );
+                        },
+                        backgroundColor: context.appColor.primarycolor,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
+            )));
       },
     );
   }

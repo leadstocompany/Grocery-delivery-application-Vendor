@@ -42,7 +42,8 @@ class _OrderScreenState extends State<OrderScreen> {
     return formattedDateTime; // Example: 11-02-2025 10:44 AM
   }
 
-  Future<void> _refresh() async {
+  Future<void> _refresh() async 
+  {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
       Provider.of<HomeProvider>(context, listen: false).getMyOrder(context);
@@ -135,7 +136,8 @@ class _OrderScreenState extends State<OrderScreen> {
           return Center(child: CircularProgressIndicator());
         }
 
-        if (orderProvider.orderList.isEmpty) {
+        if (orderProvider.orderList.isEmpty) 
+        {
           return Padding(
             padding: const EdgeInsets.only(top: 150),
             child: DataNotFound(

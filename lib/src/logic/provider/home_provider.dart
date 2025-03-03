@@ -1,3 +1,4 @@
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
@@ -103,13 +104,26 @@ class HomeProvider extends ChangeNotifier {
           context.showLoader(show: false);
           return false;
         },
-        (response) {
+        (response)
+         {
           context.showLoader(show: false);
+          getMyOrder(context);
+
+          ArtSweetAlert.show(
+              context: context,
+              artDialogArgs: ArtDialogArgs(
+                  type: ArtSweetAlertType.success,
+                  title: "Status Update",
+                  text: "Your product successfully picked up"));
           return true;
         },
       );
     } catch (e) {
       context.showLoader(show: false);
+      ArtSweetAlert.show(
+          context: context,
+          artDialogArgs: ArtDialogArgs(
+              type: ArtSweetAlertType.success, title: "${e}", text: ""));
       return false;
     }
   }
@@ -175,6 +189,5 @@ class HomeProvider extends ChangeNotifier {
 
   final List<String> statusOptions = [
     "SHIPPED",
-    "CANCELLED",
   ];
 }

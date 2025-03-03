@@ -14,9 +14,9 @@ import 'package:vendor_app/src/logic/provider/home_provider.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
 class CustomerOrder extends StatefulWidget {
-  final DatumOrder order;
+  DatumOrder order;
 
-  const CustomerOrder({super.key, required this.order});
+  CustomerOrder({super.key, required this.order});
 
   @override
   State<CustomerOrder> createState() => _CustomerOrderState();
@@ -25,10 +25,24 @@ class CustomerOrder extends StatefulWidget {
 class _CustomerOrderState extends State<CustomerOrder> {
   String? title;
   int? status;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+
+  Future<void> _fetchOrderDetails() async {
+    // Get the updated order from Provider
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    widget.order = homeProvider.orderList.firstWhere(
+      (o) => o.id == widget.order.id,
+      orElse: () => widget.order,
+    );
+
+    print("kdjhkjfh   ${widget.order}");
+
+    setState(() {});
+  }
+
+  Future<void> _refreshData() async {
+    print("kdjfhgklfdgklhjklfgh");
+    await Future.delayed(const Duration(seconds: 1));
+    _fetchOrderDetails();
   }
 
   @override
@@ -48,45 +62,49 @@ class _CustomerOrderState extends State<CustomerOrder> {
         title: Text('Customer’s Order',
             style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              cardOrder(),
-              Gap(20.h),
-              detailsCategory(),
-              //  if (title == "New Order")
-              //  orderProcess(),
-
-              Gap(20.h),
-              if (title == "Awaiting Pickup" || title == "Completed") ...{
-                Text(
-                  'Agent’s Information',
-                  style: context.titleStyleRegular.copyWith(),
-                ),
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                cardOrder(),
                 Gap(20.h),
-                CustomerInformation()
-              },
-              if (title == "Cancelled") ...{
-                Text(
-                  'Agent’s Information',
-                  style: context.titleStyleRegular.copyWith(),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.circle, size: 15, color: Colors.black),
-                        Text(
-                          ' Order cancelled by the customer. ',
-                          style: context.subTitleTextStyleBloack.copyWith(),
-                        ),
-                      ],
-                    ))
-              }
-            ],
+                detailsCategory(),
+                //  if (title == "New Order")
+                //  orderProcess(),
+
+                Gap(20.h),
+                if (title == "Awaiting Pickup" || title == "Completed") ...{
+                  Text(
+                    'Agent’s Information',
+                    style: context.titleStyleRegular.copyWith(),
+                  ),
+                  Gap(20.h),
+                  CustomerInformation()
+                },
+                if (title == "Cancelled") ...{
+                  Text(
+                    'Agent’s Information',
+                    style: context.titleStyleRegular.copyWith(),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.circle, size: 15, color: Colors.black),
+                          Text(
+                            ' Order cancelled by the customer. ',
+                            style: context.subTitleTextStyleBloack.copyWith(),
+                          ),
+                        ],
+                      ))
+                }
+              ],
+            ),
           ),
         ),
       ),
@@ -182,18 +200,21 @@ class _CustomerOrderState extends State<CustomerOrder> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  SizedBox(
-                                    // double.infinity,
-                                    child: ButtonElevated(
-                                      height: 30,
-                                      text: '   Process Order   ',
-                                      onPressed: () {
-                                        _showBottomSheet(context, orderitem.id);
-                                      },
-                                      backgroundColor:
-                                          context.appColor.primarycolor,
+                                  if (statusProvider.orderStatus != "SHIPPED" &&
+                                      statusProvider.orderStatus != "DELIVERED")
+                                    SizedBox(
+                                      // double.infinity,
+                                      child: ButtonElevated(
+                                        height: 30,
+                                        text: '   Process Order   ',
+                                        onPressed: () {
+                                          _showBottomSheet(
+                                              context, orderitem.id);
+                                        },
+                                        backgroundColor:
+                                            context.appColor.primarycolor,
+                                      ),
                                     ),
-                                  ),
                                   Spacer(),
                                   Container(
                                     decoration: BoxDecoration(
@@ -388,52 +409,53 @@ class _CustomerOrderState extends State<CustomerOrder> {
     ;
   }
 
-  Widget orderProcess() {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Center(
-        child: Column(
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "₹${widget.order.storeSubtotal}",
-                      style: context.subTitleTextStyleBloack
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    Gap(10.w),
-                    Icon(Icons.check_circle,
-                        color: context.appColor.primarycolor),
-                    Text(
-                      "Paid",
-                      style: context.subTitleTxtStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: context.appColor.primarycolor),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: ButtonElevated(
-                text: 'Process Order',
-                onPressed: () {
-                  //   _showBottomSheet(context);
-                },
-                backgroundColor: context.appColor.primarycolor,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget orderProcess() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(15.0),
+  //     child: Center(
+  //       child: Column(
+  //         children: [
+  //           Center(
+  //             child: Padding(
+  //               padding: const EdgeInsets.all(15),
+  //               child: Row(
+  //                 crossAxisAlignment: CrossAxisAlignment.center,
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Text(
+  //                     "₹${widget.order.storeSubtotal}",
+  //                     style: context.subTitleTextStyleBloack
+  //                         .copyWith(fontWeight: FontWeight.bold),
+  //                   ),
+  //                   Gap(10.w),
+  //                   Icon(Icons.check_circle,
+  //                       color: context.appColor.primarycolor),
+  //                   Text(
+  //                     "Paid",
+  //                     style: context.subTitleTxtStyle.copyWith(
+  //                         fontWeight: FontWeight.bold,
+  //                         color: context.appColor.primarycolor),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             width: double.infinity,
+  //             child: ButtonElevated(
+  //               text: 'Process Order',
+  //               onPressed: ()
+  //                {
+  //                 //   _showBottomSheet(context);
+  //               },
+  //               backgroundColor: context.appColor.primarycolor,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget CustomerInformation() {
     return Container(
@@ -496,146 +518,128 @@ class _CustomerOrderState extends State<CustomerOrder> {
   void _showBottomSheet(BuildContext context, id) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: context.appColor.greyColor400),
-            color: context.appColor.whiteColor,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0)),
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context)
+                .viewInsets
+                .bottom, // Adjusts for keyboard
           ),
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Image.asset(
-                  AppImages.applogo,
-                  height: 100.h,
-                ),
+          child: SingleChildScrollView(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: context.appColor.greyColor400),
+                color: context.appColor.whiteColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0)),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Text('Please Enter OTP', style: context.subTitleStyle),
-              ),
-              Gap(20.h),
-              Pinput(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                length: 6,
-                defaultPinTheme: PinTheme(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 5.h,
-                    horizontal: 8.w,
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: Image.asset(
+                      AppImages.applogo,
+                      height: 100.h,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: context.appColor.whiteColor,
-                    borderRadius: BorderRadius.circular(4.r),
-                    border: Border.all(
-                        color: context.appColor.greyColor400, width: 1),
+                  Align(
+                    alignment: Alignment.center,
+                    child:
+                        Text('Please Enter OTP', style: context.subTitleStyle),
                   ),
-                  textStyle:
-                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
-                ),
-                focusedPinTheme: PinTheme(
-                  decoration: BoxDecoration(
-                    color: context.appColor.greyColor100,
-                    borderRadius: BorderRadius.circular(4.r),
-                    border:
-                        Border.all(color: context.appColor.primary, width: 1),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 5.h,
-                    horizontal: 8.w,
-                  ),
-                  textStyle:
-                      context.subTitleTextStyle.copyWith(fontSize: 20.sp),
-                ),
-                onChanged: (value) {},
-                onCompleted: (value) async {
-                  otpcode = value;
+                  Gap(20.h),
+                  Pinput(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                    length: 6,
+                    defaultPinTheme: PinTheme(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5.h,
+                        horizontal: 8.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: context.appColor.whiteColor,
+                        borderRadius: BorderRadius.circular(4.r),
+                        border: Border.all(
+                            color: context.appColor.greyColor400, width: 1),
+                      ),
+                      textStyle:
+                          context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                    ),
+                    focusedPinTheme: PinTheme(
+                      decoration: BoxDecoration(
+                        color: context.appColor.greyColor100,
+                        borderRadius: BorderRadius.circular(4.r),
+                        border: Border.all(
+                            color: context.appColor.primary, width: 1),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5.h,
+                        horizontal: 8.w,
+                      ),
+                      textStyle:
+                          context.subTitleTextStyle.copyWith(fontSize: 20.sp),
+                    ),
+                    onChanged: (value) {},
+                    onCompleted: (value) async {
+                      otpcode = value;
 
-                  var status =
-                      await Provider.of<HomeProvider>(context, listen: false)
+                      var status = await Provider.of<HomeProvider>(context,
+                              listen: false)
                           .getAssignedOtp(context, id, value);
-                  if (status) {
-                    Provider.of<HomeProvider>(context, listen: false)
-                        .getMyOrder(
-                      context,
-                    );
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    ArtSweetAlert.show(
-                        context: context,
-                        artDialogArgs: ArtDialogArgs(
-                            type: ArtSweetAlertType.success,
-                            title: "Status Update",
-                            text: "Your product successfully picked up"));
-                  } else {
-                    ArtSweetAlert.show(
-                        context: context,
-                        artDialogArgs: ArtDialogArgs(
-                            type: ArtSweetAlertType.success,
-                            title: "Invalid, used, or expired OTP",
-                            text: ""));
-                  }
-                },
-              ),
-              Gap(50.h),
-              Center(
-                child: SizedBox(
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ButtonElevated(
-                        text: 'Process Order',
-                        onPressed: () async 
-                        {
-                          if (otpcode.length < 6) {
-                            Fluttertoast.showToast(
-                              msg: "Please enter volid otp",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 14.0,
-                            );
-                          } else {
-                            var status = await Provider.of<HomeProvider>(
-                                    context,
-                                    listen: false)
-                                .getAssignedOtp(context, id, otpcode);
-                            if (status)
-                             {
-                              Provider.of<HomeProvider>(context, listen: false)
-                                  .getMyOrder(
-                                context,
-                              );
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              ArtSweetAlert.show(
-                                  context: context,
-                                  artDialogArgs: ArtDialogArgs(
-                                      type: ArtSweetAlertType.success,
-                                      title: "Status Update",
-                                      text:
-                                          "Your product successfully picked up"));
-                            } else 
-                            {
-                              ArtSweetAlert.show(
-                                  context: context,
-                                  artDialogArgs: ArtDialogArgs(
-                                      type: ArtSweetAlertType.success,
-                                      title: "Invalid, used, or expired OTP",
-                                      text: ""));
-                            }
-                          }
-                        },
-                        backgroundColor: context.appColor.primarycolor),
+                      if (status) {
+                        Provider.of<HomeProvider>(context, listen: false)
+                            .getMyOrder(
+                          context,
+                        );
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      } else {}
+                    },
                   ),
-                ),
+                  Gap(50.h),
+                  Center(
+                    child: SizedBox(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ButtonElevated(
+                            text: 'Process Order',
+                            onPressed: () async {
+                              if (otpcode.length < 6) {
+                                Fluttertoast.showToast(
+                                  msg: "Please enter volid otp",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 14.0,
+                                );
+                              } else {
+                                var status = await Provider.of<HomeProvider>(
+                                        context,
+                                        listen: false)
+                                    .getAssignedOtp(context, id, otpcode);
+                                if (status) {
+                                  Provider.of<HomeProvider>(context,
+                                          listen: false)
+                                      .getMyOrder(
+                                    context,
+                                  );
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                } else {}
+                              }
+                            },
+                            backgroundColor: context.appColor.primarycolor),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         );
       },
