@@ -21,7 +21,7 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
-    Provider.of<HomeProvider>(context, listen: false).getMyOrder(context);
+    Provider.of<HomeProvider>(context, listen: false).getMyOrder(context, '');
     super.initState();
   }
 
@@ -42,11 +42,10 @@ class _OrderScreenState extends State<OrderScreen> {
     return formattedDateTime; // Example: 11-02-2025 10:44 AM
   }
 
-  Future<void> _refresh() async 
-  {
+  Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
-      Provider.of<HomeProvider>(context, listen: false).getMyOrder(context);
+      Provider.of<HomeProvider>(context, listen: false).getMyOrder(context, '');
     });
   }
 
@@ -63,11 +62,11 @@ class _OrderScreenState extends State<OrderScreen> {
               Gap(10.h),
               HeaderProfile(),
               categoryList(),
-              if (slectedIndex == 0) ...{
-                detailsCategory(),
-              } else ...{
-                orderList()
-              }
+              //  if (slectedIndex == 0) ...{
+              detailsCategory(),
+              // } else ...{
+              //   orderList()
+              // }
             ],
           ),
         ),
@@ -77,12 +76,12 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Widget categoryList() {
     final List<String> items = [
-      'All',
-      'Pending',
-      'Procesing',
-      'Shipped',
-      'Delivered',
-      'Cancelled',
+      'ALL',
+      'PENDING',
+      'PROCESSING',
+      'SHIPPED',
+      'DELIVERED',
+      'CANCELLED',
     ];
     return Container(
       height: 40.h,
@@ -106,6 +105,13 @@ class _OrderScreenState extends State<OrderScreen> {
                       onTap: () {
                         setState(() {
                           slectedIndex = index;
+                          if (slectedIndex == 0) {
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .getMyOrder(context, '');
+                          } else {
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .getMyOrder(context, items[index]);
+                          }
                         });
                       },
                       child: Padding(
@@ -136,8 +142,7 @@ class _OrderScreenState extends State<OrderScreen> {
           return Center(child: CircularProgressIndicator());
         }
 
-        if (orderProvider.orderList.isEmpty) 
-        {
+        if (orderProvider.orderList.isEmpty) {
           return Padding(
             padding: const EdgeInsets.only(top: 150),
             child: DataNotFound(

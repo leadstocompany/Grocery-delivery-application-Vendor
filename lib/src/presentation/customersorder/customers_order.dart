@@ -215,6 +215,17 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                             context.appColor.primarycolor,
                                       ),
                                     ),
+                                  if (statusProvider.orderStatus == "DELIVERED")
+                                    SizedBox(
+                                      // double.infinity,
+                                      child: ButtonElevated(
+                                        height: 30,
+                                        text: '   Completed   ',
+                                        onPressed: () {},
+                                        backgroundColor:
+                                            context.appColor.primarycolor,
+                                      ),
+                                    ),
                                   Spacer(),
                                   Container(
                                     decoration: BoxDecoration(
@@ -313,7 +324,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                               Provider.of<HomeProvider>(context,
                                                       listen: false)
                                                   .getMyOrder(
-                                                context,
+                                                context,''
                                               );
 
                                               Navigator.pop(context);
@@ -593,7 +604,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                       if (status) {
                         Provider.of<HomeProvider>(context, listen: false)
                             .getMyOrder(
-                          context,
+                          context,''
                         );
                         Navigator.pop(context);
                         Navigator.pop(context);
@@ -626,7 +637,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                   Provider.of<HomeProvider>(context,
                                           listen: false)
                                       .getMyOrder(
-                                    context,
+                                    context,''
                                   );
                                   Navigator.pop(context);
                                   Navigator.pop(context);

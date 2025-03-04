@@ -66,7 +66,7 @@ class HomeProvider extends ChangeNotifier {
   List<DatumOrder> orderList = [];
   bool isloading = true;
 
-  Future<void> getMyOrder(BuildContext context) async {
+  Future<void> getMyOrder(BuildContext context  ,String  djhfg) async {
     print("kjdfghkldfjhgkjdfkg");
     var data = {};
     try {
@@ -107,7 +107,7 @@ class HomeProvider extends ChangeNotifier {
         (response)
          {
           context.showLoader(show: false);
-          getMyOrder(context);
+          getMyOrder(context,"");
 
           ArtSweetAlert.show(
               context: context,
