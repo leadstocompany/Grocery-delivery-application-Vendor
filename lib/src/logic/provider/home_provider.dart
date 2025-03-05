@@ -66,9 +66,20 @@ class HomeProvider extends ChangeNotifier {
   List<DatumOrder> orderList = [];
   bool isloading = true;
 
-  Future<void> getMyOrder(BuildContext context  ,String  djhfg) async {
-    print("kjdfghkldfjhgkjdfkg");
-    var data = {};
+  Future<void> getMyOrder(BuildContext context, String orderItemStatus) async {
+    var data;
+
+    if (orderItemStatus.isEmpty) {
+      data = {};
+    } else 
+    {
+      data = 
+      {
+        'orderItemStatus': orderItemStatus
+      };
+    }
+
+    print("kjdfghkldfjhgkjdfkg ${data} $orderItemStatus");
     try {
       var result = await _homeRepo.getOrder(data);
 
@@ -104,10 +115,9 @@ class HomeProvider extends ChangeNotifier {
           context.showLoader(show: false);
           return false;
         },
-        (response)
-         {
+        (response) {
           context.showLoader(show: false);
-          getMyOrder(context,"");
+          getMyOrder(context, "");
 
           ArtSweetAlert.show(
               context: context,

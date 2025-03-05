@@ -265,6 +265,7 @@ class _ProductdetailsState extends State<Productdetails> {
                     hintStyle: context.subTitleTxtStyleblack,
                     fillColor: context.appColor.whiteColor,
                   ),
+                  
                   Gap(10.h),
 
                   SwitchListTile(

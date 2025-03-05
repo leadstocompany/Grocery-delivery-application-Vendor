@@ -274,8 +274,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
                       Gap(10.h),
                       CustomTextField(
-                        // controller:
-                        //     provider.productProductDiscountPriceController,
+                        controller: provider.productdiscount,
                         keyBoardType: TextInputType.number,
                         validator: (val) {
                           if (val.toString().isEmpty) {
@@ -285,13 +284,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         },
                         counterWidget: const Offstage(),
                         onChanged: (value) {
-                          setState(() {
-                            provider.productProductDiscountPriceController
-                                .text = (double.parse(
-                                        provider.productPriceController.text) *
-                                    (1 - double.parse(value) / 100))
-                                .toString();
-                          });
+                          if (value.isEmpty) {
+                            provider.productdiscount.clear();
+                            return;
+                          }
+
+                          provider.productProductDiscountPriceController
+                              .text = (double.parse(
+                                      provider.productPriceController.text) *
+                                  (1 - double.parse(value) / 100))
+                              .toString();
+
 //
                         },
                         hintText: 'Discount Price %',

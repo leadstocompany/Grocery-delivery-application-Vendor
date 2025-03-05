@@ -19,7 +19,17 @@ class HomeService extends ApiService {
   }
 
   Future getOrder(data) async {
-    var response = await api.get(APIURL.myOrder, data: jsonEncode(data),queryParameters: data);
+    print("kjsdhgjdfg  $data");
+    var response;
+    if (data is Map && data.isEmpty) {
+      // Check if data is an empty map
+      print("kgjfnhkjfghfgfg  ${data}");
+      response = await api.get(APIURL.myOrder, data: jsonEncode(data));
+    } else {
+      response = await api.get(APIURL.myOrder,
+          data: jsonEncode(data), queryParameters: data);
+    }
+
     //response.statusCode
 
     return response;

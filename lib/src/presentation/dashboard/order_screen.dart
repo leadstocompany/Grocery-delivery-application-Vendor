@@ -45,6 +45,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 2));
     setState(() {
+      slectedIndex = 0;
       Provider.of<HomeProvider>(context, listen: false).getMyOrder(context, '');
     });
   }

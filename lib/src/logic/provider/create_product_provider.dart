@@ -23,6 +23,9 @@ class ProductProvider extends ChangeNotifier {
   TextEditingController productPriceController = TextEditingController();
   TextEditingController productProductDiscountPriceController =
       TextEditingController();
+        TextEditingController productdiscount =
+      TextEditingController();
+
   TextEditingController productStockController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
   TextEditingController productquantityController = TextEditingController();
