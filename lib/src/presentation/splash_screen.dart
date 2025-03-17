@@ -27,12 +27,12 @@ class _SplashScreenState extends State<SplashScreen> {
             await SharedPrefUtils.getToken() == null)
              {
           context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
-        } else {
-          Provider.of<HomeProvider>(context, listen: false)
-              .refreshToken(context);
-          Provider.of<HomeProvider>(context, listen: false).getMe();
-
-          // context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
+        } else 
+        {
+          Provider.of<HomeProvider>(context, listen: false).refreshToken(context);
+         // Provider.of<HomeProvider>(context, listen: false).getMe(context);
+         
+         // context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
         }
       }
     });

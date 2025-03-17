@@ -7,6 +7,7 @@ class APIURL {
   static const String createStore = "${BASE_URL}stores";
   static const String getStore = "${BASE_URL}stores/";
 
+
   static const String updateStore = "${BASE_URL}stores/";
   static const String forgetPassword = "${BASE_URL}auth/forgot-password/vendor";
   static const String verifyForgetPassword =
@@ -24,12 +25,24 @@ class APIURL {
   static const String deleteProduct = "${BASE_URL}products/";
   static const String updateProduct = "${BASE_URL}products/";
   static const String myOrder = "${BASE_URL}orders/store";
- static const String productTags = "${BASE_URL}product-tags";
- static const String vendorOtpSubmit =
+  static const String productTags = "${BASE_URL}product-tags";
+  static const String vendorOtpSubmit =
       "${BASE_URL}delivery/verify-delivery-partner-otp";
 
+  static const String updateStatus = "${BASE_URL}orders/items/";
 
-       static const String updateStatus = "${BASE_URL}orders/items/";
+    static const String getWallet = "${BASE_URL}wallet/vendor";
+ 
+  static const String insightsTotalOrders =
+      "${BASE_URL}insights/total-orders/vendor";
+  static const String insightsCompleteOrders =
+      "${BASE_URL}insights/complete-orders/vendor";
+  static const String insightsCancelledOrders =
+      "${BASE_URL}insights/cancelled-orders/vendor";
+  static const String insightsMostPopularItemOrders =
+      "${BASE_URL}insights/most-popular-items/vendor";
+      static const String addAddress = "${BASE_URL}user/addresses";
+       static const String checkPin = "${BASE_URL}pin-codes/check/";
 
-//erre
+
 }

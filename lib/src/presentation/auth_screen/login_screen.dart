@@ -53,15 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     CustomTextField(
                       controller: pageNotifier.emailOrPasswordController,
-                      validator: (val) 
-                      {
-                        if (val.toString().isEmpty) 
-                        {
+                      validator: (val) {
+                        if (val.toString().isEmpty) {
                           return "Please enter your phone number";
                         }
                         return null;
                       },
-                      maxLength: 64,
+                      maxLength: 10,
                       counterWidget: const Offstage(),
                       // controller: context.read<AuthCubit>().userName,
                       hintText: 'Enter phone number',
@@ -121,11 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: context.appColor.primarycolor,
                     text: AppString.continueTxt,
                     onPressed: () async {
-                      if (_formKey.currentState?.validate() ?? false)
-                       {
+                      if (_formKey.currentState?.validate() ?? false) {
                         var status = await pageNotifier.login(context);
-                        if (status)
-                         {
+                        if (status) {
                           context.push(MyRoutes.DASHBOARDSCREEN);
                           // Provider.of<HomeProvider>(context, listen: false)
                           //     .getMe();

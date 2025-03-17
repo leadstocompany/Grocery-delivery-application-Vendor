@@ -27,12 +27,8 @@ class _DashboardScreeState extends State<DashboardScree> {
   void initState() {
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
-   Provider.of<HomeProvider>(context, listen: false).getMe();
-
-    
+    //Provider.of<HomeProvider>(context, listen: false).getMe();
   }
-
-
 
   List<Widget> _buildScreens() {
     return [

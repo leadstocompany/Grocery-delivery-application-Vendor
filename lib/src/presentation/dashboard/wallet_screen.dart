@@ -4,10 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/string/app_string.dart';
+import 'package:vendor_app/src/logic/provider/insights_provider.dart';
+import 'package:vendor_app/src/presentation/data_notfound.dart';
 import 'package:vendor_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:vendor_app/src/presentation/widgets/elevated_button.dart';
 
@@ -90,163 +93,207 @@ class _WalletScreenState extends State<WalletScreen> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    Provider.of<InsightsProvider>(context, listen: false)
+        .getVendorWallet(context);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text('Wallet History',
-            style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
-        actions: [],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ListView.builder(
-          itemCount: transactions.length,
-          itemBuilder: (context, dateIndex) {
-            final transactionDate = transactions[dateIndex];
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text('Wallet History',
+              style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
+          actions: [],
+        ),
+        body: Consumer<InsightsProvider>(builder: (context, provider, child) {
+          if (provider.productLisLoadingWallet) {
+            return Center(child: CircularProgressIndicator());
+          }
 
+          if (provider.walletList.isEmpty) {
             return Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color.fromARGB(255, 234, 231, 231)),
-                  color: context.appColor.whiteColor,
-                  borderRadius: BorderRadius.all(Radius.circular(3.0)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 8),
-                      child: Row(
-                        children: [
-                          Text(
-                            transactionDate['date'],
-                            style: context.buttonTestStyle.copyWith(),
-                          ),
-                          Spacer(),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xffFFDEDE),
-                              borderRadius: BorderRadius.circular(5.r),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8.0, right: 8),
-                              child: Text(
-                                "Pending",
-                                style:
-                                    context.subTitleTextStyleBloack.copyWith(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Total Order",
-                            style: context.buttonTestStyle.copyWith(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900),
-                          ),
-                          Text(
-                            "100",
-                            style: context.buttonTestStyle.copyWith(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900),
-                          ),
-                          Text(
-                            "₹10000",
-                            style: context.buttonTestStyle.copyWith(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w900),
-                          ),
-                        ],
-                      ),
-                    ),
-                    for (var i = 0;
-                        i < transactionDate['transactions'].length;
-                        i++) ...{
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              AppImages.product1,
-                              // height: 200,
-                              // width: 350,
-                            ),
-                            Gap(5.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  transactionDate['transactions'][i]['title'] ??
-                                      "",
-                                  style: context.buttonTestStyle
-                                      .copyWith(fontSize: 12.sp),
-                                ),
-                                Text(
-                                  transactionDate['transactions'][i]['id'] ??
-                                      '',
-                                  style: context.buttonTestStyle.copyWith(
-                                      color: context.appColor.greyColor),
-                                ),
-                                Text(
-                                    transactionDate['transactions'][i]
-                                            ['amount'] ??
-                                        '',
-                                    style: context.buttonTestStyle.copyWith(
-                                        fontSize: 12.sp, color: Colors.black)),
-                              ],
-                            ),
-                            Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      transactionDate['transactions'][i]
-                                              ['ammount'] ??
-                                          '',
-                                      style: context.buttonTestStyle.copyWith(
-                                          fontSize: 12.sp,
-                                          color: Colors.black)),
-
-                                  Text('November25th, 2023',
-                                      style:
-                                          context.subTitleTxtStyle.copyWith()),
-                                  // Here you can format the date if needed
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (i < transactionDate['transactions'].length - 1)
-                        Divider(
-                          thickness: 0.2,
-                        )
-                    }
-                  ],
-                ),
+              padding: const EdgeInsets.only(top: 150),
+              child: DataNotFound(
+                imagePath: 'assets/images/notfound.jpg',
+                message: "Sorry! Don't have a history",
               ),
             );
-          },
-        ),
-      ),
-    );
+          }
+          return Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ListView.builder(
+              itemCount: provider.walletList.length,
+              itemBuilder: (context, dateIndex) {
+                final transactionDate = transactions[dateIndex];
+                var wallet = provider.walletList[dateIndex];
+
+                return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border:
+                          Border.all(color: Color.fromARGB(255, 234, 231, 231)),
+                      color: context.appColor.whiteColor,
+                      borderRadius: BorderRadius.all(Radius.circular(3.0)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                wallet.weekStart.toString() +
+                                    " TO " +
+                                    wallet.weekEnd.toString(),
+                                style: context.buttonTestStyle.copyWith(),
+                              ),
+                              Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: wallet.totals!.status == true
+                                      ? Colors.green
+                                      : Color(0xffFFDEDE),
+                                  borderRadius: BorderRadius.circular(5.r),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8),
+                                  child: Text(
+                                    wallet.totals!.status == true
+                                        ? "Completed"
+                                        : "Pending",
+                                    style: context.subTitleTextStyleBloack
+                                        .copyWith(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                "Total Order",
+                                style: context.buttonTestStyle.copyWith(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                              Text(
+                                wallet.totals!.totalItems.toString(),
+                                style: context.buttonTestStyle.copyWith(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                              Text(
+                                "₹" + wallet.totals!.totalNetAmount.toString(),
+                                style: context.buttonTestStyle.copyWith(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ],
+                          ),
+                        ),
+                        for (var i = 0; i < wallet.items!.length; i++) ...{
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Row(
+                              children: [
+                                Image.network(
+                                  wallet.items![i].productImage != null &&
+                                          wallet.items![i].productImage!
+                                              .isNotEmpty
+                                      ? wallet.items![i].productImage ?? ''
+                                      : 'https://via.placeholder.com/150', // Fallback placeholder
+                                  height: 50,
+                                  width: 50,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(Icons
+                                        .broken_image); // Fallback icon for invalid URLs
+                                  },
+                                ),
+                                Gap(5.w),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      wallet.items![i].productName ?? "",
+                                      style: context.buttonTestStyle
+                                          .copyWith(fontSize: 12.sp),
+                                    ),
+                                    Text(
+                                      "₹" +
+                                              wallet.items![i]
+                                                  .originalProductPrice ??
+                                          '',
+                                      style: context.buttonTestStyle.copyWith(
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                          color: context.appColor.greyColor),
+                                    ),
+                                    Text(
+                                        "₹" +
+                                                wallet.items![i]
+                                                    .originalProductDiscountPrice ??
+                                            '',
+                                        style: context.buttonTestStyle.copyWith(
+                                            fontSize: 12.sp,
+                                            color: Colors.black)),
+                                  ],
+                                ),
+                                Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Text(
+                                      //     transactionDate['transactions'][i]
+                                      //             ['ammount'] ??
+                                      //         '',
+                                      //     style: context.buttonTestStyle
+                                      //         .copyWith(
+                                      //             fontSize: 12.sp,
+                                      //             color: Colors.black)),
+
+                                      // Text('November25th, 2023',
+                                      //     style: context.subTitleTxtStyle
+                                      //         .copyWith()),
+                                      // Here you can format the date if needed
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (i < transactionDate['transactions'].length - 1)
+                            Divider(
+                              thickness: 0.2,
+                            )
+                        }
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }));
   }
 
   Widget cardWidget() {

@@ -17,6 +17,7 @@ class VendorModel {
     dynamic role;
     bool? isPhoneVerified;
     dynamic storeId;
+    bool ? address;
 
     VendorModel({
         this.id,
@@ -27,6 +28,7 @@ class VendorModel {
         this.role,
         this.isPhoneVerified,
         this.storeId,
+        this.address
     });
 
     factory VendorModel.fromJson(Map<dynamic, dynamic> json) => VendorModel(
@@ -38,6 +40,7 @@ class VendorModel {
         role: json["role"],
         isPhoneVerified: json["isPhoneVerified"],
         storeId: json["storeId"],
+        address:json["address"]
     );
 
     Map<dynamic, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class VendorModel {
         "role": role,
         "isPhoneVerified": isPhoneVerified,
         "storeId": storeId,
+        "address":address
     };
 }

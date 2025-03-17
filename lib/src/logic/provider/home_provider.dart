@@ -1,7 +1,9 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
+import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
 import 'package:vendor_app/src/data/myOrder.dart';
@@ -20,6 +22,8 @@ class HomeProvider extends ChangeNotifier {
         return true;
       },
       (response) {
+        getMe(context);
+
         print("dkjhssfdgdfgdfgfgjkdfkg");
         return true;
       },
@@ -42,15 +46,22 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getMe() async {
+  Future<void> getMe(BuildContext context) async {
     var data = {};
 
     try {
-      var result = await _homeRepo.getMe(data);
+      var result = await _homeRepo.getMe(data, context);
 
       return result.fold(
         (error) {},
         (response) {
+          print("lfdjgkjggj  ${response.address}");
+          if (response.address!) {
+            context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
+          } else {
+            context.push(MyRoutes.ADDRESSS);
+          }
+
           setUserName(response.firstName + " " + response.lastName);
           setPhone(response.phone);
 
@@ -71,12 +82,8 @@ class HomeProvider extends ChangeNotifier {
 
     if (orderItemStatus.isEmpty) {
       data = {};
-    } else 
-    {
-      data = 
-      {
-        'orderItemStatus': orderItemStatus
-      };
+    } else {
+      data = {'orderItemStatus': orderItemStatus};
     }
 
     print("kjdfghkldfjhgkjdfkg ${data} $orderItemStatus");

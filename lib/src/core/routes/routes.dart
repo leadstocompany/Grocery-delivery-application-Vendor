@@ -13,6 +13,7 @@ import 'package:vendor_app/src/presentation/auth_screen/login_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/sign_up_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/approval_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/bussiness_details.dart';
+import 'package:vendor_app/src/presentation/map/add_locations.dart';
 import 'package:vendor_app/src/presentation/message/message_screen.dart';
 import 'package:vendor_app/src/presentation/profile/Setting_screen.dart';
 import 'package:vendor_app/src/presentation/store/create_store.dart';
@@ -172,6 +173,12 @@ class MyRoutes {
         pageBuilder: (context, state) => MessageScreen(),
       ),
 
+        animatedGoRoute(
+          path: ADDRESSS,
+          name: ADDRESSS,
+          pageBuilder: (context, state) => AddLocationAddress(),
+        ),
+
 
       
     ],
@@ -215,6 +222,7 @@ class MyRoutes {
 
   static const UPDATESTORE = "/updatestore";
     static const LIVESUPPORT = "/messageScreen";
+      static const ADDRESSS = "/address";
 
 
   

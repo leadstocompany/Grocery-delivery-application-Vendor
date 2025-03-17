@@ -23,8 +23,7 @@ class ProductProvider extends ChangeNotifier {
   TextEditingController productPriceController = TextEditingController();
   TextEditingController productProductDiscountPriceController =
       TextEditingController();
-        TextEditingController productdiscount =
-      TextEditingController();
+  TextEditingController productdiscount = TextEditingController();
 
   TextEditingController productStockController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
@@ -138,6 +137,14 @@ class ProductProvider extends ChangeNotifier {
     products.forEach((key, value) => value.clear());
     subcategories = {};
     products = {};
+    _selectedImages.clear();
+    selectedImages.clear();
+    _uploadedUrls.clear();
+    selectedTags.clear();
+
+    highlights.clear();
+
+    notifyListeners();
   }
 
   // Fetch categories from API
