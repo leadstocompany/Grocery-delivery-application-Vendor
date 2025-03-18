@@ -121,10 +121,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
                         var status = await pageNotifier.login(context);
-                        if (status) {
-                          context.push(MyRoutes.DASHBOARDSCREEN);
-                          // Provider.of<HomeProvider>(context, listen: false)
-                          //     .getMe();
+                        if (status) 
+                        {
+                        //  context.push(MyRoutes.DASHBOARDSCREEN);
+                          Provider.of<HomeProvider>(context, listen: false)
+                              .getMe(context);
                           //     print(
                           //     "dfdfdfdffd  ${await SharedPrefUtils.getStoreId()}");
                           // if (await SharedPrefUtils.getStoreId() == null)

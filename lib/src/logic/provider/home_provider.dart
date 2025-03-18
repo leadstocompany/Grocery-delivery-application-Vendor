@@ -46,7 +46,8 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getMe(BuildContext context) async {
+  Future<void> getMe(BuildContext context) async 
+  {
     var data = {};
 
     try {
@@ -55,11 +56,11 @@ class HomeProvider extends ChangeNotifier {
       return result.fold(
         (error) {},
         (response) {
-          print("lfdjgkjggj  ${response.address}");
+        
           if (response.address!) {
             context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
           } else {
-            context.push(MyRoutes.ADDRESSS);
+            context.clearAndPush(routePath:MyRoutes.ADDRESSS);
           }
 
           setUserName(response.firstName + " " + response.lastName);
@@ -119,10 +120,17 @@ class HomeProvider extends ChangeNotifier {
 
       return result.fold(
         (error) {
+          ArtSweetAlert.show(
+              context: context,
+              artDialogArgs: ArtDialogArgs(
+                  type: ArtSweetAlertType.warning,
+                  title: "${error.message}",
+                  text: ""));
           context.showLoader(show: false);
           return false;
         },
         (response) {
+          print("kjfgkjdfjkjgkfdjkgkj");
           context.showLoader(show: false);
           getMyOrder(context, "");
 
@@ -136,11 +144,13 @@ class HomeProvider extends ChangeNotifier {
         },
       );
     } catch (e) {
+      print("jksdfhgkjdhfjkgjdkfgjkdjg");
       context.showLoader(show: false);
       ArtSweetAlert.show(
           context: context,
           artDialogArgs: ArtDialogArgs(
               type: ArtSweetAlertType.success, title: "${e}", text: ""));
+
       return false;
     }
   }

@@ -24,17 +24,17 @@ class HomeRepo {
 
       if (loginResponse.accessToken != null) {
         print("chwckData ${loginResponse.accessToken}");
-           await SharedPrefUtils.setToken(
+        await SharedPrefUtils.setToken(
             authToken: loginResponse.accessToken ?? "");
-          await SharedPrefUtils.setRefreshToken( refresh_token: loginResponse.refreshToken ?? "");
-           // context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
+        await SharedPrefUtils.setRefreshToken(
+            refresh_token: loginResponse.refreshToken ?? "");
+        // context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
       }
 
       final String model = response.toString();
 
       return right(model);
-    } on DioException catch (e) 
-    {
+    } on DioException catch (e) {
       context.clearAndPush(routePath: MyRoutes.SELECTACCOUNT);
 
       var error = CustomDioExceptions.handleError(e);
@@ -42,42 +42,36 @@ class HomeRepo {
     }
   }
 
-    FutureResult<MyOrder> getOrder(data) async {
+  FutureResult<MyOrder> getOrder(data) async {
     try {
       var response = await _homeService.getOrder(data);
-       MyOrder productCategory = myOrderFromJson(response.toString());
+      MyOrder productCategory = myOrderFromJson(response.toString());
       return right(productCategory);
-   
-    } on DioException catch (e) 
-    {
-      
-
+    } on DioException catch (e) {
       var error = CustomDioExceptions.handleError(e);
       return left(error);
     }
   }
 
-   FutureResult<String> getAssignedOtp(data) async {
+  FutureResult<String> getAssignedOtp(data) async {
     try {
       var response = await _homeService.getAssignedOtp(data);
 
-    
-
-    final String model = response.toString();
+      final String model = response.toString();
       return right(model);
     } on DioException catch (e) {
       var error = CustomDioExceptions.handleError(e);
+
+      print("kjhgkjdfhgkdfgkjfdg   ${error}");
       return left(error);
     }
   }
 
-   FutureResult<String> updateStatus(data,orderItemId) async {
+  FutureResult<String> updateStatus(data, orderItemId) async {
     try {
-      var response = await _homeService.updateStatus(data,orderItemId);
+      var response = await _homeService.updateStatus(data, orderItemId);
 
-    
-
-    final String model = response.toString();
+      final String model = response.toString();
       return right(model);
     } on DioException catch (e) {
       var error = CustomDioExceptions.handleError(e);
@@ -85,27 +79,19 @@ class HomeRepo {
     }
   }
 
-
-  
-
-  
-
-  FutureResult<VendorModel> getMe(data,context) async
-   {
+  FutureResult<VendorModel> getMe(data, context) async {
     try {
       var response = await _homeService.getMe(data);
 
       final VendorModel vendorModel = vendorModelFromJson(response.toString());
 
-      if (vendorModel != null) 
-      {
+      if (vendorModel != null) {
         SharedPrefUtils.USER_NAME =
             vendorModel.firstName + " " + vendorModel.lastName;
-            SharedPrefUtils.PHONE = vendorModel.phone;
+        SharedPrefUtils.PHONE = vendorModel.phone;
 
         print("dkfjhdkfhkfk  ${SharedPrefUtils.USER_NAME}");
         await SharedPrefUtils.setStoreId(storeId: vendorModel.storeId ?? "");
-      
       }
 
       final String model = response.toString();
@@ -116,7 +102,6 @@ class HomeRepo {
       return left(error);
     }
   }
-
 
   FutureResult<String> addAddress(data) async {
     try {
@@ -132,7 +117,7 @@ class HomeRepo {
     }
   }
 
-    FutureResult<CheckPinResponse> checkPin(data, pin) async {
+  FutureResult<CheckPinResponse> checkPin(data, pin) async {
     try {
       var response = await _homeService.checkPin(data, pin);
       CheckPinResponse allCartItems =
@@ -144,7 +129,4 @@ class HomeRepo {
       return left(error);
     }
   }
-
-
-
 }

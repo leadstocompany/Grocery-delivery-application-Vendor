@@ -37,7 +37,7 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
   @override
   void initState() {
     super.initState();
- //   _determinePosition();
+    //   _determinePosition();
   }
 
   // Future<void> _determinePosition() async {
@@ -150,13 +150,13 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.white, title: Text("Add Address")),
+      appBar: AppBar(
+        backgroundColor: Colors.white, title: Text("Add Address")),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
-            children: 
-            [
+            children: [
               // Container(
               //   height: 200.h,
               //   child: GoogleMap(
@@ -200,8 +200,7 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
                           border: OutlineInputBorder(),
                         ),
 
-                        validator: (value) 
-                        {
+                        validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Full Name";
                           }
@@ -229,31 +228,43 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
                       SizedBox(height: 10),
                       Row(
                         children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _pincodeController,
-                              keyboardType: TextInputType.number,
-                              maxLength: 6,
-                              decoration: InputDecoration(
-                                  labelText: "Enter Pincode",
-                                  border: OutlineInputBorder(),
-                                  counterText: ""),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter a pincode";
-                                } else if (value.length != 6) {
-                                  return "Pincode must be exactly 6 digits";
-                                } else if (!RegExp(r'^[1-9][0-9]{5}$')
-                                    .hasMatch(value)) {
-                                  return "Enter a valid Indian pincode";
-                                }
-                                return null; // ✅ Valid input
-                              },
-                            ),
-                          ),
+                          Consumer<AddressProvider>(
+                              builder: (context, addressProvider, child) {
+                            return Expanded(
+                              child: TextFormField(
+                                controller: _pincodeController,
+                                keyboardType: TextInputType.number,
+                                maxLength: 6,
+                                decoration: InputDecoration(
+                                    labelText: "Enter Pincode",
+                                    border: OutlineInputBorder(),
+                                    counterText: ""),
+                                onChanged: (value) async {
+                                  if (value.length == 6 &&
+                                      RegExp(r'^[1-9][0-9]{5}$')
+                                          .hasMatch(value)) {
+                                    await addressProvider.checkPin(
+                                        context, value);
+                                  }
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter a pincode";
+                                  } else if (value.length != 6) {
+                                    return "Pincode must be exactly 6 digits";
+                                  } else if (!RegExp(r'^[1-9][0-9]{5}$')
+                                      .hasMatch(value)) {
+                                    return "Enter a valid Indian pincode";
+                                  }
+                                  return null; // ✅ Valid input
+                                },
+                              ),
+                            );
+                          }),
                           SizedBox(
                             width: 10,
                           ),
+
                           // Expanded(
                           //   child: TextFormField(
                           //     controller: _addressTypeController,
@@ -270,6 +281,7 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
                           //     },
                           //   ),
                           // ),\
+
                           Expanded(
                             child: DropdownButtonFormField<String>(
                               value: _addressTypeController.text.isNotEmpty
@@ -338,6 +350,7 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
                           return InkWell(
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
+                                addressProvider.setLoader(true);
                                 var status = await addressProvider.checkPin(
                                     context, _pincodeController.text);
 
@@ -356,14 +369,7 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
                                         routePath: MyRoutes.DASHBOARDSCREEN);
                                   }
                                 } else {
-                                  Fluttertoast.showToast(
-                                    msg: "Pin Code  is not available!",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 14.0,
-                                  );
+                                  addressProvider.setLoader(false);
                                 }
                               }
                             },
@@ -380,7 +386,7 @@ class _AddLocationAddressState extends State<AddLocationAddress> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  if (addressProvider.ischeckpin)
+                                  if (addressProvider.isAddressed)
                                     const CircularProgressIndicator(
                                       color: Colors.white,
                                     )

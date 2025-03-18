@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vendor_app/src/core/network_services/service_locator.dart';
 
 import 'package:vendor_app/src/logic/repo/home_repo.dart';
 
 class AddressProvider extends ChangeNotifier {
   bool ischeckpin = false;
- final _homeRepo = getIt<HomeRepo>();
+  final _homeRepo = getIt<HomeRepo>();
+
   Future<bool> checkPin(BuildContext context, pin) async {
-   
     ischeckpin = true;
     notifyListeners();
     var data = {};
@@ -16,7 +17,14 @@ class AddressProvider extends ChangeNotifier {
 
       return result.fold(
         (error) {
-          ischeckpin = false;
+          Fluttertoast.showToast(
+            msg: error.message + ",Please change pin cod!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
           ischeckpin = false;
           return false;
         },
@@ -27,21 +35,30 @@ class AddressProvider extends ChangeNotifier {
         },
       );
     } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Please change pin cod!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
       ischeckpin = false;
       notifyListeners();
       return false;
     }
   }
 
+  bool isAddressed = false;
 
+  setLoader(bool status) {
+    isAddressed = status;
+    notifyListeners();
+  }
 
   Future<bool> addAddress(BuildContext context, name, pincode, phone,
-      alternatePhoneNumber, address, landmark, addresstype) async 
-      {
-    ischeckpin = false;
-
- //   final _homeRepo = getIt<HomeRepo>();
-
+      alternatePhoneNumber, address, landmark, addresstype) async {
+    isAddressed = true;
     notifyListeners();
     var data = {
       "name": name,
@@ -51,32 +68,36 @@ class AddressProvider extends ChangeNotifier {
       "addressLine": address,
       "landmark": landmark,
       "addressType": addresstype,
-      "isDefault": false,
+      "isDefault": true,
       "additionalInstructions": "Please ring doorbell twice"
     };
+
     try {
       var result = await _homeRepo.addAddress(data);
-
       return result.fold(
         (error) {
-          ischeckpin = false;
+          isAddressed = false;
 
           return false;
         },
-        (response)
-         {
-          ischeckpin = false;
+        (response) {
+          Fluttertoast.showToast(
+            msg: "Address Added!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 14.0,
+          );
+          isAddressed = false;
           notifyListeners();
           return true;
         },
       );
     } catch (e) {
-      ischeckpin = false;
+      isAddressed = false;
       notifyListeners();
       return false;
     }
   }
-
-
-
 }

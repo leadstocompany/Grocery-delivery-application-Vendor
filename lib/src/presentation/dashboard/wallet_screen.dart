@@ -238,7 +238,8 @@ class _WalletScreenState extends State<WalletScreen> {
                                     Text(
                                       "₹" +
                                               wallet.items![i]
-                                                  .originalProductPrice ??
+                                                  .originalProductPrice
+                                                  .toString() ??
                                           '',
                                       style: context.buttonTestStyle.copyWith(
                                           decoration:
@@ -248,7 +249,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                     Text(
                                         "₹" +
                                                 wallet.items![i]
-                                                    .originalProductDiscountPrice ??
+                                                    .originalProductDiscountPrice.toString() ??
                                             '',
                                         style: context.buttonTestStyle.copyWith(
                                             fontSize: 12.sp,

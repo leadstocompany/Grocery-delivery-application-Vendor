@@ -323,9 +323,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                                       newValue, orderitem.id);
                                               Provider.of<HomeProvider>(context,
                                                       listen: false)
-                                                  .getMyOrder(
-                                                context,''
-                                              );
+                                                  .getMyOrder(context, '');
 
                                               Navigator.pop(context);
                                             }
@@ -602,11 +600,11 @@ class _CustomerOrderState extends State<CustomerOrder> {
                               listen: false)
                           .getAssignedOtp(context, id, value);
                       if (status) {
-                        Provider.of<HomeProvider>(context, listen: false)
-                            .getMyOrder(
-                          context,''
-                        );
                         Navigator.pop(context);
+                        print("jhfjhdfjgjdhfgjjhdhgjhjdfg");
+                        Provider.of<HomeProvider>(context, listen: false)
+                            .getMyOrder(context, '');
+
                         Navigator.pop(context);
                       } else {}
                     },
@@ -636,9 +634,7 @@ class _CustomerOrderState extends State<CustomerOrder> {
                                 if (status) {
                                   Provider.of<HomeProvider>(context,
                                           listen: false)
-                                      .getMyOrder(
-                                    context,''
-                                  );
+                                      .getMyOrder(context, '');
                                   Navigator.pop(context);
                                   Navigator.pop(context);
                                 } else {}
