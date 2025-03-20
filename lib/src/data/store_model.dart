@@ -9,8 +9,7 @@ StoreModel storeModelFromJson(dynamic str) =>
 
 dynamic storeModelToJson(StoreModel data) => json.encode(data.toJson());
 
-class StoreModel 
-{
+class StoreModel {
   dynamic? id;
   dynamic? storeName;
   dynamic? storeDescription;
@@ -167,28 +166,33 @@ class PaymentDetails {
   dynamic? appWithdrawalPin;
   bool? isVerified;
   dynamic? storeId;
+  dynamic upiId;
+  dynamic qrCode;
 
-  PaymentDetails({
-    this.id,
-    this.bankName,
-    this.accountHolder,
-    this.accountNumber,
-    this.ifscCode,
-    this.appWithdrawalPin,
-    this.isVerified,
-    this.storeId,
-  });
+  PaymentDetails(
+      {this.id,
+      this.bankName,
+      this.accountHolder,
+      this.accountNumber,
+      this.ifscCode,
+      this.appWithdrawalPin,
+      this.isVerified,
+      this.storeId,
+      this.upiId,
+      this.qrCode});
 
-  factory PaymentDetails.fromJson(Map<dynamic?, dynamic> json) => PaymentDetails(
-        id: json["id"],
-        bankName: json["bankName"],
-        accountHolder: json["accountHolder"],
-        accountNumber: json["accountNumber"],
-        ifscCode: json["ifscCode"],
-        appWithdrawalPin: json["appWithdrawalPin"],
-        isVerified: json["isVerified"],
-        storeId: json["storeId"],
-      );
+  factory PaymentDetails.fromJson(Map<dynamic?, dynamic> json) =>
+      PaymentDetails(
+          id: json["id"],
+          bankName: json["bankName"],
+          accountHolder: json["accountHolder"],
+          accountNumber: json["accountNumber"],
+          ifscCode: json["ifscCode"],
+          appWithdrawalPin: json["appWithdrawalPin"],
+          isVerified: json["isVerified"],
+          storeId: json["storeId"],
+          upiId: json["upiId"],
+          qrCode: json['qrCode']);
 
   Map<dynamic?, dynamic> toJson() => {
         "id": id,
@@ -199,5 +203,7 @@ class PaymentDetails {
         "appWithdrawalPin": appWithdrawalPin,
         "isVerified": isVerified,
         "storeId": storeId,
+        "upiId": upiId,
+        "qrCode": qrCode
       };
 }

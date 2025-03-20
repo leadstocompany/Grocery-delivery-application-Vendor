@@ -75,12 +75,55 @@ class DaySelectionProvider with ChangeNotifier {
     }
   }
 
+  File? _selectedBarcodeImage;
+
+  File? get selectedBarcodeImage => _selectedBarcodeImage;
+
+  Future<void> pickbarCodeImage(BuildContext context) async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _selectedBarcodeImage = File(pickedFile.path);
+
+      print("ksfhgkdfgkjdfg  ${_selectedBarcodeImage}");
+      uploadBarcodeImage(context);
+      notifyListeners();
+    }
+  }
+
+  final _productRepo = getIt<ProductRepo>();
+  String _uploadedBarCodeUrl = '';
+
+  Future<bool> uploadBarcodeImage(BuildContext context) async {
+    context.showLoader(show: true);
+    _isImageLoading = false;
+    final result = await _productRepo.uploadImage(selectedImage!);
+    context.showLoader(show: false);
+
+    return result.fold(
+      (error) {
+        _showSnackBar(context, error.message, Colors.red);
+        return false;
+      },
+      (uploadImage) {
+        _isImageLoading = true;
+        _uploadedBarCodeUrl = uploadImage.data!.url.toString();
+        notifyListeners();
+
+        _showSnackBar(context, "Image uploaxded successfully!", Colors.green);
+        return true;
+      },
+    );
+  }
+
   ////  create store /////////////////////////////////////////////////////
 
   final TextEditingController bankName = TextEditingController();
   final TextEditingController accountHoldername = TextEditingController();
   final TextEditingController accountNumber = TextEditingController();
   final TextEditingController ifscCode = TextEditingController();
+  final TextEditingController upiID = TextEditingController();
   final TextEditingController appwithdrawalPin = TextEditingController();
 
   String _selectedTime = 'Open';
@@ -190,6 +233,8 @@ class DaySelectionProvider with ChangeNotifier {
         "accountHolder": accountHoldername.text,
         "accountNumber": accountNumber.text,
         "ifscCode": ifscCode.text,
+        "upiId": upiID.text,
+        "qrCode": _uploadedBarCodeUrl,
         "appWithdrawalPin": confirmPin.toString()
       }
     };
@@ -240,8 +285,6 @@ class DaySelectionProvider with ChangeNotifier {
 
   String _uploadedUrl = '';
 
-  final _productRepo = getIt<ProductRepo>();
-
   Future<bool> uploadImage(BuildContext context) async {
     context.showLoader(show: true);
     _isImageLoading = false;
@@ -264,10 +307,6 @@ class DaySelectionProvider with ChangeNotifier {
     );
   }
 
-
-
-
-
   void _showSnackBar(BuildContext context, String message, Color color) {
     showTopSnackBar(context, message, color);
   }
@@ -275,16 +314,13 @@ class DaySelectionProvider with ChangeNotifier {
   Future<bool> updateSore(BuildContext context, String id) async {
     context.showLoader(show: true);
 
-    var data =
-     {
+    var data = {
       "operateDates": getOperateDates(selectedDays),
-      "operateTimes":
-       {
+      "operateTimes": {
         "startTime": selectedTime,
         "endTime": selectedClosedTime
       },
-      "paymentDetails": 
-      {
+      "paymentDetails": {
         "bankName": bankName.text,
         "accountHolder": accountHoldername.text,
         "accountNumber": accountNumber.text,
@@ -296,7 +332,7 @@ class DaySelectionProvider with ChangeNotifier {
     print("dfhgkjhg  ${data}");
 
     try {
-      var result = await _storeRepo.updateStore(data,id);
+      var result = await _storeRepo.updateStore(data, id);
 
       context.showLoader(show: false);
 

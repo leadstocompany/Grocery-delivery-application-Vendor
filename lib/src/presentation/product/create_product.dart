@@ -98,6 +98,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                 hintText: ''), // Removes default underline
                           ),
                         ),
+                  
+                  
                       if (provider.selectedCategory != null) Gap(15.h),
                       if (provider.selectedCategory != null)
                         Container(

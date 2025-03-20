@@ -57,13 +57,15 @@ class _StoreManagementState extends State<StoreManagement> {
             return Center(child: Text('No available'));
           } else {
             provider.bankName.text =
-                provider.store_model!.paymentDetails!.bankName;
+                provider.store_model!.paymentDetails!.bankName ?? "";
             provider.accountHoldername.text =
-                provider.store_model!.paymentDetails!.accountHolder;
+                provider.store_model!.paymentDetails!.accountHolder ?? "";
             provider.accountNumber.text =
-                provider.store_model!.paymentDetails!.accountNumber;
+                provider.store_model!.paymentDetails!.accountNumber ?? "";
             provider.ifscCode.text =
-                provider.store_model!.paymentDetails!.ifscCode;
+                provider.store_model!.paymentDetails!.ifscCode ?? "";
+
+            provider.upiID.text = provider.store_model!.paymentDetails!.upiId ?? "";
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               child: Column(
@@ -121,6 +123,7 @@ class _StoreManagementState extends State<StoreManagement> {
                   Form(
                     key: _formKey,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextField(
                           controller: provider.bankName,
@@ -184,6 +187,36 @@ class _StoreManagementState extends State<StoreManagement> {
                           hintText: 'Bank IFSCCOde',
                           hintStyle: context.subTitleTextStyle,
                           fillColor: context.appColor.whiteColor,
+                        ),
+                        Gap(10.h),
+                        CustomTextField(
+                          controller: provider.upiID,
+                          validator: (val) {
+                            if (val.toString().isEmpty) {
+                              return "Bank IFSCCOde";
+                            }
+                            return null;
+                          },
+                          maxLength: 64,
+                          counterWidget: const Offstage(),
+                          readOnly: true,
+                          hintText: 'UPI ID',
+                          hintStyle: context.subTitleTextStyle,
+                          fillColor: context.appColor.whiteColor,
+                        ),
+                        Gap(10.h),
+                        Text(
+                          'Bank QR Code',
+                          style: context.subTitleStyle,
+                        ),
+                        Gap(3.h),
+                        Container(
+                          height: 100.h,
+                          width: double.infinity,
+                          child: Image.network(
+                            provider.store_model!.paymentDetails!.qrCode ?? "",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Gap(10.h),
                         SizedBox(

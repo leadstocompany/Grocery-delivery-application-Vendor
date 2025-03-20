@@ -67,6 +67,7 @@ class CreateStore extends StatelessWidget {
             Form(
               key: _formKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Container(
                   //   height: 40.h,
@@ -154,10 +155,56 @@ class CreateStore extends StatelessWidget {
                     fillColor: context.appColor.greyColor100,
                   ),
                   Gap(10.h),
+                  CustomTextField(
+                    controller: createStoreprovider.upiID,
+                    validator: (val) {
+                      if (val.toString().isEmpty) {
+                        return "IFSC Code";
+                      }
+                      return null;
+                    },
+                    maxLength: 64,
+                    counterWidget: const Offstage(),
+                    hintText: 'UPI ID',
+                    fillColor: context.appColor.greyColor100,
+                  ),
+                  Gap(10.h),
+                  Text("Upload Your Barcode Image", style: TextStyle()),
+                  Gap(4.h),
+                  Consumer<DaySelectionProvider>(
+                      builder: (context, pinProvider, child) {
+                    return Container(
+                        height: 120.h,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: context.appColor.greyColor400),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: InkWell(
+                          onTap: () {
+                            createStoreprovider.pickbarCodeImage(context);
+                          },
+                          child: createStoreprovider.selectedBarcodeImage ==
+                                  null
+                              ? Center(
+                                  child: Icon(
+                                    Icons.camera,
+                                    size: 100,
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Image.file(
+                                    createStoreprovider.selectedBarcodeImage!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                        ));
+                  })
                 ],
               ),
             ),
-            Gap(50.h),
+            Gap(20.h),
             SizedBox(
               width: double.infinity,
               child: ButtonElevated(
@@ -450,9 +497,9 @@ class CreateStore extends StatelessWidget {
                                   final status =
                                       await pinProvider.createStore(context);
 
-                                  if (status) 
-                                  {
-                                    context.clearAndPush( routePath: MyRoutes.SUBMITSCREEN);
+                                  if (status) {
+                                    context.clearAndPush(
+                                        routePath: MyRoutes.SUBMITSCREEN);
                                   }
                                 }
                               : null,

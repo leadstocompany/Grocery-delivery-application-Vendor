@@ -110,7 +110,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
 
                 if (provider.mostpopulerproductlist.isEmpty) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 150),
+                    padding: const EdgeInsets.only(top: 10),
                     child: DataNotFound(
                       imagePath: 'assets/images/notfound.jpg',
                       message: "Product Not available",

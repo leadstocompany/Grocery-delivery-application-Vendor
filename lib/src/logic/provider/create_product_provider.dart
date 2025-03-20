@@ -147,7 +147,7 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Fetch categories from API
+  
   Future<void> getCategoryByLevel() async {
     clearData();
     isLoading = true;
@@ -179,6 +179,10 @@ class ProductProvider extends ChangeNotifier {
       },
     );
   }
+
+
+
+
 
   List<DatumTags> tagsList = [];
   List<DatumTags> selectedTags = [];
