@@ -159,7 +159,7 @@ class CreateStore extends StatelessWidget {
                     controller: createStoreprovider.upiID,
                     validator: (val) {
                       if (val.toString().isEmpty) {
-                        return "IFSC Code";
+                        return "UPI ID";
                       }
                       return null;
                     },
@@ -201,6 +201,10 @@ class CreateStore extends StatelessWidget {
                                 ),
                         ));
                   })
+               
+               
+               
+               
                 ],
               ),
             ),

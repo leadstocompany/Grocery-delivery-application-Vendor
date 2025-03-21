@@ -98,17 +98,19 @@ class DaySelectionProvider with ChangeNotifier {
   Future<bool> uploadBarcodeImage(BuildContext context) async {
     context.showLoader(show: true);
     _isImageLoading = false;
-    final result = await _productRepo.uploadImage(selectedImage!);
+    final result = await _productRepo.uploadImage(selectedBarcodeImage!);
     context.showLoader(show: false);
 
     return result.fold(
       (error) {
+         context.showLoader(show: false);
         _showSnackBar(context, error.message, Colors.red);
         return false;
       },
       (uploadImage) {
         _isImageLoading = true;
         _uploadedBarCodeUrl = uploadImage.data!.url.toString();
+         context.showLoader(show: false);
         notifyListeners();
 
         _showSnackBar(context, "Image uploaxded successfully!", Colors.green);
@@ -293,6 +295,7 @@ class DaySelectionProvider with ChangeNotifier {
 
     return result.fold(
       (error) {
+         context.showLoader(show: false);
         _showSnackBar(context, error.message, Colors.red);
         return false;
       },
@@ -300,6 +303,7 @@ class DaySelectionProvider with ChangeNotifier {
         _isImageLoading = true;
         _uploadedUrl = uploadImage.data!.url.toString();
         notifyListeners();
+         context.showLoader(show: false);
 
         _showSnackBar(context, "Image uploaxded successfully!", Colors.green);
         return true;
