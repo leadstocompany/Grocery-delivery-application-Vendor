@@ -13,6 +13,7 @@ import 'package:vendor_app/src/presentation/auth_screen/login_screen.dart';
 import 'package:vendor_app/src/presentation/auth_screen/sign_up_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/approval_screen.dart';
 import 'package:vendor_app/src/presentation/bussiness/bussiness_details.dart';
+import 'package:vendor_app/src/presentation/edit_profile/edit_profile_screen.dart';
 import 'package:vendor_app/src/presentation/map/add_locations.dart';
 import 'package:vendor_app/src/presentation/message/message_screen.dart';
 import 'package:vendor_app/src/presentation/profile/Setting_screen.dart';
@@ -167,20 +168,21 @@ class MyRoutes {
         name: FORGETNEWPASSWORD,
         pageBuilder: (context, state) => ForgetNewPassword(),
       ),
-        animatedGoRoute(
+      animatedGoRoute(
         path: LIVESUPPORT,
         name: LIVESUPPORT,
         pageBuilder: (context, state) => MessageScreen(),
       ),
-
-        animatedGoRoute(
-          path: ADDRESSS,
-          name: ADDRESSS,
-          pageBuilder: (context, state) => AddLocationAddress(),
-        ),
-
-
-      
+      animatedGoRoute(
+        path: ADDRESSS,
+        name: ADDRESSS,
+        pageBuilder: (context, state) => AddLocationAddress(),
+      ),
+      animatedGoRoute(
+        path: EDITPROFILE,
+        name: EDITPROFILE,
+        pageBuilder: (context, state) => EditProfileScreen(),
+      ),
     ],
   );
 
@@ -221,11 +223,9 @@ class MyRoutes {
   static const FORGETNEWPASSWORD = "/forgetnewpassword";
 
   static const UPDATESTORE = "/updatestore";
-    static const LIVESUPPORT = "/messageScreen";
-      static const ADDRESSS = "/address";
-
-
-  
+  static const LIVESUPPORT = "/messageScreen";
+  static const ADDRESSS = "/address";
+  static const EDITPROFILE = "/editProfileScreen";
 }
 
 GoRoute animatedGoRoute({

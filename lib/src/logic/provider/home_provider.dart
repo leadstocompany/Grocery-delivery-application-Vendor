@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,6 +8,7 @@ import 'package:vendor_app/src/core/network_services/service_locator.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
 import 'package:vendor_app/src/core/utiils_lib/extensions.dart';
 import 'package:vendor_app/src/core/utiils_lib/shared_pref_utils.dart';
+import 'package:vendor_app/src/core/utiils_lib/snack_bar.dart';
 import 'package:vendor_app/src/data/myOrder.dart';
 import 'package:vendor_app/src/logic/repo/home_repo.dart';
 
@@ -32,13 +35,19 @@ class HomeProvider extends ChangeNotifier {
 
   String _userName = '';
   String _phone = '';
+  String _profile = "";
 
   String get userName => _userName;
   String get phone => _phone;
+  String get profile => _profile;
 
   void setUserName(String name) {
     _userName = name;
     notifyListeners();
+  }
+
+  setuserprofile(String profile) {
+    _profile = profile;
   }
 
   void setPhone(String phoneNumber) {
@@ -46,8 +55,7 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getMe(BuildContext context) async 
-  {
+  Future<void> getMe(BuildContext context) async {
     var data = {};
 
     try {
@@ -56,15 +64,15 @@ class HomeProvider extends ChangeNotifier {
       return result.fold(
         (error) {},
         (response) {
-        
           if (response.address!) {
             context.clearAndPush(routePath: MyRoutes.DASHBOARDSCREEN);
           } else {
-            context.clearAndPush(routePath:MyRoutes.ADDRESSS);
+            context.clearAndPush(routePath: MyRoutes.ADDRESSS);
           }
 
           setUserName(response.firstName + " " + response.lastName);
           setPhone(response.phone);
+          setuserprofile(response.img);
 
           SharedPrefUtils.USER_NAME =
               response.firstName + " " + response.lastName;
@@ -217,4 +225,88 @@ class HomeProvider extends ChangeNotifier {
   final List<String> statusOptions = [
     "SHIPPED",
   ];
+  bool _isImageLoading = false;
+  bool get isImageLoading => _isImageLoading;
+  String _uploadedUrl = '';
+
+  Future<bool> uploadImage(BuildContext context, File? _selectedImage) async {
+    context.showLoader(show: true);
+    _isImageLoading = false;
+    final result = await _homeRepo.uploadImage(_selectedImage!);
+    context.showLoader(show: false);
+
+    return result.fold(
+      (error) {
+        _showSnackBar(context, error.message, Colors.red);
+        return false;
+      },
+      (uploadImage) {
+        _isImageLoading = true;
+        _uploadedUrl = uploadImage.data!.url.toString();
+        notifyListeners();
+
+        _showSnackBar(context, "Image uploaded successfully !", Colors.green);
+        return true;
+      },
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    showTopSnackBar(context, message, color);
+  }
+
+  Future<bool> updateProfile(
+      BuildContext context, String firstName, String lastName) async {
+    context.showLoader(show: true);
+    var data;
+    if (_uploadedUrl.isEmpty) {
+      data = {
+        "firstName": firstName,
+        "lastName": lastName,
+      };
+    } else {
+      data = {
+        "firstName": firstName,
+        "lastName": lastName,
+        "img": _uploadedUrl
+      };
+    }
+
+    try {
+      var result = await _homeRepo.updateProfile(data);
+
+      context.showLoader(show: false);
+
+      return result.fold(
+        (error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return false;
+        },
+        (response) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Profile updated"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          return true;
+        },
+      );
+    } catch (e) {
+      context.showLoader(show: false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+  }
 }

@@ -40,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var userName = Provider.of<HomeProvider>(context).userName;
+    var profile = Provider.of<HomeProvider>(context).profile;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -64,38 +65,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        _pickImage();
-                      },
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.grey,
-                        backgroundImage: _image != null
-                            ? FileImage(_image!)
-                            : (profile != null && profile!.isNotEmpty
-                                ? NetworkImage(profile!)
-                                : const AssetImage(
-                                    "assets/default_profile.png")),
-                      ),
-
-                      // ClipRRect(
-                      //   borderRadius: BorderRadius.circular(25),
-                      //   child: Image.network(
-                      //     "",
-                      //     width: 50,
-                      //     height: 50,
-                      //     fit: BoxFit.cover,
-                      //     errorBuilder: (context, error, stackTrace) {
-                      //       return Image.asset(
-                      //         AppImages.Avatar,
-                      //         width: 50,
-                      //         height: 50,
-                      //         fit: BoxFit.cover,
-                      //       );
-                      //     },
-                      //   ),
-                      // ),
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.grey,
+                      backgroundImage: (NetworkImage(profile!)),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -133,13 +106,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final List<Map<String, dynamic>> productsC = [
     {
-      'icon': Icons
-          .description_outlined, // 'icon' is now treated as a dynamic field to handle IconData
+      'icon': Icons.edit_square,
+      'title': "Update Profile",
+    },
+    {
+      'icon': Icons.description_outlined,
       'title': "Business Details",
     },
     {
-      'icon':
-          Icons.storefront_outlined, // Handle image separately from the icon
+      'icon': Icons.storefront_outlined,
       'title': "Store Management",
     },
     {
@@ -157,75 +132,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ];
 
   Widget _caardData() {
-    return Container(
-        height: 300.h,
-        decoration: BoxDecoration(
-          border: Border.all(color: context.appColor.greyColor100),
-          color: context.appColor.whiteColor,
-          borderRadius: BorderRadius.all(Radius.circular(3.0)),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: productsC.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    switch (index) {
-                      case 0:
-                        context.push(
-                          // MyRoutes.SETUPBUSSINESS,
-                          MyRoutes.DETAILSBUSSINESS,
-                          extra: {'status': '0'},
-                        );
-                        break;
-                      case 1:
-                        context.push(
-                          MyRoutes.STOREMANAGEMENT,
-                          extra: {'status': '0'},
-                        );
-                        break;
-                      case 2:
-                        context.push(
-                          MyRoutes.SETTING,
-                        );
-                        break;
+    return Expanded(
+      child: Container(
+          //height: 300.h,
+          decoration: BoxDecoration(
+            border: Border.all(color: context.appColor.greyColor100),
+            color: context.appColor.whiteColor,
+            borderRadius: BorderRadius.all(Radius.circular(3.0)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: productsC.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      switch (index) {
+                        case 0:
+                          context.push(MyRoutes.EDITPROFILE);
+                          break;
 
-                      case 3:
-                        context.push(
-                          MyRoutes.LIVESUPPORT,
-                        );
-                        break;
+                        case 1:
+                          context.push(
+                            // MyRoutes.SETUPBUSSINESS,
+                            MyRoutes.DETAILSBUSSINESS,
+                            extra: {'status': '0'},
+                          );
+                          break;
+                        case 2:
+                          context.push(
+                            MyRoutes.STOREMANAGEMENT,
+                            extra: {'status': '0'},
+                          );
+                          break;
+                        case 3:
+                          context.push(
+                            MyRoutes.SETTING,
+                          );
+                          break;
 
-                      case 4:
-                        Provider.of<DaySelectionProvider>(context,
-                                listen: false)
-                            .vendorLogOut(context);
+                        case 4:
+                          context.push(
+                            MyRoutes.LIVESUPPORT,
+                          );
+                          break;
+                        case 5:
+                          Provider.of<DaySelectionProvider>(context,
+                                  listen: false)
+                              .vendorLogOut(context);
 
-                        break;
-                    }
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 30.h),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Icon(
-                          productsC[index]['icon'],
-                          size: 30.w,
-                        ),
-                        Gap(20.h),
-                        Text(
-                          productsC[index]['title'],
-                          style: context.subTitleTextStyleBloack
-                              .copyWith(fontSize: 17),
-                        ),
-                      ],
+                          break;
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 30.h),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(
+                            productsC[index]['icon'],
+                            size: 30.w,
+                          ),
+                          Gap(20.h),
+                          Text(
+                            productsC[index]['title'],
+                            style: context.subTitleTextStyleBloack
+                                .copyWith(fontSize: 17),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
-        ));
+                  );
+                }),
+          )),
+    );
   }
 }

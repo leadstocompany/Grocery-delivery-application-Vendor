@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:vendor_app/src/core/constant/api.dart';
 import 'package:vendor_app/src/core/network_services/api_services.dart';
 
@@ -61,6 +63,23 @@ class HomeService extends ApiService
         APIURL.updateStatus + orderItemId + "/status",
         data: jsonEncode(data));
 
+    return response;
+  }
+
+
+      Future<Response> uploadImage(File imageFile,
+      {Map<String, dynamic>? additionalFields}) async {
+    const String url = APIURL.uploadImage;
+    return await api.uploadImage(
+      url,
+      imageFile,
+      additionalFields: additionalFields,
+    );
+  }
+
+   Future updateProfile(data) async {
+    var response =
+        await api.patch(APIURL.updateProfile, data: jsonEncode(data));
     return response;
   }
 }

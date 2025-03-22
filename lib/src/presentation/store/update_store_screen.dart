@@ -22,12 +22,27 @@ class UpdateStoreScreen extends StatelessWidget {
         Provider.of<DaySelectionProvider>(context, listen: false);
     print("djfgh  ${storeId}");
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: context.appColor.blackColor,
+          ),
+          onPressed: () 
+          {
+            Navigator.pop(context); // Handle back button functionality
+          },
+        ),
+        title: Text('Store Management',
+            style: context.subTitleTextStyleBloack.copyWith(fontSize: 16.sp)),
+      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Gap(40.h),
+            Gap(20.h),
             Text(
               'Update Store Management',
               style: context.subTitleStyle,
@@ -67,35 +82,8 @@ class UpdateStoreScreen extends StatelessWidget {
             Form(
               key: _formKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(
-                  //   height: 40.h,
-                  //   decoration: BoxDecoration(
-                  //     border: Border.all(color: context.appColor.greyColor400),
-                  //     color: context.appColor.greyColor200,
-
-                  //     borderRadius: BorderRadius.all(Radius.circular(5.0)),
-
-                  //     // width: ,
-                  //   ),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: Row(
-                  //       children: [
-                  //         Text(
-                  //           'Choose your bank',
-                  //           style: context.subTitleTxtStyleblack.copyWith(
-                  //             color: context.appColor.lightBlackColor,
-                  //           ),
-                  //         ),
-                  //         Spacer(),
-                  //         Icon(Icons.arrow_drop_down)
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // Gap(10.h),
-
                   CustomTextField(
                     controller: createStoreprovider.bankName,
                     validator: (val) {
@@ -124,7 +112,6 @@ class UpdateStoreScreen extends StatelessWidget {
                     hintText: "Account Holder Name ",
                     fillColor: context.appColor.greyColor100,
                   ),
-
                   Gap(10.h),
                   CustomTextField(
                     controller: createStoreprovider.accountNumber,
@@ -154,16 +141,71 @@ class UpdateStoreScreen extends StatelessWidget {
                     fillColor: context.appColor.greyColor100,
                   ),
                   Gap(10.h),
+                  Text(
+                    'UPI ID',
+                    style: context.subTitleTxtStyle,
+                  ),
+                  Gap(4.h),
+                  CustomTextField(
+                    controller: createStoreprovider.upiID,
+                    validator: (val) {
+                      if (val.toString().isEmpty) {
+                        return "Upi Id";
+                      }
+                      return null;
+                    },
+                    maxLength: 64,
+                    counterWidget: const Offstage(),
+                    hintText: 'UPI ID',
+                    fillColor: context.appColor.greyColor100,
+                  ),
+                  Gap(10.h),
+                  Text(
+                    'QR Code',
+                    style: context.subTitleTxtStyle,
+                  ),
+                  Gap(4.h),
+                  Consumer<DaySelectionProvider>(
+                      builder: (context, pinProvider, child) {
+                    return Container(
+                      height: 150.h,
+                      width: double.infinity,
+                      child: pinProvider.selectedBarcodeImage == null
+                          ? Image.network(
+                              pinProvider.store_model!.paymentDetails!.qrCode ??
+                                  "",
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              pinProvider.selectedBarcodeImage!,
+                              fit: BoxFit.cover,
+                            ),
+                    );
+                  }),
+                  Gap(10.h),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ButtonElevated(
+                      text: 'Update Qr code',
+                      onPressed: () async {
+                        createStoreprovider.pickbarCodeImage(context);
+                      },
+                      backgroundColor: context.appColor.greyColor,
+                    ),
+                  ),
                 ],
               ),
             ),
-            Gap(50.h),
+            Gap(20.h),
             SizedBox(
               width: double.infinity,
               child: ButtonElevated(
                 text: 'Update',
                 onPressed: () async {
-                  if (_formKey.currentState?.validate() ?? false) {
+                  if (_formKey.currentState?.validate() ?? false) 
+                  {
+                    print(
+                        "lkjdfhgkfdhgkjkfdjgh    ${createStoreprovider.upiID.text}");
                     _showBottomSheet(context, createStoreprovider);
                   }
                 },
@@ -454,7 +496,6 @@ class UpdateStoreScreen extends StatelessWidget {
                                           .updateSore(context, storeId);
 
                                   if (status) {
-                                    Navigator.pop(context);
                                     Navigator.pop(context);
 
                                     print("jsghghg  ");

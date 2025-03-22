@@ -93,7 +93,7 @@ class DaySelectionProvider with ChangeNotifier {
   }
 
   final _productRepo = getIt<ProductRepo>();
-  String _uploadedBarCodeUrl = '';
+  String uploadedBarCodeUrl = '';
 
   Future<bool> uploadBarcodeImage(BuildContext context) async {
     context.showLoader(show: true);
@@ -103,14 +103,14 @@ class DaySelectionProvider with ChangeNotifier {
 
     return result.fold(
       (error) {
-         context.showLoader(show: false);
+        context.showLoader(show: false);
         _showSnackBar(context, error.message, Colors.red);
         return false;
       },
       (uploadImage) {
         _isImageLoading = true;
-        _uploadedBarCodeUrl = uploadImage.data!.url.toString();
-         context.showLoader(show: false);
+        uploadedBarCodeUrl = uploadImage.data!.url.toString();
+        context.showLoader(show: false);
         notifyListeners();
 
         _showSnackBar(context, "Image uploaxded successfully!", Colors.green);
@@ -121,12 +121,12 @@ class DaySelectionProvider with ChangeNotifier {
 
   ////  create store /////////////////////////////////////////////////////
 
-  final TextEditingController bankName = TextEditingController();
-  final TextEditingController accountHoldername = TextEditingController();
-  final TextEditingController accountNumber = TextEditingController();
-  final TextEditingController ifscCode = TextEditingController();
-  final TextEditingController upiID = TextEditingController();
-  final TextEditingController appwithdrawalPin = TextEditingController();
+  TextEditingController bankName = TextEditingController();
+  TextEditingController accountHoldername = TextEditingController();
+  TextEditingController accountNumber = TextEditingController();
+  TextEditingController ifscCode = TextEditingController();
+  TextEditingController upiID = TextEditingController();
+  TextEditingController appwithdrawalPin = TextEditingController();
 
   String _selectedTime = 'Open';
 
@@ -236,7 +236,7 @@ class DaySelectionProvider with ChangeNotifier {
         "accountNumber": accountNumber.text,
         "ifscCode": ifscCode.text,
         "upiId": upiID.text,
-        "qrCode": _uploadedBarCodeUrl,
+        "qrCode": uploadedBarCodeUrl,
         "appWithdrawalPin": confirmPin.toString()
       }
     };
@@ -295,7 +295,7 @@ class DaySelectionProvider with ChangeNotifier {
 
     return result.fold(
       (error) {
-         context.showLoader(show: false);
+        context.showLoader(show: false);
         _showSnackBar(context, error.message, Colors.red);
         return false;
       },
@@ -303,7 +303,7 @@ class DaySelectionProvider with ChangeNotifier {
         _isImageLoading = true;
         _uploadedUrl = uploadImage.data!.url.toString();
         notifyListeners();
-         context.showLoader(show: false);
+        context.showLoader(show: false);
 
         _showSnackBar(context, "Image uploaxded successfully!", Colors.green);
         return true;
@@ -318,6 +318,8 @@ class DaySelectionProvider with ChangeNotifier {
   Future<bool> updateSore(BuildContext context, String id) async {
     context.showLoader(show: true);
 
+    print("lkjdshfgkjhdfkgfh   ${upiID.text}  ${bankName.text}");
+
     var data = {
       "operateDates": getOperateDates(selectedDays),
       "operateTimes": {
@@ -329,6 +331,8 @@ class DaySelectionProvider with ChangeNotifier {
         "accountHolder": accountHoldername.text,
         "accountNumber": accountNumber.text,
         "ifscCode": ifscCode.text,
+        "upiId": upiID.text,
+        "qrCode": uploadedBarCodeUrl,
         "appWithdrawalPin": confirmPin.toString()
       }
     };

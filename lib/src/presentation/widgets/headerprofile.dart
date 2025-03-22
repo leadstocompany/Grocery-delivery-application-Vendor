@@ -68,13 +68,13 @@ class HeaderState extends State<HeaderProfile> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications_none,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {},
-                  ),
+                  // IconButton(
+                  //   icon: Icon(
+                  //     Icons.notifications_none,
+                  //     color: Colors.black,
+                  //   ),
+                  //   onPressed: () {},
+                  // ),
                 ],
               ),
             ),

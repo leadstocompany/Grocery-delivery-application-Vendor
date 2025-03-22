@@ -31,6 +31,12 @@ class _StoreManagementState extends State<StoreManagement> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
@@ -65,7 +71,11 @@ class _StoreManagementState extends State<StoreManagement> {
             provider.ifscCode.text =
                 provider.store_model!.paymentDetails!.ifscCode ?? "";
 
-            provider.upiID.text = provider.store_model!.paymentDetails!.upiId ?? "";
+            provider.upiID.text =
+                provider.store_model!.paymentDetails!.upiId ?? "";
+            provider.uploadedBarCodeUrl =
+                provider.store_model!.paymentDetails!.qrCode ?? "";
+
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               child: Column(
@@ -225,10 +235,14 @@ class _StoreManagementState extends State<StoreManagement> {
                               text: 'Edit',
                               backgroundColor: context.appColor.primarycolor,
                               onPressed: () {
-                                context.push(
+                                context.pushReplacement(
                                   MyRoutes.UPDATESTORE,
                                   extra: {'storeId': provider.store_model!.id},
                                 );
+                                // context.clearAndPush(
+                                //   routePath: MyRoutes.UPDATESTORE,
+                                //   args: {'storeId': provider.store_model!.id},
+                                // );
                               }),
                         ),
                       ],

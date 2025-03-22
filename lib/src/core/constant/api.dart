@@ -1,12 +1,11 @@
 class APIURL {
-  static const BASE_URL = "http://210.89.44.183:3333/xam/";
+  static const BASE_URL = "https://www.mv.frontshopemporium.in/xam/";
   static const String sendOtp = "${BASE_URL}auth/send-otp/vendor";
   static const String verifyOtp = "${BASE_URL}auth/verify-otp/vendor";
   static const String login = "${BASE_URL}auth/login/vendor";
   static const String vendorRegister = "${BASE_URL}auth/register/vendor";
   static const String createStore = "${BASE_URL}stores";
   static const String getStore = "${BASE_URL}stores/";
-
 
   static const String updateStore = "${BASE_URL}stores/";
   static const String forgetPassword = "${BASE_URL}auth/forgot-password/vendor";
@@ -31,8 +30,8 @@ class APIURL {
 
   static const String updateStatus = "${BASE_URL}orders/items/";
 
-    static const String getWallet = "${BASE_URL}wallet/vendor";
- 
+  static const String getWallet = "${BASE_URL}wallet/vendor";
+
   static const String insightsTotalOrders =
       "${BASE_URL}insights/total-orders/vendor";
   static const String insightsCompleteOrders =
@@ -41,8 +40,7 @@ class APIURL {
       "${BASE_URL}insights/cancelled-orders/vendor";
   static const String insightsMostPopularItemOrders =
       "${BASE_URL}insights/most-popular-items/vendor";
-      static const String addAddress = "${BASE_URL}user/addresses";
-       static const String checkPin = "${BASE_URL}pin-codes/check/";
-
-
+  static const String addAddress = "${BASE_URL}user/addresses";
+  static const String checkPin = "${BASE_URL}pin-codes/check/";
+    static const String updateProfile = "${BASE_URL}user/profile";
 }

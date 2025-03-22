@@ -35,6 +35,7 @@ class SharedPrefUtils {
   static const String RESET_TOKEN = "RESET_TOKEN";
   static const String STORE_ID = "STORE_ID";
   static const String REFRESH_TOKEN = "REFRESH_TOKEN";
+   static const String KEY_PROFILE = "KEY_PROFILE";
 
   /// Set bearer authorization token
   static Future<bool> setToken({required String authToken}) {
@@ -230,6 +231,11 @@ class SharedPrefUtils {
 
     return firstName!;
   }
+    /// Get user profile URL
+  static Future<String?> getUserProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(KEY_PROFILE);
+  }
 
   static Future<String> getLastName() async {
     final sp = await SharedPreferences.getInstance();
@@ -274,15 +280,8 @@ class SharedPrefUtils {
   }
 
   /// Get profile url
-  static Future<String> getBadgeUrl() async {
-    final sp = await SharedPreferences.getInstance();
-    return sp.getString(BADGE_URL) ?? "";
-  }
 
-  static Future setBadgeUrl({required String url}) async {
-    final sp = await SharedPreferences.getInstance();
-    sp.setString(BADGE_URL, url);
-  }
+
 
   /// Get profile url
   static Future<String> getUserId() async {
