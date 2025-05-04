@@ -12,7 +12,7 @@
     <application
     android:enableOnBackInvokedCallback="true"
     android:usesCleartextTraffic="true"
-        android:label="Front Shop"
+        android:label="Front Shop Vendor"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
