@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vendor_app/src/core/image/app_images.dart';
 import 'package:vendor_app/src/core/routes/routes.dart';
@@ -26,10 +27,24 @@ class ProductFormScreen extends StatefulWidget {
 class _ProductFormScreenState extends State<ProductFormScreen> {
   @override
   void initState() {
+    print("jhjkhkjdshkfghhdsfghkfjkdhgjgfhd");
+
+    
     super.initState();
-    // Fetch products on screen load
-    Provider.of<ProductProvider>(context, listen: false).getCategoryByLevel();
-    Provider.of<ProductProvider>(context, listen: false).productTags();
+
+
+     Future.microtask(() {
+    final provider = Provider.of<ProductProvider>(context, listen: false);
+    provider.getCategoryByLevel();
+    provider.productTags();
+    provider.uploadedUrl.clear();
+    provider.isLoading = false;
+  });
+    // Provider.of<ProductProvider>(context, listen: false).getCategoryByLevel();
+    // Provider.of<ProductProvider>(context, listen: false).productTags();
+    // Provider.of<ProductProvider>(context, listen: false).uploadedUrl.clear();
+
+    // Provider.of<ProductProvider>(context, listen: false).isLoading = false;
   }
 
   @override
@@ -98,8 +113,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                 hintText: ''), // Removes default underline
                           ),
                         ),
-                  
-                  
+
                       if (provider.selectedCategory != null) Gap(15.h),
                       if (provider.selectedCategory != null)
                         Container(
@@ -222,23 +236,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
                       Gap(10.h),
                       CustomTextField(
-                        controller: provider.productquantityController,
-                        keyBoardType: TextInputType.number,
-                        validator: (val) {
-                          if (val.toString().isEmpty) {
-                            return "Please enter product quantity";
-                          }
-                          return null;
-                        },
-                        counterWidget: const Offstage(),
-                        onChanged: (value) {},
-                        hintText: 'Product quantity',
-                        hintStyle: context.subTitleTxtStyleblack,
-                        fillColor: context.appColor.whiteColor,
-                      ),
-
-                      Gap(10.h),
-                      CustomTextField(
                         controller: provider.productUnitController,
                         validator: (val) {
                           if (val.toString().isEmpty) {
@@ -303,6 +300,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         hintStyle: context.subTitleTxtStyleblack,
                         fillColor: context.appColor.whiteColor,
                       ),
+
                       Gap(10.h),
                       CustomTextField(
                         readOnly: true,
@@ -426,7 +424,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                                     var status =
                                         await provider.createProduct(context);
                                     if (status) {
-                                      provider.getProduct();
+                                      provider.getProduct('');
                                       _showBottomSheet(context);
                                     }
                                   }
@@ -518,75 +516,87 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       }).toList(),
     );
   }
-}
 
-void _showBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Container(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Centered App Logo
-            Center(
-              child: Image.asset(
-                AppImages.applogo, // Replace with your logo path
-                height: 100.h, // Adjust height as necessary
-              ),
-            ),
-
-            Align(
-              alignment: Alignment.center,
-              child: Text('Product added', style: context.subTitleStyle),
-            ),
-
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: 300,
-                child: Text(
-                    'Your Product has been added to the list \nand is visible to customers',
-                    textAlign: TextAlign.center,
-                    style: context.subTitleTextStyle.copyWith(fontSize: 13.sp)),
-              ),
-            ),
-            Gap(20.h),
-            Center(
-              child: SizedBox(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ButtonElevated(
-                      text: 'View',
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      backgroundColor: context.appColor.primarycolor),
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Centered App Logo
+              Center(
+                child: Image.asset(
+                  AppImages.applogo, // Replace with your logo path
+                  height: 100.h, // Adjust height as necessary
                 ),
               ),
-            ),
-            Gap(10.h),
-            Center(
+
+              Align(
+                alignment: Alignment.center,
+                child: Text('Product added', style: context.subTitleStyle),
+              ),
+
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 300,
+                  child: Text(
+                      'Your Product has been added to the list \nand is visible to customers',
+                      textAlign: TextAlign.center,
+                      style:
+                          context.subTitleTextStyle.copyWith(fontSize: 13.sp)),
+                ),
+              ),
+              Gap(20.h),
+              Center(
                 child: SizedBox(
+                  child: SizedBox(
                     width: double.infinity,
                     child: ButtonElevated(
-                      text: 'Add more Product',
-                      textColor: context.appColor.primarycolor,
-                      onPressed: () {
-                        Provider.of<ProductProvider>(context, listen: false)
-                            .clearData();
-                        Navigator.pop(context);
+                        text: 'View',
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        backgroundColor: context.appColor.primarycolor),
+                  ),
+                ),
+              ),
+              Gap(10.h),
+              Center(
+                  child: SizedBox(
+                      width: double.infinity,
+                      child: ButtonElevated(
+                        text: 'Add more Product',
+                        textColor: context.appColor.primarycolor,
+                        onPressed: ()
+                        
+                        
+                         {
+                          Provider.of<ProductProvider>(context, listen: false)
+                              .clearData();
 
-                        //context.clearAndPush(routePath: MyRoutes.LOGIN);
-                      },
-                      backgroundColor: context.appColor.whiteColor,
-                      borderColor: context.appColor.primarycolor,
-                    )))
-          ],
-        ),
-      );
-    },
-  );
+                          Provider.of<ProductProvider>(context, listen: false)
+                              .getCategoryByLevel();
+                          Provider.of<ProductProvider>(context, listen: false)
+                              .productTags();
+                          Provider.of<ProductProvider>(context, listen: false)
+                              .uploadedUrl
+                              .clear();
+                        context.push(MyRoutes.PRODUCTFORMSCREEN);
+
+                          //context .pushReplacementNamed(MyRoutes.PRODUCTFORMSCREEN);
+                        },
+                        backgroundColor: context.appColor.whiteColor,
+                        borderColor: context.appColor.primarycolor,
+                      )))
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

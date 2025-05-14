@@ -120,6 +120,9 @@ class ProductProvider extends ChangeNotifier {
     productDescriptionController.clear();
     productUnitController.clear();
     productPriceController.clear();
+    productdiscount.clear();
+    selectProductCommission.clear();
+
     productProductDiscountPriceController.clear();
     productStockController.clear();
     productNameController.clear();
@@ -147,11 +150,12 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  
   Future<void> getCategoryByLevel() async {
     clearData();
     isLoading = true;
     notifyListeners();
+
+    print("jdsfkgjhjkdsfhgjkfdg");
 
     final result = await _authRepo.getCategoryByLevel({});
     result.fold(
@@ -179,10 +183,6 @@ class ProductProvider extends ChangeNotifier {
       },
     );
   }
-
-
-
-
 
   List<DatumTags> tagsList = [];
   List<DatumTags> selectedTags = [];
@@ -268,6 +268,7 @@ class ProductProvider extends ChangeNotifier {
     context.showLoader(show: true);
 
     for (var item in _uploadedUrls) {
+      print("lshjdfkhdkfjg  ${item.url}");
       uploadedUrl.add(item.url!);
     }
 
@@ -278,7 +279,7 @@ class ProductProvider extends ChangeNotifier {
     try {
       var data = {
         "categoryId": productId,
-        "quantity": productquantityController.text,
+        //  "quantity": productquantityController.text,
         "description": productDescriptionController.text,
         "unit": productUnitController.text,
         "basePrice": productPriceController.text,
@@ -457,11 +458,15 @@ class ProductProvider extends ChangeNotifier {
   bool isLoadingg = false;
   List<Product> products1 = [];
 
-  Future<void> getProduct() async {
+  Future<void> getProduct(String searchkey) async {
     isLoadingg = true;
     notifyListeners();
 
-    final result = await _authRepo.getProduct({});
+    print("search key $searchkey");
+
+    var data = {"search": searchkey};
+
+    final result = await _authRepo.getProduct(data);
     result.fold(
       (error) {
         // Handle error

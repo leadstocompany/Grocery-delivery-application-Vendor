@@ -30,11 +30,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     getUserDetails();
-    // TODO: implement initState
+    _image = null;
+
     super.initState();
   }
 
-  getUserDetails() async {
+ getUserDetails() async {
     firstController.text = (await SharedPrefUtils.getFirstName())!;
     lastController.text = (await SharedPrefUtils.getLastName())!;
     profile = (await SharedPrefUtils.getProfilePicUrl())!;
@@ -42,8 +43,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     print("jshdgjkdhfg  ${profile}");
   }
-
-  // Pick image from gallery or camera
 
   Future<void> _pickImage() async {
     final XFile? pickedFile =
@@ -69,7 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("jkdfhgkjdfg   ${_image}    ${profile}");
+    print("kjsdfkghkjdfgh   ${profile}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -125,9 +124,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       height: 50,
                       decoration: BoxDecoration(
                           color: Colors.red,
+
                           // color: imageProvider.isImageLoading
                           //     ? APPCOLOR.lightGreen
                           //     : APPCOLOR.grey666666,
+
                           borderRadius: BorderRadius.circular(10)),
                       child: Center(
                         child: Text(

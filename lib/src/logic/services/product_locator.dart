@@ -14,7 +14,8 @@ class ProductService extends ApiService {
   // }
 
   Future getProduct(data) async {
-    var response = await api.get(APIURL.getProduct, data: jsonEncode(data));
+    var response = await api.get(APIURL.getProduct,
+        data: jsonEncode(data), queryParameters: data);
     return response;
   }
 
@@ -41,15 +42,13 @@ class ProductService extends ApiService {
     return response;
   }
 
-  Future productTags(data) async
-  {
+  Future productTags(data) async {
     var response = await api.get(APIURL.productTags, data: jsonEncode(data));
     return response;
   }
 
   Future<Response> uploadImage(File imageFile,
-      {Map<String, dynamic>? additionalFields}) async
-       {
+      {Map<String, dynamic>? additionalFields}) async {
     const String url = APIURL.uploadImage;
     return await api.uploadImage(
       url,
@@ -58,10 +57,8 @@ class ProductService extends ApiService {
     );
   }
 
-
-Future<Response> uploadImages(List<File> imageFiles,
-      {Map<String, dynamic>? additionalFields}) async 
-      {
+  Future<Response> uploadImages(List<File> imageFiles,
+      {Map<String, dynamic>? additionalFields}) async {
     const String url = APIURL.uploadImages;
     return await api.uploadImages(
       url,
@@ -69,9 +66,4 @@ Future<Response> uploadImages(List<File> imageFiles,
       additionalFields: additionalFields,
     );
   }
-
-
-
-
-  
 }

@@ -355,7 +355,7 @@ class _ProductdetailsState extends State<Productdetails> {
                               context, widget.product.id.toString());
                           if (status) {
                             Provider.of<ProductProvider>(context, listen: false)
-                                .getProduct();
+                                .getProduct('');
                             Navigator.pop(context);
                           }
                         }),
@@ -446,7 +446,7 @@ class _ProductdetailsState extends State<Productdetails> {
 
                           if (status) {
                             Provider.of<ProductProvider>(context, listen: false)
-                                .getProduct();
+                                .getProduct('');
                             Future.delayed(const Duration(seconds: 0),
                                 () async {
                               Navigator.pop(context);

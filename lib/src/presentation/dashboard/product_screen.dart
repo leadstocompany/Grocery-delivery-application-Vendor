@@ -19,12 +19,12 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   int status = 0;
-
+  final TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
 
-    Provider.of<ProductProvider>(context, listen: false).getProduct();
+    Provider.of<ProductProvider>(context, listen: false).getProduct('');
   }
 
   @override
@@ -35,7 +35,64 @@ class _ProductScreenState extends State<ProductScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          children: [Gap(10.h), HeaderProfile(), detailsCategory()],
+          children: [
+            Gap(10.h),
+            HeaderProfile(),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Consumer<ProductProvider>(
+                  builder: (context, provider, child) {
+                return Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextFormField(
+                    controller: _searchController,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.search,
+                    onFieldSubmitted: (value) {
+                      if (value.isNotEmpty) {
+                        provider.getProduct(value);
+                      }
+                    },
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        provider.getProduct(_searchController.text);
+                      }
+
+                      // provider.searchProducts(value, context);
+
+                      // if (value.isNotEmpty) {
+                      //   _showOverlay(context);
+                      // } else {
+                      //   _clearOverlay();
+                      // }
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      fillColor: Colors.transparent,
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          provider.getProduct(_searchController.text);
+                        },
+                        child: Icon(Icons.search),
+                      ),
+                      hintText: 'Search',
+                      // hintStyle: context.customRegular(APPCOLOR.grey666666, 18),
+                      isCollapsed: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+            detailsCategory()
+          ],
         ),
       ),
     );

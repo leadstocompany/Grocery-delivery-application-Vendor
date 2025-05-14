@@ -284,9 +284,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  product.productName,
-                                  style: context.buttonTestStyle.copyWith(),
+                                Container(
+                                  width: 200,
+                                  child: Text(
+                                    product.productName,
+                                    maxLines: 2,
+                                    style: context.buttonTestStyle.copyWith(),
+                                  ),
                                 ),
                                 Text(
                                   product.quantity.toString(),

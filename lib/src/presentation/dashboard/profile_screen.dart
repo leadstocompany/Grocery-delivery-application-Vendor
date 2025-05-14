@@ -21,26 +21,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ImagePicker _picker = ImagePicker();
-
-  String? profile;
-  File? _image;
-  Future<void> _pickImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        profile = pickedFile.path;
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var userName = Provider.of<HomeProvider>(context).userName;
     var profile = Provider.of<HomeProvider>(context).profile;
+
+    print("jksdfgkjfh  ${profile}");
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -121,10 +107,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'icon': Icons.settings,
       'title': "Settings",
     },
-    {
-      'icon': Icons.headphones_outlined,
-      'title': "Live Support",
-    },
+    // {
+    //   'icon': Icons.headphones_outlined,
+    //   'title': "Live Support",
+    // },
     {
       'icon': Icons.login_outlined,
       'title': "Log Out",
@@ -172,12 +158,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                           break;
 
+                        // case 4:
+                        //   context.push(
+                        //     MyRoutes.LIVESUPPORT,
+                        //   );
+                        //   break;
                         case 4:
-                          context.push(
-                            MyRoutes.LIVESUPPORT,
-                          );
-                          break;
-                        case 5:
                           Provider.of<DaySelectionProvider>(context,
                                   listen: false)
                               .vendorLogOut(context);

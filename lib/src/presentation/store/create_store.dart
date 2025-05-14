@@ -40,7 +40,7 @@ class CreateStore extends StatelessWidget {
             Gap(20.h),
             Row(
               children: [
-                _buildDayDropdown(context), // Dropdown for days
+                _buildDayDropdown(context),
                 Gap(10.w),
                 _buildOpenTiming(context),
                 Gap(10.w),
@@ -201,10 +201,6 @@ class CreateStore extends StatelessWidget {
                                 ),
                         ));
                   })
-               
-               
-               
-               
                 ],
               ),
             ),
@@ -213,9 +209,17 @@ class CreateStore extends StatelessWidget {
               width: double.infinity,
               child: ButtonElevated(
                 text: 'Next',
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    _showBottomSheet(context, createStoreprovider);
+                onPressed: () async {
+                  if (_formKey.currentState?.validate() ?? false) 
+                  {
+                    final status =
+                        await createStoreprovider.createStore(context);
+
+                    if (status) 
+                    {
+                      context.clearAndPush(routePath: MyRoutes.SUBMITSCREEN);
+                    }
+                    //_showBottomSheet(context, createStoreprovider);
                   }
                 },
                 backgroundColor: context.appColor.primarycolor,
@@ -227,7 +231,7 @@ class CreateStore extends StatelessWidget {
     );
   }
 
-  // Dropdown for selecting days with checkboxes using PopupMenuButton
+  
   Widget _buildDayDropdown(BuildContext context) {
     final List<String> days = [
       'Monday',
@@ -247,41 +251,59 @@ class CreateStore extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(color: context.appColor.greyColor400),
             color: context.appColor.greyColor200,
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: PopupMenuButton<String>(
-              onSelected: (String day) {
-                provider.toggleDay(day);
-              },
-              itemBuilder: (context) {
-                return days.map((String day) {
-                  return PopupMenuItem<String>(
-                    value: day,
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          value: provider.selectedDays.contains(day),
-                          onChanged: (bool? value) {
-                            provider.toggleDay(day);
-                          },
-                        ),
-                        Text(day),
-                      ],
+          child: InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Select Days'),
+                    content: SizedBox(
+                      width: double.maxFinite,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: days.map((String day) {
+                          return Consumer<DaySelectionProvider>(
+                            builder: (context, provider, _) {
+                              return CheckboxListTile(
+                                value: provider.selectedDays.contains(day),
+                                title: Text(day),
+                                onChanged: (bool? value) {
+                                  provider.toggleDay(day);
+                                },
+                              );
+                            },
+                          );
+                        }).toList(),
+                      ),
                     ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Done'),
+                      ),
+                    ],
                   );
-                }).toList();
-              },
+                },
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
-                  Text(
-                    'Days',
-                    style: context.subTitleTxtStyleblack.copyWith(
-                      color: context.appColor.lightBlackColor,
+                  Expanded(
+                    child: Text(
+                      provider.selectedDays.isEmpty
+                          ? 'Select Days'
+                          : provider.selectedDays.join(', '),
+                      overflow: TextOverflow.ellipsis,
+                      style: context.subTitleTxtStyleblack.copyWith(
+                        color: context.appColor.lightBlackColor,
+                      ),
                     ),
                   ),
-                  const Spacer(),
                   const Icon(Icons.arrow_drop_down),
                 ],
               ),
@@ -292,7 +314,6 @@ class CreateStore extends StatelessWidget {
     );
   }
 
-  // Display selected days below the dropdown
   Widget _buildSelectedDayChip(BuildContext context, String day) {
     return Chip(
       label: Text(day),
@@ -303,7 +324,6 @@ class CreateStore extends StatelessWidget {
     );
   }
 
-  // Helper method to build the open/close dropdown container
   Widget _buildOpenTiming(BuildContext context) {
     return GestureDetector(
       onTap: () => Provider.of<DaySelectionProvider>(context, listen: false)

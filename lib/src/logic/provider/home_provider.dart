@@ -264,7 +264,8 @@ class HomeProvider extends ChangeNotifier {
         "firstName": firstName,
         "lastName": lastName,
       };
-    } else {
+    } else 
+    {
       data = {
         "firstName": firstName,
         "lastName": lastName,

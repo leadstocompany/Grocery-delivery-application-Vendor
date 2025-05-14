@@ -56,14 +56,17 @@ class _SelectAccountState extends State<SelectAccount> {
                   alignment: Alignment.center,
                   child: InkWell(
                     onTap: (){
-                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PdfViewerPage(
-                            assetPath: 'assets/terms_and_conditions.pdf',
-                          ),
-                        ),
-                      );
+                   
+                   context.push(MyRoutes.TERMANDCONDITION);
+
+                      //  Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => PdfViewerPage(
+                      //       assetPath: 'assets/terms_and_conditions.pdf',
+                      //     ),
+                      //   ),
+                      // );
                     },
                     child: RichText(
                       text: TextSpan(

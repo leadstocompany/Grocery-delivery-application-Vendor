@@ -12,11 +12,11 @@ class SharedPrefUtils {
   static String? _refreshToken;
   static const String PROFILE_PIC = "profile_pic";
   static const String BADGE_URL = "badge_url";
-  static  String USER_NAME = "username";
+  static String USER_NAME = "username";
   static const String INS_RANDOM = "ins_random";
   static const String INS_NearBy = "ins_nearby";
   static const String USER_ID = "user_id";
-  static  String PHONE = "phone";
+  static String PHONE = "phone";
   static const String BACK_STATUS = "back_status";
   static const String HAND_OF_ACTION = "hand_of_action";
   static const String VERIFIED_USER = "verified_user";
@@ -29,15 +29,14 @@ class SharedPrefUtils {
   static const String CITY = "city";
   static const String IS_SUBSCRIPTION_PURCHASE = "IS_SUBSCRIPTION_PURCHASE";
   static const String FIRST_NAME = "FIRST_NAME";
-  static const String LAST_NAME = "FIRST_NAME";
+  static const String LAST_NAME = "LAST_NAME";
   static const String EMAIL = "EMAIL";
   static const String PASSWORD = "PASSWORD";
   static const String RESET_TOKEN = "RESET_TOKEN";
   static const String STORE_ID = "STORE_ID";
   static const String REFRESH_TOKEN = "REFRESH_TOKEN";
-   static const String KEY_PROFILE = "KEY_PROFILE";
+  static const String KEY_PROFILE = "KEY_PROFILE";
 
-  /// Set bearer authorization token
   static Future<bool> setToken({required String authToken}) {
     _token = authToken;
     return SharedPreferences.getInstance()
@@ -109,7 +108,7 @@ class SharedPrefUtils {
     return _token;
   }
 
-   static Future<String?> getRefreshToken() async {
+  static Future<String?> getRefreshToken() async {
     final sp = await SharedPreferences.getInstance();
     _refreshToken = sp.getString(REFRESH_TOKEN);
     return _refreshToken;
@@ -231,11 +230,12 @@ class SharedPrefUtils {
 
     return firstName!;
   }
-    /// Get user profile URL
-  static Future<String?> getUserProfile() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(KEY_PROFILE);
-  }
+
+  // /// Get user profile URL
+  // static Future<String?> getUserProfile() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString(KEY_PROFILE);
+  // }
 
   static Future<String> getLastName() async {
     final sp = await SharedPreferences.getInstance();
@@ -280,8 +280,6 @@ class SharedPrefUtils {
   }
 
   /// Get profile url
-
-
 
   /// Get profile url
   static Future<String> getUserId() async {

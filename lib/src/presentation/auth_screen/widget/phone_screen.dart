@@ -99,10 +99,9 @@ class PhoneScreen extends StatelessWidget {
 
                 final number = phoneController.text;
 
-                if (number.length == 10) 
-                {
-                  
-                  final success = await pageNotifier.sendOtp(number, context, country_code);
+                if (number.length == 10) {
+                  final success =
+                      await pageNotifier.sendOtp(number, context, country_code);
 
                   if (success) {
                     pageNotifier.goToNextPage(); // Change page
@@ -130,14 +129,7 @@ class PhoneScreen extends StatelessWidget {
             child: TextButton(
               onPressed: () 
               {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PdfViewerPage(
-                      assetPath: 'assets/terms_and_conditions.pdf',
-                    ),
-                  ),
-                );
+                context.push(MyRoutes.TERMANDCONDITION);
               },
               child: Text(
                 "Terms of Services & Privacy Policy.",

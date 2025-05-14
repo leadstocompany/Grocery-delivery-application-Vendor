@@ -31,6 +31,7 @@ import 'package:vendor_app/src/presentation/splash_screen.dart';
 import 'package:vendor_app/src/presentation/store/store_management.dart';
 import 'package:vendor_app/src/presentation/store/update_store_screen.dart';
 import 'package:vendor_app/src/presentation/terms&conditions/terms_conditions.dart';
+import 'package:vendor_app/src/presentation/terms&conditions/tersandconditions.dart';
 import 'package:vendor_app/src/presentation/transation/transation_history.dart';
 
 /// Route names as constants
@@ -183,6 +184,11 @@ class MyRoutes {
         name: EDITPROFILE,
         pageBuilder: (context, state) => EditProfileScreen(),
       ),
+      animatedGoRoute(
+        path: TERMANDCONDITION,
+        name: TERMANDCONDITION,
+        pageBuilder: (context, state) => const TermsAndConditionsScreenssss(),
+      ),
     ],
   );
 
@@ -191,6 +197,7 @@ class MyRoutes {
   static const HOME = "/home";
   static const SELECTACCOUNT = "/selectAccount";
   static const DASHBOARD = "/dashboard";
+  static const TERMANDCONDITION = "/TermsAndConditionsScreenssss";
 
   static const BOTTOM_NAV = "/home";
   static const LOGIN = "/login";

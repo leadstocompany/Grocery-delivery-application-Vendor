@@ -16,11 +16,9 @@ class _PinCreatedState extends State<PinCreated> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () async 
-    {
+    Future.delayed(const Duration(seconds: 2), () async {
       // Navigate to another route after 2 seconds (if needed)
       context.clearAndPush(routePath: MyRoutes.APPROVEDSTATUS);
-     
     });
   }
 
@@ -44,7 +42,7 @@ class _PinCreatedState extends State<PinCreated> {
               ),
               const SizedBox(height: 20), // Add space between image and text
               Text(
-                'Pin Created',
+                'Account Created',
                 style: context.subTitleStyle,
               ),
               Text(

@@ -89,21 +89,22 @@ class HomeRepo {
 
       final VendorModel vendorModel = vendorModelFromJson(response.toString());
 
-      if (vendorModel != null) 
-      {
+      if (vendorModel != null) {
         SharedPrefUtils.USER_NAME =
             vendorModel.firstName + " " + vendorModel.lastName;
         SharedPrefUtils.PHONE = vendorModel.phone;
 
-        print("dkfjhdkfhkfk  ${SharedPrefUtils.USER_NAME}");
+        print(
+            "dkfjhdkfhkfk   ${vendorModel.firstName}    ${vendorModel.lastName}   ${vendorModel.img} ");
         await SharedPrefUtils.setStoreId(storeId: vendorModel.storeId ?? "");
 
-        await SharedPrefUtils.setFistName(firstName: vendorModel.name ?? "");
+        await SharedPrefUtils.setFistName(
+            firstName: vendorModel.firstName ?? "");
 
         await SharedPrefUtils.setLastName(LastName: vendorModel.lastName ?? "");
 
-            await SharedPrefUtils.setProfilePicUrl(
-    profileUrl: vendorModel.img?? "");
+        await SharedPrefUtils.setProfilePicUrl(
+            profileUrl: vendorModel.img ?? "");
       }
 
       final String model = response.toString();

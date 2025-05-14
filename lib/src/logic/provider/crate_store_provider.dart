@@ -14,10 +14,8 @@ import 'package:vendor_app/src/logic/repo/product_repo.dart';
 import 'package:vendor_app/src/logic/repo/store_repo.dart';
 
 class DaySelectionProvider with ChangeNotifier {
-  List<String> _selectedDays = [];
-
+  final List<String> _selectedDays = [];
   List<String> get selectedDays => _selectedDays;
-  final _storeRepo = getIt<StoreRepo>();
 
   void toggleDay(String day) {
     if (_selectedDays.contains(day)) {
@@ -25,8 +23,20 @@ class DaySelectionProvider with ChangeNotifier {
     } else {
       _selectedDays.add(day);
     }
-    notifyListeners();
+    notifyListeners(); // VERY IMPORTANT 🚨
   }
+
+  // List<String> get selectedDays => _selectedDays;
+  final _storeRepo = getIt<StoreRepo>();
+
+  // void toggleDay(String day) {
+  //   if (_selectedDays.contains(day)) {
+  //     _selectedDays.remove(day);
+  //   } else {
+  //     _selectedDays.add(day);
+  //   }
+  //   notifyListeners();
+  // }
 
   void removeDay(String day) {
     _selectedDays.remove(day);
@@ -237,7 +247,7 @@ class DaySelectionProvider with ChangeNotifier {
         "ifscCode": ifscCode.text,
         "upiId": upiID.text,
         "qrCode": uploadedBarCodeUrl,
-        "appWithdrawalPin": confirmPin.toString()
+        "appWithdrawalPin": '1234'
       }
     };
 
